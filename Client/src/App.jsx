@@ -5,9 +5,28 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import './App.css'
+import axios from 'axios';
+
+
 
 function App() {
   const [count, setCount] = useState(0)
+  const [data, setData] = useState()
+
+  const url = "/api/v1/restaurants"
+
+  function getDataFromServer(){
+    axios.get(url).then((res)=>setData(res.data)).catch((err)=>{
+      console.log(err)
+    })
+  }
+  if (!data){
+    getDataFromServer();
+  }
+  console.log(data)
+
+  
+
 
   return (
     

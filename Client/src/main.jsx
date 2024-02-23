@@ -11,6 +11,7 @@ import ErrorPage from "./error-page";
 
 import Contacts from "./routes/contacts";
 import { Outlet } from "react-router-dom";
+import App from "./App"
 
 const router = createBrowserRouter([
   {
@@ -31,5 +32,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
      <div id="detail">
         <Outlet />
       </div>
+      <App/>
   </React.StrictMode>,
 )

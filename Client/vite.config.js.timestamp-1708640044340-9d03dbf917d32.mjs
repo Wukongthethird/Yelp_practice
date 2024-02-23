@@ -1,0 +1,18 @@
+// vite.config.js
+import { defineConfig } from "file:///Users/simonzhang/Desktop/proj/Yelp%20Clone/Client/node_modules/vite/dist/node/index.js";
+import react from "file:///Users/simonzhang/Desktop/proj/Yelp%20Clone/Client/node_modules/@vitejs/plugin-react/dist/index.mjs";
+var vite_config_default = defineConfig({
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:3000/",
+        changeOrigin: true
+      }
+    },
+    plugins: [react()]
+  }
+});
+export {
+  vite_config_default as default
+};
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsidml0ZS5jb25maWcuanMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImNvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9kaXJuYW1lID0gXCIvVXNlcnMvc2ltb256aGFuZy9EZXNrdG9wL3Byb2ovWWVscCBDbG9uZS9DbGllbnRcIjtjb25zdCBfX3ZpdGVfaW5qZWN0ZWRfb3JpZ2luYWxfZmlsZW5hbWUgPSBcIi9Vc2Vycy9zaW1vbnpoYW5nL0Rlc2t0b3AvcHJvai9ZZWxwIENsb25lL0NsaWVudC92aXRlLmNvbmZpZy5qc1wiO2NvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9pbXBvcnRfbWV0YV91cmwgPSBcImZpbGU6Ly8vVXNlcnMvc2ltb256aGFuZy9EZXNrdG9wL3Byb2ovWWVscCUyMENsb25lL0NsaWVudC92aXRlLmNvbmZpZy5qc1wiO2ltcG9ydCB7IGRlZmluZUNvbmZpZyB9IGZyb20gJ3ZpdGUnXG5pbXBvcnQgcmVhY3QgZnJvbSAnQHZpdGVqcy9wbHVnaW4tcmVhY3QnXG5cbi8vIGh0dHBzOi8vdml0ZWpzLmRldi9jb25maWcvXG5leHBvcnQgZGVmYXVsdCBkZWZpbmVDb25maWcoe1xuICBzZXJ2ZXI6e1xuICAgIFxuICAgIHByb3h5OntcbiAgICAgIFwiL2FwaVwiOiB7dGFyZ2V0OlwiaHR0cDovL2xvY2FsaG9zdDozMDAwL1wiLFxuICAgICAgY2hhbmdlT3JpZ2luOiB0cnVlLCB9XG4gIH0sXG4gIHBsdWdpbnM6W3JlYWN0KCldXG59fSlcbiJdLAogICJtYXBwaW5ncyI6ICI7QUFBb1UsU0FBUyxvQkFBb0I7QUFDalcsT0FBTyxXQUFXO0FBR2xCLElBQU8sc0JBQVEsYUFBYTtBQUFBLEVBQzFCLFFBQU87QUFBQSxJQUVMLE9BQU07QUFBQSxNQUNKLFFBQVE7QUFBQSxRQUFDLFFBQU87QUFBQSxRQUNoQixjQUFjO0FBQUEsTUFBTTtBQUFBLElBQ3hCO0FBQUEsSUFDQSxTQUFRLENBQUMsTUFBTSxDQUFDO0FBQUEsRUFDbEI7QUFBQyxDQUFDOyIsCiAgIm5hbWVzIjogW10KfQo=
