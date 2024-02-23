@@ -37,7 +37,7 @@ app.get("/api/v1/restaurants", async (req, res) => {
 });
 
 // get a restaraunt
-app.get("/api/v1/restaurants/:id", async (req, res) => {
+app.get("/api/v1/restaurant/:id", async (req, res) => {
   try {
     const result = await db.query("select * from restaurants where id = $1", [
       req.params.id,
@@ -78,7 +78,7 @@ app.post("/api/v1/create_restaurant/", async (req, res) => {
 
 //update restaraunt
 
-app.put("/api/v1/restaurants/:id", async (req, res) => {
+app.put("/api/v1/restaurant/:id", async (req, res) => {
   let allowedColumns = [
     "restaurants_name",
     "address_location",
@@ -117,7 +117,7 @@ app.put("/api/v1/restaurants/:id", async (req, res) => {
 });
 
 //delete
-app.delete("/api/v1/restaurants/:id", async (req, res) => {
+app.delete("/api/v1/restaurant/:id", async (req, res) => {
   await db.query(`
   DELETE FROM restaurants
   WHERE id = $1
