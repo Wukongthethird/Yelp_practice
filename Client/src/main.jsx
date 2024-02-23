@@ -6,12 +6,12 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "./index.css";
-import ErrorPage from "./error-page";
+import ErrorPage from "./routes/ErrorPage";
 import { Outlet } from "react-router-dom";
 import App from "./App"
-import Home from "./routes/home"
-import Update from "./routes/update"
-import Restaurantsdetailpage from "./routes/restaurantsdetailpage"
+import Home from "./routes/Home"
+import Update from "./routes/Update"
+import Restaurantsdetailpage from "./routes/RestaurantsDetailPage"
 
 // const router = createBrowserRouter([
   
@@ -24,9 +24,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Outlet />
       </div>
       <App/>
-      <Home/>
-      hello
-      <Update/>
-      <Restaurantsdetailpage/>
   </React.StrictMode>,
 )
