@@ -16,7 +16,7 @@ const Home = () =>{
     setRestaurants(restaurants);
   }
 
-  console.log('eat',restaurants)
+  
   if (!restaurants) return <LoadingSpinner />;
   
   console.log('done', restaurants)

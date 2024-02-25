@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import yelpAPI from "../api";
 // import { useHistory } from "react-router-dom";
 import addNewRestaurant from "../routes/AddNewRestaurant";
+import Alert from "./Alert";
 
 const AddRestaurantsForm = () => {
   // const history = useHistory();
@@ -41,24 +42,28 @@ const AddRestaurantsForm = () => {
       zipcode: formData.zipcode,
       price_range: +formData.price_range,
     };
-  }
+  
   let newRestaurant;
   console.log("im here")
   try {
     newRestaurant = yelpAPI.addNewRestaurant(formData);
-    console.log("good")
   } catch (err) {
-    console.log("err",err);
+    debugger;
     setFormErrors(err);
+    debugger;
   }
+  setFormErrors([]);
+  setSaveConfirmed(true);
 
+}
   /** Handles form changes  */
   function handleChange(evt){
     const {name, value} = evt.target;
-    setFormData( f => ({...f,[name]:value}));
-    if (name == "price_range"){
+    
+    if (name == "price_range" && !isNaN(value)){
       setFormData( f => ({...f,[name]:+value}));
     }
+    setFormData( f => ({...f,[name]:value}));
   }
 
   console.log(typeof(formData.price_range))
@@ -132,10 +137,15 @@ const AddRestaurantsForm = () => {
                     required
                 />
               </div>
-{/* 
+
               {formErrors.length
                   ? <Alert type="danger" messages={formErrors} />
-                  : null} */}
+                  : null}
+
+              {saveConfirmed
+                  ?
+                  <Alert type="success" messages={["Updated successfully."]} />
+                  : null}
 
               <button
                   className="btn btn-primary float-right"
