@@ -10,7 +10,7 @@ const AddRestaurantsForm = () => {
     address_location: "",
     city: "",
     zipcode: "",
-    price_range: "",
+    price_range: 0,
   });
 
   const [formErrors, setFormErrors] = useState([]);
@@ -39,15 +39,16 @@ const AddRestaurantsForm = () => {
       address_location: formData.address_location,
       city: formData.City,
       zipcode: formData.zipcode,
-      price_range: formData.price_range,
+      price_range: +formData.price_range,
     };
   }
   let newRestaurant;
   console.log("im here")
   try {
     newRestaurant = yelpAPI.addNewRestaurant(formData);
+    console.log("good")
   } catch (err) {
-    console.log(err);
+    console.log("err",err);
     setFormErrors(err);
   }
 
@@ -55,8 +56,12 @@ const AddRestaurantsForm = () => {
   function handleChange(evt){
     const {name, value} = evt.target;
     setFormData( f => ({...f,[name]:value}));
+    if (name == "price_range"){
+      setFormData( f => ({...f,[name]:+value}));
+    }
   }
 
+  console.log(typeof(formData.price_range))
   
 
   return (
@@ -70,11 +75,12 @@ const AddRestaurantsForm = () => {
               <div className="form-group">
                 <label>Restaraunt Name</label>
                 <input
-                    name="restaurant_name"
+                    type="restaurants_name"
+                    name="restaurants_name"
                     className="form-control"
                     value={formData.restaurants_name}
                     onChange={handleChange}
-                    autoComplete="restaraunt_name"
+                    autoComplete="restaraunts_name"
                     required
                 />
               </div>
