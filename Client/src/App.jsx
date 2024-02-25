@@ -6,6 +6,7 @@ import axios from 'axios';
 import Home from "./routes/Home"
 import Update from "./routes/Update"
 import Restaurantsdetailpage from "./routes/RestaurantsDetailPage"
+import AddNewRestaurant from './routes/AddNewRestaurant';
 
 
 
@@ -40,7 +41,7 @@ function App() {
       <Route exact path="/" element={<Home/>}/>
       <Route exact path="/restaurants/:id/" element={<Restaurantsdetailpage/>}/>
       <Route exact path="/restaurants/:id/update" element={<Update/>}/>
-
+      <Route exact path = "/create_restaurant" element={<AddNewRestaurant/>}/>
     </Routes>
     </BrowserRouter>
      

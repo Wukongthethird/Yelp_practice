@@ -40,6 +40,11 @@ class yelpAPI{
     return res.data;
   }
 
+  static async addNewRestaurant(data){
+    let res = await this.request("api/v1/create_restaurant",data,"post")
+    return res.data
+    
+  }
   
 
 
