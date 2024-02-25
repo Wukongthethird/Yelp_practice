@@ -11,7 +11,7 @@ const AddRestaurantsForm = () => {
     address_location: "",
     city: "",
     zipcode: "",
-    price_range: 0,
+    price_range: "",
   });
 
   const [formErrors, setFormErrors] = useState([]);
@@ -35,18 +35,17 @@ const AddRestaurantsForm = () => {
   async function handleSubmit(evt) {
     evt.preventDefault();
 
-    let restaurantData = {
-      restaurants_name: formData.restaurants_name,
-      address_location: formData.address_location,
-      city: formData.City,
-      zipcode: formData.zipcode,
-      price_range: +formData.price_range,
-    };
+    // let restaurantData = {
+    //   restaurants_name: formData.restaurants_name,
+    //   address_location: formData.address_location,
+    //   city: formData.City,
+    //   zipcode: formData.zipcode,
+    //   price_range: formData.price_range,
+    // };
   
-  let newRestaurant;
-  console.log("im here")
+
   try {
-    newRestaurant = yelpAPI.addNewRestaurant(formData);
+    yelpAPI.addNewRestaurant(formData);
   } catch (err) {
     debugger;
     setFormErrors(err);
@@ -59,8 +58,9 @@ const AddRestaurantsForm = () => {
   /** Handles form changes  */
   function handleChange(evt){
     const {name, value} = evt.target;
-    
+    console.log("value",value)
     if (name == "price_range" && !isNaN(value)){
+
       setFormData( f => ({...f,[name]:+value}));
     }
     setFormData( f => ({...f,[name]:value}));
@@ -127,7 +127,15 @@ const AddRestaurantsForm = () => {
               </div>
               <div className="form-group">
                 <label>Price Range</label>
-                <input
+                <select className="form-group" type = "price_range" name="price_range" onChange={handleChange }>
+                <option disabled selected>Price</option>
+                  <option value={1} type = "price_range" name="price_range" onChange={handleChange}>$</option>
+                  <option value={2} type = "price_range" name="price_range" onChange={handleChange}>$$</option>
+                  <option value={3} type = "price_range" name="price_range" onChange={handleChange}>$$$</option>
+                  <option value={4} type = "price_range" name="price_range" onChange={handleChange}>$$$$</option>
+                  <option value={5} type = "price_range" name="price_range" onChange={handleChange}>$$$$$</option>
+                </select>
+                {/* <input
                     type="price_range"
                     name="price_range"
                     className="form-control"
@@ -135,7 +143,7 @@ const AddRestaurantsForm = () => {
                     onChange={handleChange}
                     autoComplete="price_range"
                     required
-                />
+                /> */}
               </div>
 
               {formErrors.length
