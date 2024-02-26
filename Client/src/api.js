@@ -21,7 +21,8 @@ class yelpAPI{
         : {};
 
     try {
-      return (await axios({ url, method, data, params })).data;
+
+      return (await axios({ url, method, data,params })).data;
     } catch (err) {
       console.error("API Error:", err.response);
       let message = err.response.data.error.message;
@@ -31,9 +32,7 @@ class yelpAPI{
 
   /** Gets a list of all restaurants */
   static async getAllRestaurants(restaurants_name) {
-
     let res = await this.request(`api/v1/restaurants`, {restaurants_name})
-    console.log("yelp api",res)
 
     return res.restaurants  ;
   }

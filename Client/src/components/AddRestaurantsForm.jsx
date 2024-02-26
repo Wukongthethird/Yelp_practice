@@ -131,7 +131,7 @@ const AddRestaurantsForm = () => {
                 <option disabled selected>Price</option>
                   <option value={1} type = "price_range" name="price_range" onChange={handleChange}>$</option>
                   <option value={2} type = "price_range" name="price_range" onChange={handleChange}>$$</option>
-                  <option value={3} type = "price_range" name="price_range" onChange={handleChange}>$$$</option>
+                  <option default value={3} type = "price_range" name="price_range" onChange={handleChange}>$$$</option>
                   <option value={4} type = "price_range" name="price_range" onChange={handleChange}>$$$$</option>
                   <option value={5} type = "price_range" name="price_range" onChange={handleChange}>$$$$$</option>
                 </select>

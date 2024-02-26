@@ -23,7 +23,7 @@ const RestaurantList = () =>{
   async function search(restaurants_name) {
     console.log("search in here", restaurants_name )
     let restaurants = await yelpAPI.getAllRestaurants(restaurants_name)
-    console.log("search past here", restaurants_name )
+    console.log("search past here", restaurants_name, restaurants )
     setRestaurants(restaurants);
   }
   

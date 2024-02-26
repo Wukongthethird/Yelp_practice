@@ -21,8 +21,8 @@ app.use(express.json());
 
 // get all restaraunts
 app.get("/api/v1/restaurants", async (req, res) => {
-  console.log("req", req.body);
-  if (Object.keys(req.body) == 0) {
+  console.log("req", req.query);
+  if (Object.keys(req.query) == 0) {
     try {
       console.log();
       const results = await db.query("select * from restaurants");
@@ -33,10 +33,10 @@ app.get("/api/v1/restaurants", async (req, res) => {
       console.log(err);
     }
   }
-  if (req.body["restaurants_name"]) {
+  if (req.query["restaurants_name"]) {
     try {
       console.log("restaurants");
-      const restaurants_name = req.body["restaurants_name"];
+      const restaurants_name = req.query["restaurants_name"];
       const results = await db.query(
         "select * from restaurants where LOWER(restaurants_name) = $1",
         [restaurants_name]
