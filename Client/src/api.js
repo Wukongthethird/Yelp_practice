@@ -29,15 +29,23 @@ class yelpAPI{
     }
   }
 
+  /** Gets a list of all restaurants */
   static async getAllRestaurants() {
     let res = await axios.get(`${this.BASE_URL}/api/v1/restaurants`)
     return res.data;
   }
 
-
-  static async getRestaurant(id) {
+  /** Searches exact restaurant by id */
+  static async getRestaurantByID(id) {
     let res = await this.request(`api/v1/restaurants/${id}`);
     return res.data;
+  }
+
+  /** filters out restaurants by name */
+  static async getRestaurantByName(name){
+    name = name.toLowerCase()
+    let res = await this.request('restaurants',{name})
+    return res.data
   }
 
   static async addNewRestaurant(data){

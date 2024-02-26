@@ -135,15 +135,6 @@ const AddRestaurantsForm = () => {
                   <option value={4} type = "price_range" name="price_range" onChange={handleChange}>$$$$</option>
                   <option value={5} type = "price_range" name="price_range" onChange={handleChange}>$$$$$</option>
                 </select>
-                {/* <input
-                    type="price_range"
-                    name="price_range"
-                    className="form-control"
-                    value={formData.price_range}
-                    onChange={handleChange}
-                    autoComplete="price_range"
-                    required
-                /> */}
               </div>
 
               {formErrors.length
