@@ -2,6 +2,7 @@ import React , {useEffect,useState} from "react";
 import yelpAPI from "../api";
 import LoadingSpinner from "./LoadingSpinner";
 import SearchForm from "./SearchForm";
+import RestaurantCardList from "./RestaurantCardList";
 
 /**
  * on mount should load list of restaraunts
@@ -10,7 +11,7 @@ import SearchForm from "./SearchForm";
  * 
  */
 const RestaurantList = () =>{
-  console.debug("JobList")
+  console.debug("RestaurantList")
 
   const [restaurants, setRestaurants] = useState(null);
 
@@ -21,19 +22,23 @@ const RestaurantList = () =>{
   },[])
 
   async function search(restaurants_name) {
-    console.log("search in here", restaurants_name )
     let restaurants = await yelpAPI.getAllRestaurants(restaurants_name)
-    console.log("search past here", restaurants_name, restaurants )
     setRestaurants(restaurants);
   }
   
   if(!restaurants) return <LoadingSpinner/>
+  
+  console.log("loadedd",restaurants)
 
-  console.log('done', restaurants)
 
   return (
     <div className="JobList col-md-8 offset-md-2">
     <SearchForm searchFor={search} />
+    {restaurants.length
+    ?<RestaurantCardList restaurants={restaurants}/>
+    :<p className="lead">Sorry, no results were found!</p>
+  }
+
   </div>
   );
 
