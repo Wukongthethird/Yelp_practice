@@ -3,12 +3,12 @@ require("dotenv").config();
 const morgan = require("morgan");
 const express = require("express");
 const app = express();
-var cors = require('cors')
+var cors = require("cors");
 
 const PORT = process.env.PORT || 3001;
 const db = require("./DB");
 
-app.use(cors())
+app.use(cors());
 app.use(morgan("dev"));
 
 app.use(express.json());
@@ -21,37 +21,33 @@ app.use(express.json());
 
 // get all restaraunts
 app.get("/api/v1/restaurants", async (req, res) => {
-  console.log("req",req.body)
-  if (Object.keys(req.body) ==0){
+  console.log("req", req.body);
+  if (Object.keys(req.body) == 0) {
     try {
+      console.log();
       const results = await db.query("select * from restaurants");
       res.status(200).json({
-        status: "success",
-        results: results["rows"].length,
-        data: {
-          restaurants: results["rows"],
-        },
+        restaurants: results["rows"],
       });
     } catch (err) {
       console.log(err);
     }
   }
-  if(req.body["name"]){
+  if (req.body["restaurants_name"]) {
     try {
-      const name = req.body["name"]
-      const results = await db.query("select * from restaurants where LOWER(restaurants_name) = $1",[name]);
+      console.log("restaurants");
+      const restaurants_name = req.body["restaurants_name"];
+      const results = await db.query(
+        "select * from restaurants where LOWER(restaurants_name) = $1",
+        [restaurants_name]
+      );
       res.status(200).json({
-        status: "success",
-        data: {
-          restaurants: results["rows"][0],
-        },
+        restaurants: results["rows"][0],
       });
     } catch (err) {
       console.log(err);
     }
   }
-
- 
 });
 
 // get a restaraunt
@@ -61,10 +57,7 @@ app.get("/api/v1/restaurant/:id", async (req, res) => {
       req.params.id,
     ]);
     res.status(200).json({
-      status: "sucess",
-      data: {
-        restaurant: result["rows"][0],
-      },
+      restaurant: result["rows"][0],
     });
   } catch (err) {
     console.log(err);
@@ -84,10 +77,7 @@ app.post("/api/v1/create_restaurant/", async (req, res) => {
     );
 
     res.status(201).json({
-      status: "sucess",
-      data: {
-        restaurant: result["rows"][0],
-      },
+      restaurant: result["rows"][0],
     });
   } catch (err) {
     console.log(err);
@@ -115,36 +105,33 @@ app.put("/api/v1/restaurant/:id", async (req, res) => {
     }
   }
 
-  const result =  await db.query(
+  const result = await db.query(
     `UPDATE restaurants SET ${columns.join(", ")} 
-   WHERE id = $1 returning *`, [
-      req.params.id,
-      ...values
-  ])
-  if(!result){
-    return null
+   WHERE id = $1 returning *`,
+    [req.params.id, ...values]
+  );
+  if (!result) {
+    return null;
   }
 
   res.status(200).json({
-    status: "sucess",
-    data: {
-   
-      restaurant: result["rows"][0],
-    },
+    restaurant: result["rows"][0],
   });
 });
 
 //delete
 app.delete("/api/v1/restaurant/:id", async (req, res) => {
-  await db.query(`
+  await db.query(
+    `
   DELETE FROM restaurants
   WHERE id = $1
-   `,[req.params.id])
+   `,
+    [req.params.id]
+  );
 
-   res.status(204).json({
+  res.status(204).json({
     status: "sucess",
   });
-
 });
 
 app.post("/api/v1/restaurants/", (req, res) => {});

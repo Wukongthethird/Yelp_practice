@@ -1,6 +1,8 @@
 import React , {useState, useEffect} from "react";
 import yelpAPI from "../api";
 import LoadingSpinner from "../components/LoadingSpinner";
+import RestaurantList from "../components/RestaurantsList";
+import SearchForm from "../components/SearchForm";
 
 const Home = () =>{
 
@@ -23,7 +25,7 @@ const Home = () =>{
 
   return (
     <div>
-      restaurants
+      <RestaurantList/>
     </div>
   )
 }

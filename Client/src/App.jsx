@@ -2,7 +2,6 @@ import { useState } from 'react'
 import * as ReactDOM from "react-dom/client";
 import { BrowserRouter , Routes, Route } from 'react-router-dom';
 import './App.css'
-import axios from 'axios';
 import Home from "./routes/Home"
 import Update from "./routes/Update"
 import Restaurantsdetailpage from "./routes/RestaurantsDetailPage"
