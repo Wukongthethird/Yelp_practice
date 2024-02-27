@@ -1,12 +1,3 @@
--- CREATE TABLE products(
---   id integer UNIQUE NOT NULL,
---   product_name VARCHAR(70),
---   price integer,
---   on_sale BOOLEAN
--- );
--- ALTER TABLE products ADD COLUMN featured BOOLEAN;
--- ALTER TABLE products DROP COLUMN featured;
-
 -- should be big int for primary key
 CREATE TABLE
   restaurants (
@@ -18,19 +9,23 @@ CREATE TABLE
     price_range INTEGER NOT NULL check(price_range>=0 and price_range<=5)
   );
 
-INSERT INTO
-  restaurants (
-    restaurants_name,
-    address_location,
-    city,
-    zipcode, 
-    price_range
-  )
-values
-  (
-    'wing lung',
-    '2460 san bruno ave',
-    'San Francisco',
-    '94134',
-    1
+
+-- store password as salt hash bcrypt? do it on server side--
+CREATE TABLE 
+  yelp_users (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(60) NOT NULL,
+    middle_name VARCHAR(60),
+    email VARCHAR(254) NOT NULL,
+    passhash VARCHAR(254) NOT NULL
+  );
+
+
+
+CREATE TABLE
+  user_favorites(
+    user_id INTEGER REFERENCES yelp_users ON DELETE CASCADE NOT NULL,
+    restaurants_id INTEGER REFERENCES restaurants ON DELETE CASCADE NOT NULL,
+    PRIMARY KEY (user_id,restaurants_id)
   );
