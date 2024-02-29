@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 import Alert from "../Alert";
 
 
 function SignupForm() {
-  const history = useHistory();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -31,7 +29,7 @@ function SignupForm() {
   async function handleSubmit(evt) {
     evt.preventDefault();
     try {
-      await signup(formData);
+      // await signup(formData);
       history.push("/");
     } catch (err) {
       setFormErrors(err);
@@ -54,9 +52,38 @@ function SignupForm() {
                 <div className="form-group">
                   <label>First Name</label>
                   <input
-                      name="username"
+                      name="firstName"
                       className="form-control"
-                      value={formData.username}
+                      value={formData.firstName}
+                      onChange={handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Last Name</label>
+                  <input
+                      name="lastName"
+                      className="form-control"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>middle name</label>
+                  <input
+                      name="middleName"
+                      className="form-control"
+                      value={formData.middleName}
+                      onChange={handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Email</label>
+                  <input
+                      type="email"
+                      name="email"
+                      className="form-control"
+                      value={formData.email}
                       onChange={handleChange}
                   />
                 </div>
@@ -70,32 +97,13 @@ function SignupForm() {
                       onChange={handleChange}
                   />
                 </div>
-
                 <div className="form-group">
-                  <label>Last name</label>
+                  <label>Confirm Password</label>
                   <input
-                      name="irstName"
+                    type="password"
+                      name="passwordConfirm"
                       className="form-control"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Last name</label>
-                  <input
-                      name="lastName"
-                      className="form-control"
-                      value={formData.lastName}
-                      onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Email</label>
-                  <input
-                      type="email"
-                      name="email"
-                      className="form-control"
-                      value={formData.email}
+                      value={formData.passwordConfirm}
                       onChange={handleChange}
                   />
                 </div>
