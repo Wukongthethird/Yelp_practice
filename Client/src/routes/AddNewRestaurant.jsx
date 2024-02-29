@@ -1,5 +1,5 @@
 import React from "react";
-import AddRestaurantForm from "../components/AddRestaurantsForm"
+import AddRestaurantForm from "../components/forms/AddRestaurantsForm";
 import { Route } from "react-router-dom";
 
 const addNewRestaurant = () =>{

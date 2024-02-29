@@ -22,7 +22,7 @@ function RestaurantCardList({restaurants}){
 
 //https://www.geeksforgeeks.org/react-proptype-array-with-shape/
 //https://legacy.reactjs.org/docs/typechecking-with-proptypes.html
-RestaurantCardList.PropTypes = {
+RestaurantCardList.propTypes = {
   restaurants: PropTypes.arrayOf(
     PropTypes.shape({
       restaurants_name: PropTypes.string,

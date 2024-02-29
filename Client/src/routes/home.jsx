@@ -1,8 +1,8 @@
 import React , {useState, useEffect} from "react";
 import yelpAPI from "../api";
 import LoadingSpinner from "../components/LoadingSpinner";
-import RestaurantList from "../components/RestaurantsList";
-import SearchForm from "../components/SearchForm";
+import RestaurantList from "../components/restaurants/RestaurantsList";
+import SearchForm from "../components/forms/SearchForm";
 
 const Home = () =>{
 

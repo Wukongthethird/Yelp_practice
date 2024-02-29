@@ -1,17 +1,20 @@
 import React, { useState } from "react";
-import yelpAPI from "../api";
+import yelpAPI from "../../api";
 // import { useHistory } from "react-router-dom";
-import addNewRestaurant from "../routes/AddNewRestaurant";
-import Alert from "./Alert";
+import Alert from "../../components/Alert";
+
+
+
+
 
 const AddRestaurantsForm = () => {
   // const history = useHistory();
   const [formData, setFormData] = useState({
-    restaurants_name: "",
-    address_location: "",
+    restaurantsName: "",
+    addressLocation: "",
     city: "",
     zipcode: "",
-    price_range: "",
+    priceRange: "",
   });
 
   const [formErrors, setFormErrors] = useState([]);
@@ -59,15 +62,13 @@ const AddRestaurantsForm = () => {
   function handleChange(evt){
     const {name, value} = evt.target;
     console.log("value",value)
-    if (name == "price_range" && !isNaN(value)){
-
+    if (name == "priceRange" && !isNaN(value)){
       setFormData( f => ({...f,[name]:+value}));
     }
     setFormData( f => ({...f,[name]:value}));
   }
-
-  console.log(typeof(formData.price_range))
   
+  console.log(formData)
 
   return (
     <div className="AddRestaurantForm">
@@ -80,24 +81,24 @@ const AddRestaurantsForm = () => {
               <div className="form-group">
                 <label>Restaraunt Name</label>
                 <input
-                    type="restaurants_name"
-                    name="restaurants_name"
+                    type="restaurantsName"
+                    name="restaurantsName"
                     className="form-control"
-                    value={formData.restaurants_name}
+                    value={formData.restaurantsName}
                     onChange={handleChange}
-                    autoComplete="restaraunts_name"
+                    autoComplete="restarauntsName"
                     required
                 />
               </div>
               <div className="form-group">
                 <label>Address</label>
                 <input
-                    type="address_location"
-                    name="address_location"
+                    type="addressLocation"
+                    name="addressLocation"
                     className="form-control"
                     value={formData.password}
                     onChange={handleChange}
-                    autoComplete="address_location"
+                    autoComplete="addressLocation"
                     required
                 />
               </div>
@@ -127,13 +128,13 @@ const AddRestaurantsForm = () => {
               </div>
               <div className="form-group">
                 <label>Price Range</label>
-                <select className="form-group" type = "price_range" name="price_range" onChange={handleChange }>
+                <select className="form-group" type = "priceRange" name="priceRange" onChange={handleChange }>
                 <option disabled selected>Price</option>
-                  <option value={1} type = "price_range" name="price_range" onChange={handleChange}>$</option>
-                  <option value={2} type = "price_range" name="price_range" onChange={handleChange}>$$</option>
-                  <option default value={3} type = "price_range" name="price_range" onChange={handleChange}>$$$</option>
-                  <option value={4} type = "price_range" name="price_range" onChange={handleChange}>$$$$</option>
-                  <option value={5} type = "price_range" name="price_range" onChange={handleChange}>$$$$$</option>
+                  <option value={1} type = "priceRange" name="priceRange" onChange={handleChange}>$</option>
+                  <option value={2} type = "priceRange" name="priceRange" onChange={handleChange}>$$</option>
+                  <option default value={3} type = "priceRange" name="priceRange" onChange={handleChange}>$$$</option>
+                  <option value={4} type = "priceRange" name="priceRange" onChange={handleChange}>$$$$</option>
+                  <option value={5} type = "priceRange" name="priceRange" onChange={handleChange}>$$$$$</option>
                 </select>
               </div>
 

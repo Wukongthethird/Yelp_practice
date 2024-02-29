@@ -18,7 +18,8 @@ CREATE TABLE
     last_name VARCHAR(60) NOT NULL,
     middle_name VARCHAR(60),
     email VARCHAR(254) NOT NULL,
-    passhash VARCHAR(254) NOT NULL
+    passhash VARCHAR(254) NOT NULL,
+    is_admin BOOLEAN DEFAULT false
   );
 
 
@@ -29,6 +30,18 @@ CREATE TABLE
     restaurants_id INTEGER REFERENCES restaurants ON DELETE CASCADE NOT NULL,
     PRIMARY KEY (user_id,restaurants_id)
   );
+
+  CREATE TABLE 
+  yelp_admin (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(60) NOT NULL,
+    middle_name VARCHAR(60),
+    email VARCHAR(254) NOT NULL,
+    passhash VARCHAR(254) NOT NULL,
+    is_admin BOOLEAN NOT NULL
+  );
+
 
 
 insert into yelp_users (first_name, last_name, middle_name, email, passhash) values ('Yvette', 'Mannock', 'Jere', 'sit amet lobortis sapien sapien non mi integer ac neque duis bibendum morbi', 'sed tincidunt eu felis fusce posuere felis sed lacus morbi sem mauris laoreet');

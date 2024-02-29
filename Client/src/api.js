@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 
 /** API Class.
  *
@@ -8,33 +8,51 @@ import axios from "axios"
  *
  */
 
-class yelpAPI{
+class yelpAPI {
+
   static BASE_URL = import.meta.env.VITE_BASEURL || "http://localhost:3001";
 
-  static async request(endpoint="", data = {}, method = "get") {
+  //https://stackoverflow.com/questions/40710628/how-to-convert-snake-case-to-camelcase
+  static snakeToCamel = str =>
+  str.toLowerCase().replace(/([-_][a-z])/g, group =>
+    group
+      .toUpperCase()
+      .replace('-', '')
+      .replace('_', '')
+  );
+  
+
+  static async request(endpoint = "", data = {}, method = "get") {
     console.debug("API Call:", endpoint, data, method);
 
     //base api call
     const url = `${this.BASE_URL}/${endpoint}`;
-    const params = (method === "get")
-        ? data
-        : {};
+    const params = method === "get" ? data : {};
 
     try {
-
-      return (await axios({ url, method, data,params })).data;
+      return (await axios({ url, method, data, params })).data;
     } catch (err) {
       console.error("API Error:", err.response);
       let message = err.response.data.error.message;
       throw Array.isArray(message) ? message : [message];
-    }
+    } 
   }
 
   /** Gets a list of all restaurants */
-  static async getAllRestaurants(restaurants_name) {
-    let res = await this.request(`api/v1/restaurants`, {restaurants_name})
-
-    return res.restaurants  ;
+  static async getAllRestaurants(restaurantsName) {
+    let res = await this.request(`api/v1/restaurants`, { restaurantsName });
+    console.log("rrr",res.restaurants)
+    // let copy = {...res.restaurants}
+    // console.log("copy",copy)
+    // for (let key in copy){
+    //   const newKey = this.snakeToCamel(key)
+    //   console.log("nk",newKey)
+    //   console.log("nk",copy[newKey])
+    //   // copy[this.snakeToCamel(key)] = copy[key]
+    //   // delete copy[key]
+    // }
+    // console.log("copy",res)
+    return res.restaurants;
   }
 
   /** Searches exact restaurant by id */
@@ -43,22 +61,21 @@ class yelpAPI{
     return res.data;
   }
 
-  /** filters out restaurants by name */
-  // static async getRestaurantByName(name){
-  //   name = name.toLowerCase()
-  //   let res = await this.request('restaurants',{name})
-  //   return res.data
-  // }
-
-  static async addNewRestaurant(data){
-    let res = await this.request("api/v1/create_restaurant",data,"post")
-    return res.data
-    
+  /** adds new restaurant based on form data */
+  static async addNewRestaurant(data) {
+    let res = await this.request("api/v1/create_restaurant", data, "post");
+    return res.data;
   }
-  
 
+   /** delete restaurant based on ID should be allowed only by admin */
+  static async deleteRestaurant(id) {
+    let res = await this.request(`api/v1/restaurants/${id}`, "delete");
+    return res.status;
+  }
 
+  static async signUpUser(data){
 
+  }
 }
 
 export default yelpAPI;
