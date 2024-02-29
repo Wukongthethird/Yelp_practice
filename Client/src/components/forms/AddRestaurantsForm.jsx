@@ -68,7 +68,7 @@ const AddRestaurantsForm = () => {
     setFormData( f => ({...f,[name]:value}));
   }
   
-  console.log(formData)
+
 
   return (
     <div className="AddRestaurantForm">

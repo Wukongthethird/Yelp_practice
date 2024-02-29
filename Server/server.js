@@ -5,16 +5,16 @@ const express = require("express");
 const app = express();
 var cors = require("cors");
 const bcrypt = require("bcrypt");
-var session = require('express-session');
+var session = require("express-session");
 
 const PORT = process.env.PORT || 3001;
+const genSalt = process.env.GENSALT;
 const db = require("./DB");
 
 app.use(cors());
 app.use(morgan("dev"));
 
 app.use(express.json());
-
 
 // TODO safer methods and middlewears look at react and previus projects
 // app.use((req, res, next) => {
@@ -24,7 +24,7 @@ app.use(express.json());
 
 // get all restaraunts or all restaurants on search data
 app.get("/api/v1/restaurants", async (req, res) => {
-  console.log(req.query)
+  console.log(req.query);
   if (req.query["restaurantsName"]) {
     try {
       const restaurantsName = req.query["restaurantsName"];
@@ -70,8 +70,8 @@ app.get("/api/v1/restaurant/:id", async (req, res) => {
 });
 
 //create a reastaruant
+// to do validate inputs``
 app.post("/api/v1/create_restaurant/", async (req, res) => {
-
   const sqlInput = Object.values(req.body);
 
   try {
@@ -141,40 +141,46 @@ app.delete("/api/v1/restaurant/:id", async (req, res) => {
   });
 });
 
-
 /**
  * 
  *  Create new user and add to DB. Redirect to home page.
 
-    If data not valid, return err.
+    to do validate data If data not valid, return err.
  */
-app.post("/api/v1/restaurant/signup" , async (req,res)=>{
-  console.log("hello")
-  const passhash = req.body["password"]
+app.post("/api/v1/signup", async (req, res) => {
+  console.log("req", req.body);
+  let data = {};
+  for (let key in req.body) {
+    data[camelToSnakeCase(key)] = req.body[key];
+  }
 
-  
-} )
+  const passhash = await bcrypt.hash(data["password"].toString(), 10);
+  data["passhash"] = passhash;
+  delete data["password"];
+  delete data["passwordConfirm"];
 
+  const sqlInput = Object.values(data)
 
+  try {
+    const result = await db.query(
+      `INSERT INTO 
+      yelp_users (first_name, last_name, middle_name, email, passhash) 
+      VALUES ($1,$2,$3,$4,$5)
+      returning * `,
+      sqlInput
+    );
+    res.status(201)
+  } catch (err) {
+    console.log(err);
+  }
+});
 
-app.post("/api/v1/restaurants/", (req, res) => {});
 app.listen(PORT, () => {
   console.log(`server is up and listening on port ${PORT}`);
 });
 
-
 // converts camel case to snake case
 
-const camelToSnakeCase = (str)=>{
-  return str.replace(/[A_Z]/g, c => `_${c.toLowerCase()}` )
-};
-
-
-const snakeToCamelCase = (str)=>{
-  let snakeSplit = str.split("_")
-  for(let i=1; i<snakeSplit.length; i++){
-    snakeSplit[0] = snakeSplit[0].toUpperCase();
-  }
-  return snakeSplit.join("")
-
+const camelToSnakeCase = (str) => {
+  return str.replace(/[A_Z]/g, (c) => `_${c.toLowerCase()}`);
 };

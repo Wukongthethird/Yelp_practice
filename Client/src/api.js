@@ -41,17 +41,6 @@ class yelpAPI {
   /** Gets a list of all restaurants */
   static async getAllRestaurants(restaurantsName) {
     let res = await this.request(`api/v1/restaurants`, { restaurantsName });
-    console.log("rrr",res.restaurants)
-    // let copy = {...res.restaurants}
-    // console.log("copy",copy)
-    // for (let key in copy){
-    //   const newKey = this.snakeToCamel(key)
-    //   console.log("nk",newKey)
-    //   console.log("nk",copy[newKey])
-    //   // copy[this.snakeToCamel(key)] = copy[key]
-    //   // delete copy[key]
-    // }
-    // console.log("copy",res)
     return res.restaurants;
   }
 
@@ -74,7 +63,8 @@ class yelpAPI {
   }
 
   static async signUpUser(data){
-
+    let res = await this.request("api/v1/signup", data , "post")
+    return res.status
   }
 }
 
