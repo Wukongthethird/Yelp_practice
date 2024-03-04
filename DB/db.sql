@@ -17,7 +17,7 @@ CREATE TABLE
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(60) NOT NULL,
     middle_name VARCHAR(60),
-    email VARCHAR(254) NOT NULL,
+    email  VARCHAR(254) UNIQUE NOT NULL,
     passhash VARCHAR(254) NOT NULL,
     is_admin BOOLEAN DEFAULT false
   );

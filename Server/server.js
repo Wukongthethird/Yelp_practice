@@ -5,16 +5,36 @@ const express = require("express");
 const app = express();
 var cors = require("cors");
 const bcrypt = require("bcrypt");
+const { v4: uuidv4 } = require('uuid');
 var session = require("express-session");
+const db = require("./DB");
+const {camelToSnakeCase} = require("./helper")
 
 const PORT = process.env.PORT || 3001;
-const genSalt = process.env.GENSALT;
-const db = require("./DB");
+const SESSIONSECRET = process.env.SESSION_SECRET;
 
+
+
+
+
+/** MIDDLEWARE */
 app.use(cors());
 app.use(morgan("dev"));
-
 app.use(express.json());
+
+
+
+
+app.use(session({
+  id: function(req) {
+    return uuidv4() // use UUIDs for session IDs
+  },
+  cookie: { secure: true , maxAge:2000},
+  secret:SESSIONSECRET,
+  resave:false,
+  saveUninitialized:false,
+
+}))
 
 // TODO safer methods and middlewears look at react and previus projects
 // app.use((req, res, next) => {
@@ -22,9 +42,11 @@ app.use(express.json());
 //   next();
 // });
 
+
+
 // get all restaraunts or all restaurants on search data
 app.get("/api/v1/restaurants", async (req, res) => {
-  console.log(req.query);
+  console.log(req.session)
   if (req.query["restaurantsName"]) {
     try {
       const restaurantsName = req.query["restaurantsName"];
@@ -143,23 +165,22 @@ app.delete("/api/v1/restaurant/:id", async (req, res) => {
 
 /**
  * 
- *  Create new user and add to DB. Redirect to home page.
+ *  Create new user and add to DB.
 
     to do validate data If data not valid, return err.
  */
 app.post("/api/v1/signup", async (req, res) => {
-  console.log("req", req.body);
   let data = {};
   for (let key in req.body) {
     data[camelToSnakeCase(key)] = req.body[key];
   }
-
+  console.log(data)
   const passhash = await bcrypt.hash(data["password"].toString(), 10);
   data["passhash"] = passhash;
   delete data["password"];
   delete data["passwordConfirm"];
 
-  const sqlInput = Object.values(data)
+  const sqlInput = Object.values(data);
 
   try {
     const result = await db.query(
@@ -169,18 +190,23 @@ app.post("/api/v1/signup", async (req, res) => {
       returning * `,
       sqlInput
     );
-    res.status(201)
+    res.status(201);
   } catch (err) {
     console.log(err);
   }
 });
 
+/**
+ * logins user by email needs to validate later and do session
+ */
+app.post("/api/v1/login", async (req, res) => {
+
+
+
+
+
+});
+
 app.listen(PORT, () => {
   console.log(`server is up and listening on port ${PORT}`);
 });
-
-// converts camel case to snake case
-
-const camelToSnakeCase = (str) => {
-  return str.replace(/[A_Z]/g, (c) => `_${c.toLowerCase()}`);
-};
