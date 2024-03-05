@@ -8,10 +8,7 @@ const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 var session = require("express-session");
 
-// passport sessions stuff
-const passport = require("passport");
-const initializePassport = require("./passportconfig");
-initializePassport(passport);
+
 
 const db = require("./DB");
 /**secrets */
@@ -37,9 +34,13 @@ app.use(
     saveUninitialized: false,
   })
 );
-
-app.use(passport.initialize);
-app.use(passport.session);
+/** passport */
+// passport sessions stuff
+const passport = require("passport");
+const initializePassport = require("./passportconfig");
+initializePassport(passport);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // TODO safer methods and middlewears look at react and previus projects
 // app.use((req, res, next) => {
@@ -202,12 +203,17 @@ app.post("/api/v1/signup", async (req, res) => {
 /**
  * logins user by email needs to validate later and do session
  */
-app.post("/api/v1/login", passport.authenticate(
-  "local",{
-    successRedirect:console.log("it kinda works"),
-    failureRedirect:console.log("it didnt work")
-  }
-));
+app.post("/api/v1/login", 
+passport.authenticate("local"
+),
+ async (req, res) => {
+ 
+});
+
+// app.post("/api/v1/login", async(req,res)=>{
+
+// }
+// );
 
 app.listen(PORT, () => {
   console.log(`server is up and listening on port ${PORT}`);

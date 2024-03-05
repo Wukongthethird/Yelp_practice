@@ -66,6 +66,13 @@ class yelpAPI {
     let res = await this.request("api/v1/signup", data , "post")
     return res.status
   }
+
+  static async loginUser(data){
+    console.log("Api", data)
+    let res = await this.request("api/v1/login", data , "post")
+    console.log(res,"api")
+    return res
+  }
 }
 
 export default yelpAPI;
