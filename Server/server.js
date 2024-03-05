@@ -5,36 +5,41 @@ const express = require("express");
 const app = express();
 var cors = require("cors");
 const bcrypt = require("bcrypt");
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 var session = require("express-session");
-const db = require("./DB");
-const {camelToSnakeCase} = require("./helper")
 
+// passport sessions stuff
+const passport = require("passport");
+const initializePassport = require("./passportconfig");
+initializePassport(passport);
+
+const db = require("./DB");
+/**secrets */
 const PORT = process.env.PORT || 3001;
 const SESSIONSECRET = process.env.SESSION_SECRET;
 
-
-
-
+/** helper function */
+const { camelToSnakeCase } = require("./helper");
 
 /** MIDDLEWARE */
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 
+app.use(
+  session({
+    id: function (req) {
+      return uuidv4(); // use UUIDs for session IDs
+    },
+    cookie: { secure: true, maxAge: 2000 },
+    secret: SESSIONSECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
-
-
-app.use(session({
-  id: function(req) {
-    return uuidv4() // use UUIDs for session IDs
-  },
-  cookie: { secure: true , maxAge:2000},
-  secret:SESSIONSECRET,
-  resave:false,
-  saveUninitialized:false,
-
-}))
+app.use(passport.initialize);
+app.use(passport.session);
 
 // TODO safer methods and middlewears look at react and previus projects
 // app.use((req, res, next) => {
@@ -42,11 +47,9 @@ app.use(session({
 //   next();
 // });
 
-
-
 // get all restaraunts or all restaurants on search data
 app.get("/api/v1/restaurants", async (req, res) => {
-  console.log(req.session)
+  console.log(req.session);
   if (req.query["restaurantsName"]) {
     try {
       const restaurantsName = req.query["restaurantsName"];
@@ -174,7 +177,7 @@ app.post("/api/v1/signup", async (req, res) => {
   for (let key in req.body) {
     data[camelToSnakeCase(key)] = req.body[key];
   }
-  console.log(data)
+  console.log(data);
   const passhash = await bcrypt.hash(data["password"].toString(), 10);
   data["passhash"] = passhash;
   delete data["password"];
@@ -199,13 +202,12 @@ app.post("/api/v1/signup", async (req, res) => {
 /**
  * logins user by email needs to validate later and do session
  */
-app.post("/api/v1/login", async (req, res) => {
-
-
-
-
-
-});
+app.post("/api/v1/login", passport.authenticate(
+  "local",{
+    successRedirect:console.log("it kinda works"),
+    failureRedirect:console.log("it didnt work")
+  }
+));
 
 app.listen(PORT, () => {
   console.log(`server is up and listening on port ${PORT}`);
