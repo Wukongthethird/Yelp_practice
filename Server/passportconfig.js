@@ -10,47 +10,44 @@ const db = require("./DB");
 
 /** https://www.youtube.com/watch?v=vxu1RrR0vbw&t=4381s 1 hrs 06 min */
 function initializePassport(passport) {
-  //holy fuck you need to pass req through
-  const authenticateUser = async (req, email, password) => {
-
+ 
+  const authenticateUser = async (req, email, password,done) => {
     const results = await db.query(
-      "select id, email, passhash from yelp_users where LOWER(email) = $1",
+      "select * from yelp_users where LOWER(email) = $1",
       [email]
     );
 
-    if (!results.rows) {
-      return {
+    let user = results.rows[0];
+
+    if (!user) {
+      return done(null, {
         errors: [
           {
             field: "username",
             message: "could not find user by username",
           },
         ],
-      };
+      });
     }
-
-    if (results.rows.length > 0) {
-      const user = results.rows[0];
+  
+    if (user) {
       const isValid = await bcrypt.compare(password, user["passhash"]);
       if (!isValid) {
-        return {
+        return done(null,{
           errors: [
             {
               field: "password",
               message: "password is incorrect",
             },
           ],
-        };
+        });
       }
-      req.session.userId = user.id;
-      return { user };
     }
- 
+    return done(null,user);
   };
 
   passport.use(
     new LocalStrategy(
-      // HAS TO BE ISERNAME FIELD SO DUMB
       {
         passReqToCallback: true,
         usernameField: "email",

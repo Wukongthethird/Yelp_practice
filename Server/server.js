@@ -204,10 +204,13 @@ app.post("/api/v1/signup", async (req, res) => {
  * logins user by email needs to validate later and do session
  */
 app.post("/api/v1/login", 
-passport.authenticate("local"
-),
+passport.authenticate("local"),
  async (req, res) => {
- console.log("req",req)
+  console.log("im here,",req.session)
+  res.json({
+    status:"login"
+  })
+
 });
 
 // app.post("/api/v1/login", async(req,res)=>{
