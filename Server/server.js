@@ -207,7 +207,7 @@ app.post("/api/v1/login",
 passport.authenticate("local"
 ),
  async (req, res) => {
- 
+ console.log("req",req)
 });
 
 // app.post("/api/v1/login", async(req,res)=>{

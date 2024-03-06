@@ -7,74 +7,47 @@ var passport = require("passport");
 const { authenticate } = require("passport");
 
 const db = require("./DB");
-//authenicate user by email
-// const authenticate_user = async (user_email, password) => {
-//   try {
-//     let user = await db.query(
-//       "select email,passhash from yelp_users where LOWER(email) = $1",
-//       [user_email.toLowerCase()]
-//     );
-
-//     user = user.rows[0]
-//     if (user) {
-//       const auth = await bcrypt.compare(password, user["passhash"]);
-//       if (auth) {
-//         return user;
-//       }
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
-
-
 
 /** https://www.youtube.com/watch?v=vxu1RrR0vbw&t=4381s 1 hrs 06 min */
 function initializePassport(passport) {
-
   //holy fuck you need to pass req through
-  const authenticateUser = async ( req,email,password ) => {
-    if(!email| !password){
-      return "no input"
+  const authenticateUser = async (req, email, password) => {
+
+    const results = await db.query(
+      "select id, email, passhash from yelp_users where LOWER(email) = $1",
+      [email]
+    );
+
+    if (!results.rows) {
+      return {
+        errors: [
+          {
+            field: "username",
+            message: "could not find user by username",
+          },
+        ],
+      };
     }
-    console.log(email,password)
-  
-  
-    // const results = await db.query(
-    //   "select email,passhash from yelp_users where LOWER(email) = $1",
-    //   [email])
-  
-    //   if(!results){
-    //     console.log("bad res,", )
-  
-    //   }
-      
-  
-        // if (err) {
-        //   console.log("first err in db. query", err);
-        //   throw err;
-        // }
-        // if (results.rows.length > 0) {
-        //   const user = user.rows[0];
-        //   bcrypt.compare(password, user["passhash"], (err, isMatch) => {
-        //     if (err) {
-        //       console.log("err after hash pass,", err);
-        //       throw err;
-        //     }
-        //     if (isMatch) {
-        //       return done(null, user);
-        //     } else {
-        //       return done(null, false, { message: "Password is not Correct" });
-        //     }
-        //   });
-        // } else {
-        //   return done(null, false, { message: "email is not registered" });
-        // }
-      
-  
-        // return results
+
+    if (results.rows.length > 0) {
+      const user = results.rows[0];
+      const isValid = await bcrypt.compare(password, user["passhash"]);
+      if (!isValid) {
+        return {
+          errors: [
+            {
+              field: "password",
+              message: "password is incorrect",
+            },
+          ],
+        };
+      }
+      req.session.userId = user.id;
+      return { user };
+    }
+ 
   };
-  
+
   passport.use(
     new LocalStrategy(
       // HAS TO BE ISERNAME FIELD SO DUMB
@@ -83,8 +56,7 @@ function initializePassport(passport) {
         usernameField: "email",
         passwordField: "password",
       },
-     authenticateUser
-      
+      authenticateUser
     )
   );
   /**
@@ -105,6 +77,5 @@ function initializePassport(passport) {
     });
   });
 }
-
 
 module.exports = initializePassport;
