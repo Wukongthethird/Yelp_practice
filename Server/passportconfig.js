@@ -20,27 +20,26 @@ function initializePassport(passport) {
     let user = results.rows[0];
 
     if (!user) {
-      return done(null, {
-        errors: [
+      return done(JSON.stringify( {
+        errors: 
           {
             field: "username",
             message: "could not find user by username",
           },
-        ],
-      });
+        
+      }));
     }
   
     if (user) {
       const isValid = await bcrypt.compare(password, user["passhash"]);
       if (!isValid) {
-        return done(null,{
-          errors: [
+        return done(JSON.stringify({
+          errors: 
             {
               field: "password",
               message: "password is incorrect",
             },
-          ],
-        });
+        }));
       }
     }
     return done(null,user);

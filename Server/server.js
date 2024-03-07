@@ -203,15 +203,15 @@ app.post("/api/v1/signup", async (req, res) => {
 /**
  * logins user by email needs to validate later and do session
  */
+//https://github.com/jaredhanson/passport/issues/126#issuecomment-32333163
 app.post("/api/v1/login", 
-passport.authenticate("local"),
- async (req, res) => {
-  console.log("im here,",req.session)
-  res.json({
-    status:"login"
-  })
-
-});
+passport.authenticate("local",{failWithError:true}),
+  ( req, res,next ) => {
+  res.status(200).json({status:"login"})
+},(err,req,res,next)=>{
+  res.status(404).send(err)
+}
+);
 
 // app.post("/api/v1/login", async(req,res)=>{
 

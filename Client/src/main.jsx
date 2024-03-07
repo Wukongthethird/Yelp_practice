@@ -9,9 +9,7 @@ import "./index.css";
 import ErrorPage from "./routes/ErrorPage";
 import { Outlet } from "react-router-dom";
 import App from "./App"
-import Home from "./routes/Home"
-import Update from "./routes/Update"
-import Restaurantsdetailpage from "./routes/RestaurantsDetailPage"
+
 
 // const router = createBrowserRouter([
   
