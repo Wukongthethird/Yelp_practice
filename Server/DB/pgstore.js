@@ -13,6 +13,8 @@ conObject = {
 const pgstore = new (require('connect-pg-simple')(session))({
   pool:db,
   conObject,
+  tableName : 'user_sessions' ,
+  createTableIfMissing: true, // creates session table
 })
 
 module.exports = pgstore;
