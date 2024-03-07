@@ -25,6 +25,9 @@ const Home = () =>{
 
   return (
     <div>
+    <button onClick={yelpAPI.logout}>
+      LogOut
+    </button>
       <RestaurantList/>
     </div>
   )

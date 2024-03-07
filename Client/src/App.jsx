@@ -33,7 +33,6 @@ function App() {
   // }
   // console.log(data)
 
-  
 
 
   return (

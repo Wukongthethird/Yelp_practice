@@ -7,7 +7,7 @@ var cors = require("cors");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 var session = require("express-session");
-
+const pgstore = require("./DB/pgstore")
 
 
 const db = require("./DB");
@@ -22,13 +22,21 @@ const { camelToSnakeCase } = require("./helper");
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+const isAuth = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.json({ msg: "you need to be login to do that" });
+  }
+};
 
 app.use(
   session({
     id: function (req) {
       return uuidv4(); // use UUIDs for session IDs
     },
-    cookie: { secure: true, maxAge: 2000 },
+    store:pgstore,
+    cookie: { httpOnly: true, secure: false, maxAge: 1000 * 60 * 60 * 24 },
     secret: SESSIONSECRET,
     resave: false,
     saveUninitialized: false,
@@ -43,10 +51,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // TODO safer methods and middlewears look at react and previus projects
-// app.use((req, res, next) => {
-//   console.log("im middlewhere");
-//   next();
-// });
+app.use((req, res, next) => {
+  console.log(req.session);
+  next();
+});
 
 // get all restaraunts or all restaurants on search data
 app.get("/api/v1/restaurants", async (req, res) => {
@@ -178,13 +186,13 @@ app.post("/api/v1/signup", async (req, res) => {
   for (let key in req.body) {
     data[camelToSnakeCase(key)] = req.body[key];
   }
-  console.log(data);
+
   const passhash = await bcrypt.hash(data["password"].toString(), 10);
   data["passhash"] = passhash;
   delete data["password"];
   delete data["passwordConfirm"];
 
-  const sqlInput = Object.values(data);
+  const [sqlInput] = Object.values(data);
 
   try {
     const result = await db.query(
@@ -204,19 +212,27 @@ app.post("/api/v1/signup", async (req, res) => {
  * logins user by email needs to validate later and do session
  */
 //https://github.com/jaredhanson/passport/issues/126#issuecomment-32333163
-app.post("/api/v1/login", 
-passport.authenticate("local",{failWithError:true}),
-  ( req, res,next ) => {
-  res.status(200).json({status:"login"})
-},(err,req,res,next)=>{
-  res.status(404).send(err)
-}
+app.post(
+  "/api/v1/login",
+  passport.authenticate("local", { failWithError: true }),
+  (req, res, next) => {
+    console.log(req.session)
+    res.status(200).json({ status: "login" });
+  },
+  (err, req, res, next) => {
+    res.send(err);
+  }
 );
 
-// app.post("/api/v1/login", async(req,res)=>{
-
-// }
-// );
+app.delete("/api/v1/logout", async (msg, req, res) => {
+  // if (msg) {
+  //   res.json({ msg: "you cannot logout" });
+  // }
+  // console.log(req.session)
+  // req.logOut()
+  // console.log(req.session)
+  res.status(200).json({ msg: "you have logout successfully" });
+});
 
 app.listen(PORT, () => {
   console.log(`server is up and listening on port ${PORT}`);

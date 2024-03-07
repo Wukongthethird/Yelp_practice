@@ -68,8 +68,15 @@ class yelpAPI {
   }
 
   static async loginUser(data){
-    console.log("Api", data)
+
+ 
     let res = await this.request("api/v1/login", data , "post")
+    console.log(res,"api")
+    return res
+  }
+
+  static async logout(){
+    let res = await this.request("api/v1/logout" , "delete")
     console.log(res,"api")
     return res
   }
