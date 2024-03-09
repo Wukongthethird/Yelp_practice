@@ -7,9 +7,8 @@ var cors = require("cors");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 var session = require("express-session");
-const pgstore = require("./DB/pgstore")
-const isAuth = require("./middlewear/isAuth")
-
+const pgstore = require("./DB/pgstore");
+const isAuth = require("./middlewear/isAuth");
 
 const db = require("./DB");
 /**secrets */
@@ -21,22 +20,16 @@ const { camelToSnakeCase } = require("./helper");
 
 /** MIDDLEWARE */
 
-
-
-
-app.use(cors(
-{  
-  // origin:"https://localhost:5173",
-  allowedHeaders:"*",
-  credentials:true
-  // origin:"*"
-}
-
-));
+app.use(
+  cors({
+    // origin:"https://localhost:5173",
+    allowedHeaders: "*",
+    credentials: true,
+    // origin:"*"
+  })
+);
 app.use(morgan("dev"));
 app.use(express.json());
-
-
 
 // express session store
 app.use(
@@ -44,19 +37,18 @@ app.use(
     id: function (req) {
       return uuidv4(); // use UUIDs for session IDs
     },
-    store:pgstore,
+    store: pgstore,
     cookie: {
-       httpOnly: true,
-        secure: false,
-         maxAge: 1000 * 60 * 60 * 24,
-         sameSite:"none"
-       },
+      httpOnly: true,
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24,
+      sameSite: "none",
+    },
     secret: SESSIONSECRET,
     resave: false,
     saveUninitialized: false,
   })
 );
-
 
 /** passport */
 // passport sessions stuff
@@ -65,52 +57,48 @@ const initializePassport = require("./passportconfig");
 initializePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
-app.use("/api/v1/logout", isAuth);
+
+//admin auth TODO
+// app.use("/api/v1/create_restaurant/", isAuth);
+
+//userAuth
+// app.use("/api/v1/logout", isAuth);
 
 // TODO safer methods and middlewears look at react and previus projects
 // app.use((req, res, next) => {
-//   console.log("pre get",req.user);
+//   console.log("pre get",req.user, req.session.passport );
 //   next();
 // });
 
 // get all restaraunts or all restaurants on search data
 app.get("/api/v1/restaurants", async (req, res) => {
-  // if(!req.user){
-  //   console.log("you arent logged in")
-  //   res.json({msg:"no info for you "})
-  // }
+ 
   if (req.query["restaurantsName"]) {
-    try {
-      const restaurantsName = req.query["restaurantsName"];
-      const results = await db.query(
-        "select * from restaurants where LOWER(restaurants_name) like   ('%'||$1||'%')",
-        [restaurantsName]
-      );
-      if (!results) {
-        res.status(204).json({
-          restaurants: "",
-        });
-      }
-      res.status(200).json({
-        restaurants: [results["rows"][0]],
+
+    const restaurantsName = req.query["restaurantsName"];
+    const results = await db.query(
+      "select * from restaurants where LOWER(restaurants_name) like   ('%'||$1||'%')",
+      [restaurantsName]
+    );
+    if (!results) {
+      res.status(204).json({
+        restaurants: "",
       });
-    } catch (err) {
-      console.log(err);
     }
+    res.status(200).json({
+      restaurants: [results["rows"][0]],
+    });
   } else {
-    try {
-      const results = await db.query("select * from restaurants");
-      res.status(200).json({
-        restaurants: results["rows"],
-      });
-    } catch (err) {
-      console.log(err);
-    }
+    const results = await db.query("select * from restaurants");
+    res.status(200).json({
+      restaurants: results["rows"],
+    });
   }
 });
 
 // get a restaraunt by id
 app.get("/api/v1/restaurant/:id", async (req, res) => {
+  console.log("get");
   try {
     const result = await db.query("select * from restaurants where id = $1", [
       req.params.id,
@@ -126,6 +114,7 @@ app.get("/api/v1/restaurant/:id", async (req, res) => {
 //create a reastaruant
 // to do validate inputs``
 app.post("/api/v1/create_restaurant/", async (req, res) => {
+
   const sqlInput = Object.values(req.body);
 
   try {
@@ -244,16 +233,24 @@ app.post(
   }
 );
 
-app.delete("/api/v1/logout", async ( req, res, next) => {
+app.delete("/api/v1/logout", async (req, res, next) => {
   // if (msg) {
   //   res.json({ msg: "you cannot logout" });
   // }
-  console.log("before",req.headers)
-  req.logout((err)=>{console.log(err)})
-  console.log("after", req.session)
+  // req.session = null // do not destroy whole session
+
+  req.logout((err) => {
+    if (err) {
+      console.log("err", err);
+    }
+  });
+
+  res.clearCookie("connect.sid", { path: "/" });
   res.json({ msg: "you have logout successfully" });
 });
 
+
+//need to add global error messsage
 app.listen(PORT, () => {
   console.log(`server is up and listening on port ${PORT}`);
 });
