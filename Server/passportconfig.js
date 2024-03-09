@@ -37,7 +37,7 @@ function initializePassport(passport) {
         );
       }
     }
-    delete user["passhash"]
+    delete user["passhash"];
     return done(null, user);
   };
 
@@ -59,14 +59,25 @@ function initializePassport(passport) {
   /**
    * this will take the session stored on req.user and matches the info on the server/db
    */
-  passport.deserializeUser((id, done) => {
-    db.query(`Select * FROM users where id = $1`, [id], (err, results) => {
-      if (err) {
-        console.log("err in deserializer", err);
-        throw err;
-      }
-      return done(null, results.rows[0]);
-    });
+  passport.deserializeUser(async (user,done) => {
+   
+    const results = await db.query(`Select * FROM yelp_users where id = $1`, [
+      user.id,
+    ]);
+
+    if (!results) {
+      return done(
+        JSON.stringify({
+          errors: {
+            field: "user",
+            message: "could not find user by id",
+          },
+        })
+      );
+    }
+
+    return done(null,results)
+
   });
 }
 

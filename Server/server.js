@@ -19,7 +19,13 @@ const SESSIONSECRET = process.env.SESSION_SECRET;
 const { camelToSnakeCase } = require("./helper");
 
 /** MIDDLEWARE */
-app.use(cors());
+app.use(cors(
+{  
+  origin:"https://localhost:5173",
+  // origin:"*"
+}
+
+));
 app.use(morgan("dev"));
 app.use(express.json());
 const isAuth = (req, res, next) => {
@@ -36,7 +42,12 @@ app.use(
       return uuidv4(); // use UUIDs for session IDs
     },
     store:pgstore,
-    cookie: { httpOnly: true, secure: false, maxAge: 1000 * 60 * 60 * 24 },
+    cookie: {
+       httpOnly: true,
+        secure: false,
+         maxAge: 1000 * 60 * 60 * 24,
+         sameSite:"none"
+       },
     secret: SESSIONSECRET,
     resave: false,
     saveUninitialized: false,
@@ -51,14 +62,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // TODO safer methods and middlewears look at react and previus projects
-app.use((req, res, next) => {
-  console.log(req.session);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log(req.session);
+//   next();
+// });
 
 // get all restaraunts or all restaurants on search data
 app.get("/api/v1/restaurants", async (req, res) => {
-  console.log(req.session);
+  console.log("im here");
   if (req.query["restaurantsName"]) {
     try {
       const restaurantsName = req.query["restaurantsName"];
