@@ -29,6 +29,10 @@ function LoginForm() {
     evt.preventDefault();
     try {
       await yelpAPI.loginUser(formData);
+      const res = await yelpAPI.getAllRestaurants().then();
+      if(res){
+        console.log("res", res)
+      }
     } catch (err) {
       setFormErrors(err);
     }

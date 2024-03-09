@@ -6,6 +6,7 @@ const db = require("./DB");
 /** https://www.youtube.com/watch?v=vxu1RrR0vbw&t=4381s 1 hrs 06 min */
 function initializePassport(passport) {
   const authenticateUser = async (req, email, password, done) => {
+    
     if(req.session.passport){
       return done(
         JSON.stringify({
@@ -16,6 +17,7 @@ function initializePassport(passport) {
         })
       );
     }
+
     const results = await db.query(
       "select id, email, last_name , passhash from yelp_users where LOWER(email) = $1",
       [email]

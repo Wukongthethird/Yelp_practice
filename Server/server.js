@@ -22,10 +22,10 @@ const { camelToSnakeCase } = require("./helper");
 
 app.use(
   cors({
-    // origin:"https://localhost:5173",
+    origin:"http://localhost:5173",
     allowedHeaders: "*",
     credentials: true,
-    // origin:"*"
+    // origin:"null"
   })
 );
 app.use(morgan("dev"));
@@ -39,7 +39,7 @@ app.use(
     },
     store: pgstore,
     cookie: {
-      httpOnly: true,
+      httpOnly: false,
       secure: false,
       maxAge: 1000 * 60 * 60 * 24,
       sameSite: "none",
@@ -61,8 +61,9 @@ app.use(passport.session());
 //admin auth TODO
 // app.use("/api/v1/create_restaurant/", isAuth);
 
-//userAuth
-// app.use("/api/v1/logout", isAuth);
+// userAuth
+app.use("/api/v1/logout", isAuth);
+// app.use("/api/v1/restaurants", isAuth);
 
 // TODO safer methods and middlewears look at react and previus projects
 // app.use((req, res, next) => {
@@ -72,7 +73,7 @@ app.use(passport.session());
 
 // get all restaraunts or all restaurants on search data
 app.get("/api/v1/restaurants", async (req, res) => {
- 
+  console.log("im here" ,req.headers)
   if (req.query["restaurantsName"]) {
 
     const restaurantsName = req.query["restaurantsName"];

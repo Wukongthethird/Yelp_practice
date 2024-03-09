@@ -71,7 +71,7 @@ class yelpAPI {
   static async loginUser(data){
 
  
-    let res = await this.request("api/v1/login", data , "post")
+    let res = await this.request("api/v1/login", data , "post",{Credential:true})
     console.log(res,"api")
     return res
   }
