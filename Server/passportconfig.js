@@ -60,21 +60,21 @@ function initializePassport(passport) {
    * this will take the session stored on req.user and matches the info on the server/db
    */
   passport.deserializeUser(async (user,done) => {
-   
+   console.log("Des", user)
     const results = await db.query(`Select * FROM yelp_users where id = $1`, [
       user.id,
     ]);
-
-    if (!results) {
-      return done(
-        JSON.stringify({
-          errors: {
-            field: "user",
-            message: "could not find user by id",
-          },
-        })
-      );
-    }
+    console.log("was called",results)
+    // if (!results) {
+    //   return done(
+    //     JSON.stringify({
+    //       errors: {
+    //         field: "user",
+    //         message: "could not find user by id",
+    //       },
+    //     })
+    //   );
+    // }
 
     return done(null,results)
 

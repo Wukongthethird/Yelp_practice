@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 var session = require("express-session");
 const pgstore = require("./DB/pgstore")
+const isAuth = require("./middlewear/isAuth")
 
 
 const db = require("./DB");
@@ -19,23 +20,25 @@ const SESSIONSECRET = process.env.SESSION_SECRET;
 const { camelToSnakeCase } = require("./helper");
 
 /** MIDDLEWARE */
+
+
+
+
 app.use(cors(
 {  
-  origin:"https://localhost:5173",
+  // origin:"https://localhost:5173",
+  allowedHeaders:"*",
+  credentials:true
   // origin:"*"
 }
 
 ));
 app.use(morgan("dev"));
 app.use(express.json());
-const isAuth = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    next();
-  } else {
-    res.json({ msg: "you need to be login to do that" });
-  }
-};
 
+
+
+// express session store
 app.use(
   session({
     id: function (req) {
@@ -53,6 +56,8 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+
 /** passport */
 // passport sessions stuff
 const passport = require("passport");
@@ -60,16 +65,20 @@ const initializePassport = require("./passportconfig");
 initializePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
+app.use("/api/v1/logout", isAuth);
 
 // TODO safer methods and middlewears look at react and previus projects
 // app.use((req, res, next) => {
-//   console.log(req.session);
+//   console.log("pre get",req.user);
 //   next();
 // });
 
 // get all restaraunts or all restaurants on search data
 app.get("/api/v1/restaurants", async (req, res) => {
-  console.log("im here");
+  // if(!req.user){
+  //   console.log("you arent logged in")
+  //   res.json({msg:"no info for you "})
+  // }
   if (req.query["restaurantsName"]) {
     try {
       const restaurantsName = req.query["restaurantsName"];
@@ -227,7 +236,7 @@ app.post(
   "/api/v1/login",
   passport.authenticate("local", { failWithError: true }),
   (req, res, next) => {
-    console.log(req.session)
+    // console.log(req.session)
     res.status(200).json({ status: "login" });
   },
   (err, req, res, next) => {
@@ -235,14 +244,14 @@ app.post(
   }
 );
 
-app.delete("/api/v1/logout", async (msg, req, res) => {
+app.delete("/api/v1/logout", async ( req, res, next) => {
   // if (msg) {
   //   res.json({ msg: "you cannot logout" });
   // }
-  // console.log(req.session)
-  // req.logOut()
-  // console.log(req.session)
-  res.status(200).json({ msg: "you have logout successfully" });
+  console.log("before",req.headers)
+  req.logout((err)=>{console.log(err)})
+  console.log("after", req.session)
+  res.json({ msg: "you have logout successfully" });
 });
 
 app.listen(PORT, () => {

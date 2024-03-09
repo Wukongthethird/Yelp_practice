@@ -26,11 +26,12 @@ class yelpAPI {
     console.debug("API Call:", endpoint, data, method);
 
     //base api call
+    const headers = ('Access-Control-Allow-Origin', 'http://localhost')
     const url = `${this.BASE_URL}/${endpoint}`;
     const params = method === "get" ? data : {};
 
     try {
-      return (await axios({ url, method, data, params })).data;
+      return (await axios({ url, method, data, params, headers })).data;
     } catch (err) {
       console.error("API Error:", err.response);
       let message = err.response.data.error.message;
