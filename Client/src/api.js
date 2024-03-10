@@ -26,12 +26,14 @@ class yelpAPI {
     console.debug("API Call:", endpoint, data, method);
 
     //base api call
-    const headers = ('Access-Control-Allow-Origin', 'http://localhost')
+    const headers = {'Access-Control-Allow-Origin': 'http://localhost:3000' , }
+    // const withCredentials = { withCredentials: true }
+
     const url = `${this.BASE_URL}/${endpoint}`;
     const params = method === "get" ? data : {};
 
     try {
-      return (await axios({ url, method, data, params, headers })).data;
+      return (await axios({ url, method, data, params, headers,  withCredentials: true, credentials: 'include'   })).data;
     } catch (err) {
       console.error("API Error:", err.response);
       let message = err.response.data.error.message;
@@ -71,7 +73,7 @@ class yelpAPI {
   static async loginUser(data){
 
  
-    let res = await this.request("api/v1/login", data , "post",{Credential:true})
+    let res = await this.request("api/v1/login", data , "post",  )
     console.log(res,"api")
     return res
   }

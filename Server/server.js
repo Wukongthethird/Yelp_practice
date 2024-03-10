@@ -19,13 +19,20 @@ const SESSIONSECRET = process.env.SESSION_SECRET;
 const { camelToSnakeCase } = require("./helper");
 
 /** MIDDLEWARE */
+  app.set('trust proxy', 1)
 
 app.use(
   cors({
-    origin:"http://localhost:5173",
-    allowedHeaders: "*",
+    // origin:"http://localhost:5173",
+    // allowedHeaders: "X-Requested-With, Content-Type, Accept",
+    //   credentials: true,
+    //   httpOnly: false,
+      // sameSite: "lax",
+      // secure:false,
+    //
+    // origin: "*",
     credentials: true,
-    // origin:"null"
+    origin: 'http://localhost:5173'
   })
 );
 app.use(morgan("dev"));
@@ -39,10 +46,12 @@ app.use(
     },
     store: pgstore,
     cookie: {
-      httpOnly: false,
-      secure: false,
+      credentials: true,
+      httpOnly: true,
+      // sameSite: "none",
+      // secure: false, //
       maxAge: 1000 * 60 * 60 * 24,
-      sameSite: "none",
+    
     },
     secret: SESSIONSECRET,
     resave: false,
@@ -73,9 +82,8 @@ app.use("/api/v1/logout", isAuth);
 
 // get all restaraunts or all restaurants on search data
 app.get("/api/v1/restaurants", async (req, res) => {
-  console.log("im here" ,req.headers)
+  console.log("im here", req.headers);
   if (req.query["restaurantsName"]) {
-
     const restaurantsName = req.query["restaurantsName"];
     const results = await db.query(
       "select * from restaurants where LOWER(restaurants_name) like   ('%'||$1||'%')",
@@ -115,7 +123,6 @@ app.get("/api/v1/restaurant/:id", async (req, res) => {
 //create a reastaruant
 // to do validate inputs``
 app.post("/api/v1/create_restaurant/", async (req, res) => {
-
   const sqlInput = Object.values(req.body);
 
   try {
@@ -249,7 +256,6 @@ app.delete("/api/v1/logout", async (req, res, next) => {
   res.clearCookie("connect.sid", { path: "/" });
   res.json({ msg: "you have logout successfully" });
 });
-
 
 //need to add global error messsage
 app.listen(PORT, () => {
