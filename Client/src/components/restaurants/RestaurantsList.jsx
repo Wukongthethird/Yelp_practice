@@ -27,7 +27,7 @@ const RestaurantList = () =>{
     let restaurants = await yelpAPI.getAllRestaurants(restaurantsName)
     setRestaurants(restaurants);
   }
-  console.log("loadedd",restaurants)
+
   if(!restaurants) return <LoadingSpinner/>
   
 

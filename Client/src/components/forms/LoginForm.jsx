@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Alert from "../Alert";
 import yelpAPI from "../../api";
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -8,6 +9,7 @@ function LoginForm() {
     password: "",
   });
   const [formErrors, setFormErrors] = useState([]);
+  const navigate = useNavigate()
 
   console.debug(
     "LoginForm",
@@ -29,10 +31,7 @@ function LoginForm() {
     evt.preventDefault();
     try {
       await yelpAPI.loginUser(formData);
-      const res = await yelpAPI.getAllRestaurants().then();
-      if(res){
-        console.log("res", res)
-      }
+      navigate("/")
     } catch (err) {
       setFormErrors(err);
     }

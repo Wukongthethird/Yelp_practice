@@ -31,6 +31,7 @@ app.use(
       // secure:false,
     //
     // origin: "*",
+    /**  this makes cookie save in browser */
     credentials: true,
     origin: 'http://localhost:5173'
   })
@@ -46,6 +47,7 @@ app.use(
     },
     store: pgstore,
     cookie: {
+      /**  this makes cookie save in browser */
       credentials: true,
       httpOnly: true,
       // sameSite: "none",
@@ -82,7 +84,6 @@ app.use("/api/v1/logout", isAuth);
 
 // get all restaraunts or all restaurants on search data
 app.get("/api/v1/restaurants", async (req, res) => {
-  console.log("im here", req.headers);
   if (req.query["restaurantsName"]) {
     const restaurantsName = req.query["restaurantsName"];
     const results = await db.query(
@@ -107,7 +108,7 @@ app.get("/api/v1/restaurants", async (req, res) => {
 
 // get a restaraunt by id
 app.get("/api/v1/restaurant/:id", async (req, res) => {
-  console.log("get");
+
   try {
     const result = await db.query("select * from restaurants where id = $1", [
       req.params.id,
@@ -246,6 +247,7 @@ app.delete("/api/v1/logout", async (req, res, next) => {
   //   res.json({ msg: "you cannot logout" });
   // }
   // req.session = null // do not destroy whole session
+  console.log(req)
 
   req.logout((err) => {
     if (err) {
@@ -253,7 +255,12 @@ app.delete("/api/v1/logout", async (req, res, next) => {
     }
   });
 
-  res.clearCookie("connect.sid", { path: "/" });
+  res.clearCookie("connect.sid", {
+     path: "/",
+     httpOnly: true,
+    });
+
+
   res.json({ msg: "you have logout successfully" });
 });
 
