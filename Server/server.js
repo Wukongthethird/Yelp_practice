@@ -73,7 +73,7 @@ app.use(passport.session());
 
 // userAuth
 app.use("/api/v1/logout", isAuth);
-app.use("/api/v1/restaurants", isAuth);
+// app.use("/api/v1/restaurants", isAuth);
 
 // TODO safer methods and middlewears look at react and previus projects
 // app.use((req, res, next) => {

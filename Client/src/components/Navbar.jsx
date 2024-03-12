@@ -1,15 +1,27 @@
 import { Box, Link, Heading, Flex, Button, ChakraProvider } from "@chakra-ui/react";
-import { BrowserRouter , Routes, Route } from 'react-router-dom';
+import { useContext } from "react";
+import UserContext from "../auth/UserContext";
+import { useNavigate } from "react-router-dom";
 
 
-const  Navbar = ()=>{
+export const Navbar = ()=>{
   // write a usecontext to check if user is login displace
 
+  const user = useContext(UserContext)
 
-  let body;
+  console.log("USEC", user)
 
 
-  let body1 = (
+  const navigate = useNavigate()
+
+   function logout(){
+    user.logout()
+    navigate("/");
+  }
+
+console.log("nb", user)
+  let body = (
+    user.user.status =="logout" && Object.keys(user.user.user).length ===0 ?
     <>
     <div>
       <Link href="/login">
@@ -20,9 +32,17 @@ const  Navbar = ()=>{
       </Link>
     </div>
     </>
-
+    :
+    <div>
+      <Link href="/">
+        Home
+      </Link>
+      <button onClick={logout}>Log Out</button>
+    </div>
 
   )
+
+  
 
   return(
     <div>
@@ -34,7 +54,7 @@ const  Navbar = ()=>{
             <Heading>Yelp</Heading>
           </Link>
 
-        <Box ml={"auto"}>{body1}</Box>
+        <Box ml={"auto"}>{body}</Box>
         </Flex>
       </Flex>
       </div>
@@ -45,4 +65,3 @@ const  Navbar = ()=>{
 
 }
 
-export default Navbar

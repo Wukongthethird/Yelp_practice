@@ -1,33 +1,58 @@
-import { useState } from 'react'
+import { useState } from "react";
 import * as ReactDOM from "react-dom/client";
-import { BrowserRouter , Routes, Route } from 'react-router-dom';
-import './App.css'
-import Home from "./routes/Home"
-import Update from "./routes/Update"
-import Restaurantsdetailpage from "./routes/RestaurantsDetailPage"
-import AddNewRestaurant from './routes/AddNewRestaurant';
-import SignUp from './routes/SignUp';
-import Login from './routes/Login';
-import RoutesOrganizer from './routes/RoutesOrganizer';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./routes/Login";
+import "./App.css";
+
+import RoutesOrganizer from "./routes/RoutesOrganizer";
+import yelpAPI from "./api";
+
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import UserContext from "./auth/UserContext";
+
+const colors = {
+  brand: {
+    200: "#90CDF4",
+    800: "#153e75",
+    700: "#2a69ac",
+  },
+};
+
+const theme = extendTheme({ colors });
 
 
-
-// import {
-//   createBrowserRouter,
-//   RouterProvider,
-// } from "react-router-dom";
 
 function App() {
-  
+  const [user, setUser] = useState({user:{}, status:"logout"});
+
+
   // const user = await yelpAPI.loginUser(formData);
+  async function login(loginData) {
+    let user = await yelpAPI.loginUser(loginData);
+    setUser(user)
+  }
+
+  async function logout(){
+    await yelpAPI.logout
+    setUser(user)
+  }
+  
+
+  console.log("surer home", user)
 
 
   return (
-    <BrowserRouter>
-      <RoutesOrganizer/>
-    </BrowserRouter>
-     
-  )
+    <ChakraProvider theme={theme}>
+      <BrowserRouter>
+      <UserContext.Provider value={{user , logout}}>
+        <RoutesOrganizer />
+        <Routes>
+          <Route exact path="/login" element={<Login login={login} />} />
+        </Routes>
+        </UserContext.Provider>
+      </BrowserRouter>
+    </ChakraProvider>
+  );
 }
 
-export default App
+export default App;

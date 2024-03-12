@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import Alert from "../Alert";
 import yelpAPI from "../../api";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-const SignupForm = () =>  {
-
+const SignupForm = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -25,19 +24,19 @@ const SignupForm = () =>  {
     formErrors
   );
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   /** Handle form submit:
    *
    * Calls login func prop and, if successful, redirect to /companies.
-   * 
+   *
    */
 
   async function handleSubmit(evt) {
     evt.preventDefault();
     try {
-      if (formData["password"] ==  formData["passwordConfirm"] ){
-      await yelpAPI.signUpUser(formData);
-      navigate("/")
+      if (formData["password"] == formData["passwordConfirm"]) {
+        await yelpAPI.signUpUser(formData);
+        navigate("/");
       }
     } catch (err) {
       setFormErrors(err);
@@ -133,6 +132,6 @@ const SignupForm = () =>  {
       </div>
     </div>
   );
-}
+};
 
 export default SignupForm;

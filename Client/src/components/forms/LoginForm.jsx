@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 
 
-const LoginForm = () => {
+const LoginForm = ({login}) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -19,6 +19,7 @@ const LoginForm = () => {
   const [formErrors, setFormErrors] = useState([]);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
+
 
   console.debug(
     "LoginForm",
@@ -39,7 +40,7 @@ const LoginForm = () => {
   async function handleSubmit(evt) {
     evt.preventDefault();
     try {
-      const user = await yelpAPI.loginUser(formData);
+      login(formData)
       navigate("/");
     } catch (err) {
       setFormErrors(err);
@@ -101,6 +102,7 @@ const LoginForm = () => {
     //   </div>
     // );
     <div className="LoginForm">
+
       <Box mt={8} mx="auto" maxW="800px" w="100%" color="teal">
         <form onSubmit={handleSubmit}>
           <div className="form-group">

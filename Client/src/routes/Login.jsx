@@ -3,13 +3,14 @@ import LoginForm from "../components/forms/LoginForm";
 import { Route } from "react-router-dom";
 
 
-const Login = () =>{
+const Login = ({login}) =>{
   return (
     <div className = "Login">
-      <LoginForm/>
+
+      <LoginForm login={login}/>
     </div>
   
-  )
+  ) 
 }
 
 export default Login;

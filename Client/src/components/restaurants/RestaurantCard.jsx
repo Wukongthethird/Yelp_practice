@@ -8,7 +8,7 @@ import yelpAPI from "../../api";
  *
  */
 
-const  RestaurantCard = ({ restaurant }) => {
+const RestaurantCard = ({ restaurant }) => {
   const convertedRestaurant = {};
   for (let key in restaurant) {
     convertedRestaurant[yelpAPI.snakeToCamel(key)] = restaurant[key];
@@ -20,7 +20,7 @@ const  RestaurantCard = ({ restaurant }) => {
       </div>
     </div>
   );
-}
+};
 
 RestaurantCard.proptypes = {
   restaurant: PropTypes.shape({

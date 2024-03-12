@@ -19,24 +19,17 @@ const Home = () => {
     let restaurants = await yelpAPI.getAllRestaurants();
     setRestaurants(restaurants);
   }
-  const navigate = useNavigate();
+  
 
-  async function logout() {
-    console.log("logout");
-    const res = await yelpAPI.logout();
-    navigate("/login");
-    console.log(res);
-  }
+
 
   if (!restaurants) return <LoadingSpinner />;
 
-  console.log("done", restaurants);
 
   return (
 
     <div>
       <Navbar/>
-      <button onClick={logout}>LogOut</button>
       <RestaurantList />
     </div>
   );

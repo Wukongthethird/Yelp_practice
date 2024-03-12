@@ -45,9 +45,7 @@ const AddRestaurantsForm = () => {
     try {
       yelpAPI.addNewRestaurant(formData);
     } catch (err) {
-
       setFormErrors(err);
-  
     }
     setFormErrors([]);
     setSaveConfirmed(true);
@@ -55,7 +53,7 @@ const AddRestaurantsForm = () => {
   /** Handles form changes  */
   function handleChange(evt) {
     const { name, value } = evt.target;
-    console.log("value", value);
+
     if (name == "priceRange" && !isNaN(value)) {
       setFormData((f) => ({ ...f, [name]: +value }));
     }
