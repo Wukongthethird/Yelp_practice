@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import Alert from "../Alert";
 import yelpAPI from "../../api";
-import { useNavigate } from 'react-router-dom';
-import { Box , Flex ,Button} from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { Box, Flex, Button, InputRightElement,InputGroup } from "@chakra-ui/react";
 
 function LoginForm() {
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [formErrors, setFormErrors] = useState([]);
-  const [show,setShow] = useState(false)
-  const navigate = useNavigate()
+  const [show, setShow] = useState(false);
+  const navigate = useNavigate();
 
   console.debug(
     "LoginForm",
@@ -27,14 +26,14 @@ function LoginForm() {
   /** Handle form submit:
    *
    * Calls login func prop and, if successful, redirect to /companies.
-   * 
+   *
    */
 
   async function handleSubmit(evt) {
     evt.preventDefault();
     try {
       await yelpAPI.loginUser(formData);
-      navigate("/")
+      navigate("/");
     } catch (err) {
       setFormErrors(err);
     }
@@ -46,68 +45,60 @@ function LoginForm() {
     setFormData((data) => ({ ...data, [name]: value }));
   }
 
-  function handleShow(){
-    setShow(!show)
+  function handleShow() {
+    setShow(!show);
   }
 
   return (
-  //   <div className="LoginForm">
-  //     <div className="container col-md-6 offset-md-3 col-lg-4 offset-lg-4">
-  //       <h2 className="mb-3">Login</h2>
-  //       <div className="card">
-  //         <div className="card-body">
-  //           <form onSubmit={handleSubmit}>
-  //             <div className="form-group">
-  //               <label>Email</label>
-  //               <input
-  //                 type="email"
-  //                 name="email"
-  //                 className="form-control"
-  //                 value={formData.email}
-  //                 onChange={handleChange}
-  //               />
-  //             </div>
-  //             <div className="form-group">
-  //               <label>Password</label>
-  //               <input
-  //                 type="password"
-  //                 name="password"
-  //                 className="form-control"
-  //                 value={formData.password}
-  //                 onChange={handleChange}
-  //               />
-  //             </div>
-  //             {formErrors.length ? (
-  //               <Alert type="danger" messages={formErrors} />
-  //             ) : null}
+    //   <div className="LoginForm">
+    //     <div className="container col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+    //       <h2 className="mb-3">Login</h2>
+    //       <div className="card">
+    //         <div className="card-body">
+    //           <form onSubmit={handleSubmit}>
+    //             <div className="form-group">
+    //               <label>Email</label>
+    //               <input
+    //                 type="email"
+    //                 name="email"
+    //                 className="form-control"
+    //                 value={formData.email}
+    //                 onChange={handleChange}
+    //               />
+    //             </div>
+    //             <div className="form-group">
+    //               <label>Password</label>
+    //               <input
+    //                 type="password"
+    //                 name="password"
+    //                 className="form-control"
+    //                 value={formData.password}
+    //                 onChange={handleChange}
+    //               />
+    //             </div>
+    //             {formErrors.length ? (
+    //               <Alert type="danger" messages={formErrors} />
+    //             ) : null}
 
-  //             <button
-  //               type="submit"
-  //               className="btn btn-primary float-right"
-  //               onSubmit={handleSubmit}
-  //             >
-  //               Submit
-  //             </button>
-  //           </form>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
-  <div className="LoginForm">
-  <Box
-    mt={8}
-    mx="auto"
-    maxW="800px"
-    w="100%"
-  >
-    <div className="card">
-      <div className="card-body">
+    //             <button
+    //               type="submit"
+    //               className="btn btn-primary float-right"
+    //               onSubmit={handleSubmit}
+    //             >
+    //               Submit
+    //             </button>
+    //           </form>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // );
+    <div className="LoginForm">
+      <Box mt={8} mx="auto" maxW="800px" w="100%" color="teal">
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-      
             <input
-            placeholder="Email"
+              placeholder="Email"
               type="email"
               name="email"
               className="form-control"
@@ -115,24 +106,35 @@ function LoginForm() {
               onChange={handleChange}
             />
           </div>
+
           <div className="form-group">
-            <input
-            placeholder="Password"
-              type={show? 'text':"password"}
-              name="password"
-              className="form-control"
-              value={formData.password}
-              onChange={handleChange}
-            />
-            <Button onClick={handleShow}>
-              {show ? 'Hide' :'Show'}
-            </Button>
+
+                <InputGroup
+                >
+                <input
+                  placeholder="Password"
+                  type={show ? "text" : "password"}
+                  name="password"
+                  className="form-control"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+                <InputRightElement onClick={handleShow}>
+                  {show ? "Hide" : "Show"} 
+
+                </InputRightElement>
+    
+              </InputGroup>
+       
           </div>
+
           {formErrors.length ? (
             <Alert type="danger" messages={formErrors} />
           ) : null}
 
-          <Button mt ={4} color={'red'}
+          <Button
+            mt={4}
+            color={"red"}
             type="submit"
             className="btn btn-primary float-right"
             onSubmit={handleSubmit}
@@ -140,11 +142,9 @@ function LoginForm() {
             Submit
           </Button>
         </form>
-      </div>
+      </Box>
     </div>
-  </Box> 
-</div>
-);
+  );
 }
 
 export default LoginForm;
