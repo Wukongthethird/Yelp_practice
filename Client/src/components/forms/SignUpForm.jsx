@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Alert from "../Alert";
 import yelpAPI from "../../api";
+import { useNavigate } from 'react-router-dom';
 
 function SignupForm() {
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -23,6 +25,7 @@ function SignupForm() {
     formErrors
   );
 
+  const navigate = useNavigate()
   /** Handle form submit:
    *
    * Calls login func prop and, if successful, redirect to /companies.
@@ -34,7 +37,7 @@ function SignupForm() {
     try {
       if (formData["password"] ==  formData["passwordConfirm"] ){
       await yelpAPI.signUpUser(formData);
-      history.push("/");
+      navigate("/")
       }
     } catch (err) {
       setFormErrors(err);

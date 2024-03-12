@@ -41,7 +41,7 @@ class yelpAPI {
           withCredentials: true,
           credentials: "include",
         })
-      ).data;
+      ).data
     } catch (err) {
       console.error("API Error:", err.response);
       let message = err.response.data.error.message;
@@ -84,8 +84,17 @@ class yelpAPI {
   }
 
   static async logout() {
-    console.log("logout");
-    let res = await this.request("/api/v1/logout", "delete", );
+
+    // try{
+      const res = await this.request("api/v1/logout", {}, "delete");
+    //   let res = await this.request(`api/v1/restaurants`, { restaurantsName });
+    //   console.log('res' ,res)
+    //   // return res.restaurants;
+      
+    // }catch(err){
+    //   console.log('err',err)
+    // }
+  
 
     return res;
   }

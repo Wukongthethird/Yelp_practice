@@ -1,15 +1,16 @@
-import { defineConfig, loadEnv } from "vite";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { chakra } from "@chakra-ui/react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  //   server: {
-  //     host: "localhost",
-  //     https:false,
-  //     port: "5173",
 
-  // },
   server: {
+    watch: {
+      usePolling: true,
+    },
+  },
+  // server: {
     // proxy: {
     //   "/api": {
     //     target: "http://localhost:3000/",
@@ -26,6 +27,6 @@ export default defineConfig({
     // proxy:{
     //   "/api":"http://localhost:3000/",
     // }
-  },
+  // },
   plugins: [react()],
 });

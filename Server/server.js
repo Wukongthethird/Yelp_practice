@@ -19,7 +19,7 @@ const SESSIONSECRET = process.env.SESSION_SECRET;
 const { camelToSnakeCase } = require("./helper");
 
 /** MIDDLEWARE */
-  app.set('trust proxy', 1)
+app.set("trust proxy", 1);
 
 app.use(
   cors({
@@ -27,13 +27,13 @@ app.use(
     // allowedHeaders: "X-Requested-With, Content-Type, Accept",
     //   credentials: true,
     //   httpOnly: false,
-      // sameSite: "lax",
-      // secure:false,
+    // sameSite: "lax",
+    // secure:false,
     //
     // origin: "*",
     /**  this makes cookie save in browser */
     credentials: true,
-    origin: 'http://localhost:5173'
+    origin: "http://localhost:5173",
   })
 );
 app.use(morgan("dev"));
@@ -53,7 +53,6 @@ app.use(
       // sameSite: "none",
       // secure: false, //
       maxAge: 1000 * 60 * 60 * 24,
-    
     },
     secret: SESSIONSECRET,
     resave: false,
@@ -74,7 +73,7 @@ app.use(passport.session());
 
 // userAuth
 app.use("/api/v1/logout", isAuth);
-// app.use("/api/v1/restaurants", isAuth);
+app.use("/api/v1/restaurants", isAuth);
 
 // TODO safer methods and middlewears look at react and previus projects
 // app.use((req, res, next) => {
@@ -108,7 +107,6 @@ app.get("/api/v1/restaurants", async (req, res) => {
 
 // get a restaraunt by id
 app.get("/api/v1/restaurant/:id", async (req, res) => {
-
   try {
     const result = await db.query("select * from restaurants where id = $1", [
       req.params.id,
@@ -243,26 +241,32 @@ app.post(
 );
 
 app.delete("/api/v1/logout", async (req, res, next) => {
+
+
   // if (msg) {
   //   res.json({ msg: "you cannot logout" });
   // }
   // req.session = null // do not destroy whole session
-  console.log(req)
+  // console.log(req);
 
   req.logout((err) => {
     if (err) {
       console.log("err", err);
     }
   });
-
+  // these 2 lines remove/replace cookie on browser probably removing the thing that is sent
+  req.sessionID = null
   res.clearCookie("connect.sid", {
-     path: "/",
-     httpOnly: true,
-    });
+    // path: "/",
+    httpOnly: true,
+    credentials:true
+  });
 
 
   res.json({ msg: "you have logout successfully" });
 });
+
+
 
 //need to add global error messsage
 app.listen(PORT, () => {
