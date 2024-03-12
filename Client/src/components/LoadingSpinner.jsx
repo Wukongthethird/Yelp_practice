@@ -3,7 +3,7 @@ import "./LoadingSpinner.css";
 
 /** Loading message used by components that fetch API data. */
 
-function LoadingSpinner() {
+const LoadingSpinner() => {
   return (
       <div className="LoadingSpinner">
         Loading ...

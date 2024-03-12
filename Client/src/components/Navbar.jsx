@@ -2,7 +2,7 @@ import { Box, Link, Heading, Flex, Button, ChakraProvider } from "@chakra-ui/rea
 import { BrowserRouter , Routes, Route } from 'react-router-dom';
 
 
-export const  Navbar = ()=>{
+const  Navbar = ()=>{
   // write a usecontext to check if user is login displace
 
 
@@ -45,3 +45,4 @@ export const  Navbar = ()=>{
 
 }
 
+export default Navbar

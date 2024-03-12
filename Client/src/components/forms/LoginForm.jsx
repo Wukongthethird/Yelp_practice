@@ -10,9 +10,8 @@ import {
   InputGroup,
 } from "@chakra-ui/react";
 
-import UserContext from"../../auth/UserContext.js"
 
-const LoginForm = ()=>{
+const LoginForm = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -148,6 +147,6 @@ const LoginForm = ()=>{
       </Box>
     </div>
   );
-}
+};
 
 export default LoginForm;
