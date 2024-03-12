@@ -5,11 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { Box , Flex ,Button} from "@chakra-ui/react";
 
 function LoginForm() {
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [formErrors, setFormErrors] = useState([]);
+  const [show,setShow] = useState(false)
   const navigate = useNavigate()
 
   console.debug(
@@ -42,6 +44,10 @@ function LoginForm() {
   function handleChange(evt) {
     const { name, value } = evt.target;
     setFormData((data) => ({ ...data, [name]: value }));
+  }
+
+  function handleShow(){
+    setShow(!show)
   }
 
   return (
@@ -110,15 +116,17 @@ function LoginForm() {
             />
           </div>
           <div className="form-group">
-
             <input
             placeholder="Password"
-              type="password"
+              type={show? 'text':"password"}
               name="password"
               className="form-control"
               value={formData.password}
               onChange={handleChange}
             />
+            <Button onClick={handleShow}>
+              {show ? 'Hide' :'Show'}
+            </Button>
           </div>
           {formErrors.length ? (
             <Alert type="danger" messages={formErrors} />
