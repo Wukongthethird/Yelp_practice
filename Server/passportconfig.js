@@ -19,7 +19,7 @@ function initializePassport(passport) {
     }
 
     const results = await db.query(
-      "select id, email, last_name , passhash from yelp_users where LOWER(email) = $1",
+      "select id, first_name, last_name , email, passhash from yelp_users where LOWER(email) = $1",
       [email]
     );
 

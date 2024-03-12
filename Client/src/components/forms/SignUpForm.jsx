@@ -3,7 +3,7 @@ import Alert from "../Alert";
 import yelpAPI from "../../api";
 import { useNavigate } from 'react-router-dom';
 
-function SignupForm() {
+const SignupForm = () =>  {
 
   const [formData, setFormData] = useState({
     firstName: "",

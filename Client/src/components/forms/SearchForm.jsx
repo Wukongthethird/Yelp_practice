@@ -1,5 +1,5 @@
-import React, {useState}  from  "react";
-import PropTypes from 'prop-types';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 /** Search widget.
  *
@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
  * { RestaurantsList } -> SearchForm
  */
 
-function SearchForm({ searchFor }) {
+const SearchForm = ({ searchFor }) => {
   console.debug("SearchForm", "searchFor=", typeof searchFor);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,26 +31,25 @@ function SearchForm({ searchFor }) {
     setSearchTerm(evt.target.value);
   }
 
-
   return (
-      <div className="SearchForm mb-4">
-        <form className="form-inline" onSubmit={handleSubmit}>
-          <input
-              className="form-control form-control-lg flex-grow-1"
-              name="searchTerm"
-              placeholder="Enter search term.."
-              value={searchTerm}
-              onChange={handleChange}
-          />
-          <button type="submit" className="btn btn-lg btn-primary">
-            Submit
-          </button>
-        </form>
-      </div>
+    <div className="SearchForm mb-4">
+      <form className="form-inline" onSubmit={handleSubmit}>
+        <input
+          className="form-control form-control-lg flex-grow-1"
+          name="searchTerm"
+          placeholder="Enter search term.."
+          value={searchTerm}
+          onChange={handleChange}
+        />
+        <button type="submit" className="btn btn-lg btn-primary">
+          Submit
+        </button>
+      </form>
+    </div>
   );
-}
+};
 
-SearchForm.propTypes ={
-  searchFor: PropTypes.func 
-}
+SearchForm.propTypes = {
+  searchFor: PropTypes.func,
+};
 export default SearchForm;

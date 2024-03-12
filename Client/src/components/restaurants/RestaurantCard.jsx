@@ -8,7 +8,7 @@ import yelpAPI from "../../api";
  *
  */
 
-function RestaurantCard({ restaurant }) {
+const  RestaurantCard = ({ restaurant }) => {
   const convertedRestaurant = {};
   for (let key in restaurant) {
     convertedRestaurant[yelpAPI.snakeToCamel(key)] = restaurant[key];

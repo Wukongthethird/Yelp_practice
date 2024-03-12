@@ -3,10 +3,6 @@ import yelpAPI from "../../api";
 // import { useHistory } from "react-router-dom";
 import Alert from "../../components/Alert";
 
-
-
-
-
 const AddRestaurantsForm = () => {
   // const history = useHistory();
   const [formData, setFormData] = useState({
@@ -45,30 +41,26 @@ const AddRestaurantsForm = () => {
     //   zipcode: formData.zipcode,
     //   price_range: formData.price_range,
     // };
+
+    try {
+      yelpAPI.addNewRestaurant(formData);
+    } catch (err) {
+
+      setFormErrors(err);
   
-
-  try {
-    yelpAPI.addNewRestaurant(formData);
-  } catch (err) {
-    debugger;
-    setFormErrors(err);
-    debugger;
-  }
-  setFormErrors([]);
-  setSaveConfirmed(true);
-
-}
-  /** Handles form changes  */
-  function handleChange(evt){
-    const {name, value} = evt.target;
-    console.log("value",value)
-    if (name == "priceRange" && !isNaN(value)){
-      setFormData( f => ({...f,[name]:+value}));
     }
-    setFormData( f => ({...f,[name]:value}));
+    setFormErrors([]);
+    setSaveConfirmed(true);
   }
-  
-
+  /** Handles form changes  */
+  function handleChange(evt) {
+    const { name, value } = evt.target;
+    console.log("value", value);
+    if (name == "priceRange" && !isNaN(value)) {
+      setFormData((f) => ({ ...f, [name]: +value }));
+    }
+    setFormData((f) => ({ ...f, [name]: value }));
+  }
 
   return (
     <div className="AddRestaurantForm">
@@ -81,75 +73,117 @@ const AddRestaurantsForm = () => {
               <div className="form-group">
                 <label>Restaraunt Name</label>
                 <input
-                    type="restaurantsName"
-                    name="restaurantsName"
-                    className="form-control"
-                    value={formData.restaurantsName}
-                    onChange={handleChange}
-                    autoComplete="restarauntsName"
-                    required
+                  type="restaurantsName"
+                  name="restaurantsName"
+                  className="form-control"
+                  value={formData.restaurantsName}
+                  onChange={handleChange}
+                  autoComplete="restarauntsName"
+                  required
                 />
               </div>
               <div className="form-group">
                 <label>Address</label>
                 <input
-                    type="addressLocation"
-                    name="addressLocation"
-                    className="form-control"
-                    value={formData.password}
-                    onChange={handleChange}
-                    autoComplete="addressLocation"
-                    required
+                  type="addressLocation"
+                  name="addressLocation"
+                  className="form-control"
+                  value={formData.password}
+                  onChange={handleChange}
+                  autoComplete="addressLocation"
+                  required
                 />
               </div>
               <div className="form-group">
                 <label>City</label>
                 <input
-                    type="city"
-                    name="city"
-                    className="form-control"
-                    value={formData.city}
-                    onChange={handleChange}
-                    autoComplete="city"
-                    required
+                  type="city"
+                  name="city"
+                  className="form-control"
+                  value={formData.city}
+                  onChange={handleChange}
+                  autoComplete="city"
+                  required
                 />
               </div>
               <div className="form-group">
                 <label>Zipcode</label>
                 <input
-                    type="zipcode"
-                    name="zipcode"
-                    className="form-control"
-                    value={formData.zipcode}
-                    onChange={handleChange}
-                    autoComplete="zipcode"
-                    required
+                  type="zipcode"
+                  name="zipcode"
+                  className="form-control"
+                  value={formData.zipcode}
+                  onChange={handleChange}
+                  autoComplete="zipcode"
+                  required
                 />
               </div>
               <div className="form-group">
                 <label>Price Range</label>
-                <select className="form-group" type = "priceRange" name="priceRange" onChange={handleChange }>
-                <option disabled selected>Price</option>
-                  <option value={1} type = "priceRange" name="priceRange" onChange={handleChange}>$</option>
-                  <option value={2} type = "priceRange" name="priceRange" onChange={handleChange}>$$</option>
-                  <option default value={3} type = "priceRange" name="priceRange" onChange={handleChange}>$$$</option>
-                  <option value={4} type = "priceRange" name="priceRange" onChange={handleChange}>$$$$</option>
-                  <option value={5} type = "priceRange" name="priceRange" onChange={handleChange}>$$$$$</option>
+                <select
+                  className="form-group"
+                  type="priceRange"
+                  name="priceRange"
+                  onChange={handleChange}
+                >
+                  <option disabled selected>
+                    Price
+                  </option>
+                  <option
+                    value={1}
+                    type="priceRange"
+                    name="priceRange"
+                    onChange={handleChange}
+                  >
+                    $
+                  </option>
+                  <option
+                    value={2}
+                    type="priceRange"
+                    name="priceRange"
+                    onChange={handleChange}
+                  >
+                    $$
+                  </option>
+                  <option
+                    default
+                    value={3}
+                    type="priceRange"
+                    name="priceRange"
+                    onChange={handleChange}
+                  >
+                    $$$
+                  </option>
+                  <option
+                    value={4}
+                    type="priceRange"
+                    name="priceRange"
+                    onChange={handleChange}
+                  >
+                    $$$$
+                  </option>
+                  <option
+                    value={5}
+                    type="priceRange"
+                    name="priceRange"
+                    onChange={handleChange}
+                  >
+                    $$$$$
+                  </option>
                 </select>
               </div>
 
-              {formErrors.length
-                  ? <Alert type="danger" messages={formErrors} />
-                  : null}
+              {formErrors.length ? (
+                <Alert type="danger" messages={formErrors} />
+              ) : null}
 
-              {saveConfirmed
-                  ?
-                  <Alert type="success" messages={["Updated successfully."]} />
-                  : null}
+              {saveConfirmed ? (
+                <Alert type="success" messages={["Updated successfully."]} />
+              ) : null}
 
               <button
-                  className="btn btn-primary float-right"
-                  onSubmit={handleSubmit}
+                className="btn btn-primary float-right"
+                onSubmit={handleSubmit}
               >
                 Submit
               </button>
@@ -158,8 +192,7 @@ const AddRestaurantsForm = () => {
         </div>
       </div>
     </div>
-);
-
+  );
 };
 
 export default AddRestaurantsForm;

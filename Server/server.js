@@ -232,8 +232,8 @@ app.post(
   "/api/v1/login",
   passport.authenticate("local", { failWithError: true }),
   (req, res, next) => {
-    // console.log(req.session)
-    res.status(200).json({ status: "login" });
+    console.log('login',req.user)
+    res.status(200).json({ user:req.user, status: "login" });
   },
   (err, req, res, next) => {
     res.send(err);
@@ -241,13 +241,6 @@ app.post(
 );
 
 app.delete("/api/v1/logout", async (req, res, next) => {
-
-
-  // if (msg) {
-  //   res.json({ msg: "you cannot logout" });
-  // }
-  // req.session = null // do not destroy whole session
-  // console.log(req);
 
   req.logout((err) => {
     if (err) {

@@ -2,9 +2,17 @@ import React, { useState } from "react";
 import Alert from "../Alert";
 import yelpAPI from "../../api";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Button, InputRightElement,InputGroup } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Button,
+  InputRightElement,
+  InputGroup,
+} from "@chakra-ui/react";
 
-function LoginForm() {
+import UserContext from"../../auth/UserContext.js"
+
+const LoginForm = ()=>{
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -32,7 +40,7 @@ function LoginForm() {
   async function handleSubmit(evt) {
     evt.preventDefault();
     try {
-      await yelpAPI.loginUser(formData);
+      const user = await yelpAPI.loginUser(formData);
       navigate("/");
     } catch (err) {
       setFormErrors(err);
@@ -108,24 +116,19 @@ function LoginForm() {
           </div>
 
           <div className="form-group">
-
-                <InputGroup
-                >
-                <input
-                  placeholder="Password"
-                  type={show ? "text" : "password"}
-                  name="password"
-                  className="form-control"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                <InputRightElement onClick={handleShow}>
-                  {show ? "Hide" : "Show"} 
-
-                </InputRightElement>
-    
-              </InputGroup>
-       
+            <InputGroup>
+              <input
+                placeholder="Password"
+                type={show ? "text" : "password"}
+                name="password"
+                className="form-control"
+                value={formData.password}
+                onChange={handleChange}
+              />
+              <InputRightElement onClick={handleShow}>
+                {show ? "Hide" : "Show"}
+              </InputRightElement>
+            </InputGroup>
           </div>
 
           {formErrors.length ? (
