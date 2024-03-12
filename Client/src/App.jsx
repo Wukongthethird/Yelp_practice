@@ -38,13 +38,13 @@ function App() {
   }
   
 
-  console.log("surer home", user)
+ 
 
 
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>
-      <UserContext.Provider value={{user , logout}}>
+      <UserContext.Provider value={{user,logout }}>
         <RoutesOrganizer />
         <Routes>
           <Route exact path="/login" element={<Login login={login} />} />
