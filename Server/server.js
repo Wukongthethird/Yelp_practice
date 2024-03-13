@@ -86,16 +86,19 @@ app.get("/api/v1/restaurants", async (req, res) => {
   if (req.query["restaurantsName"]) {
     const restaurantsName = req.query["restaurantsName"];
     const results = await db.query(
-      "select * from restaurants where LOWER(restaurants_name) like   ('%'||$1||'%')",
+      "SELECT * FROM restaurants where LOWER(restaurants_name) LIKE   ('%'||$1||'%')",
       [restaurantsName]
     );
+    
     if (!results) {
       res.status(204).json({
         restaurants: "",
       });
     }
+    console.log(results["rows"])
+
     res.status(200).json({
-      restaurants: [results["rows"][0]],
+      restaurants: results["rows"],
     });
   } else {
     const results = await db.query("select * from restaurants");
@@ -107,12 +110,11 @@ app.get("/api/v1/restaurants", async (req, res) => {
 
 // get a restaraunt by id
 app.get("/api/v1/restaurant/:id", async (req, res) => {
- 
   try {
     const result = await db.query("select * from restaurants where id = $1", [
       req.params.id,
     ]);
-    console.log(result)
+    console.log(result);
     res.status(200).json({
       restaurant: result["rows"][0],
     });
@@ -234,8 +236,8 @@ app.post(
   "/api/v1/login",
   passport.authenticate("local", { failWithError: true }),
   (req, res, next) => {
-    console.log('login',req.user)
-    res.status(200).json({ user:req.user, status: "login" });
+    console.log("login", req.user);
+    res.status(200).json({ user: req.user, status: "login" });
   },
   (err, req, res, next) => {
     res.send(err);
@@ -243,25 +245,21 @@ app.post(
 );
 
 app.delete("/api/v1/logout", async (req, res, next) => {
-
   req.logout((err) => {
     if (err) {
       console.log("err", err);
     }
   });
   // these 2 lines remove/replace cookie on browser probably removing the thing that is sent
-  req.sessionID = null
+  req.sessionID = null;
   res.clearCookie("connect.sid", {
     // path: "/",
     httpOnly: true,
-    credentials:true
+    credentials: true,
   });
-
 
   res.json({ msg: "you have logout successfully" });
 });
-
-
 
 //need to add global error messsage
 app.listen(PORT, () => {

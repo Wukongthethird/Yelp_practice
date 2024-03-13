@@ -22,7 +22,6 @@ const RestaurantList = () => {
     search();
   }, []);
 
-  console.log(restaurants);
 
   /** Triggered by search form submit; reloads restaurants. */
   async function search(restaurantsName) {

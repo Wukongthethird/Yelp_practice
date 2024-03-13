@@ -4,7 +4,7 @@ import yelpAPI from "../../api";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
 /**
- * only renders limited info on a restaraunt
+ * SOMEHOw add reviews and like functionality
  *
  *RestaurantCardList will hand down the info of what to render
  *

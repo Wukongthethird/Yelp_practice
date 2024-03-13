@@ -28,6 +28,7 @@ const SearchForm = ({ searchFor }) => {
 
   /** Update form fields */
   function handleChange(evt) {
+    evt.preventDefault()
     setSearchTerm(evt.target.value);
   }
 
