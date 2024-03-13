@@ -1,24 +1,22 @@
 import React from "react";
 import RestaurantCard from "./RestaurantCard";
-import PropTypes from "prop-types"
-import { v4 as uuidv4 } from 'uuid'
+import PropTypes from "prop-types";
+import { v4 as uuidv4 } from "uuid";
+import { Box, SimpleGrid } from "@chakra-ui/react";
 
-
-const RestaurantCardList = ({restaurants}) =>{
-  console.log("rcl", restaurants)
-  return(
-    <div className="RestaurantCardList">
-      
-      {
-        restaurants.map( (restaurant) =>{
-          return (<RestaurantCard key={uuidv4()} restaurant={restaurant}/>)
-        })
-      }
-
-    </div>
-  )
-
-}
+const RestaurantCardList = ({ restaurants }) => {
+  return (
+    <SimpleGrid columns={[2, null, 3]} spacing="40px">
+      {restaurants.map((restaurant) => {
+        return (
+          <Box key={uuidv4()}>
+            <RestaurantCard key={uuidv4()} restaurant={restaurant} />
+          </Box>
+        );
+      })}
+    </SimpleGrid>
+  );
+};
 
 //https://www.geeksforgeeks.org/react-proptype-array-with-shape/
 //https://legacy.reactjs.org/docs/typechecking-with-proptypes.html
@@ -29,10 +27,9 @@ RestaurantCardList.propTypes = {
       address_location: PropTypes.string,
       city: PropTypes.string,
       zipcode: PropTypes.string,
-      price_range: PropTypes.number
+      price_range: PropTypes.number,
     })
-  )
-}
-
+  ),
+};
 
 export default RestaurantCardList;

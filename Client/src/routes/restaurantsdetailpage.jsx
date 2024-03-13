@@ -1,9 +1,9 @@
 import React from "react";
-
+import RestaurantDetails from "../components/restaurants/RestaurantDetails";
 const RestaurantsDetailPage = () =>{
   return (
     <div>
-      restaurantsdetailpage
+      <RestaurantDetails restaurant={"jeeoo"}/>
     </div>
   )
 }

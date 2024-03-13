@@ -1,4 +1,17 @@
 import React, { useContext, useState } from "react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Flex,
+  Box,
+  Avatar,
+  Heading,
+  Text,
+  IconButton,
+  Link,
+} from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import yelpAPI from "../../api";
 /**
@@ -9,21 +22,37 @@ import yelpAPI from "../../api";
  */
 
 const RestaurantCard = ({ restaurant }) => {
+  // I did it at this level so i didnt have to loop on every api request. TBD if i leave this in here seems weird
+
   const convertedRestaurant = {};
   for (let key in restaurant) {
     convertedRestaurant[yelpAPI.snakeToCamel(key)] = restaurant[key];
   }
+  
+ // TO DO ADD IMAGE TO BACK DROP
+ // TO DO ADD LIKE BUTTON AND REVIEW
   return (
-    <div className="Restaurant card">
-      <div className="card-body">
-        <h6 className="card-title">{convertedRestaurant.restaurantsName} </h6>
-      </div>
-    </div>
+    <Card maxW="md">
+      <CardHeader>
+        <Flex spacing="4">
+          <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
+            {/* <Avatar name='Hung Bro' src='https://bit.ly/sage-adebayo' /> */}
+            <Box>
+              <Heading size="sm">{convertedRestaurant.restaurantsName}</Heading>
+            </Box>
+          </Flex>
+        </Flex>
+      </CardHeader>
+      <CardBody>
+    <Link href={`/restaurants/${convertedRestaurant.id}`}> read more</Link>
+  </CardBody>
+    </Card>
   );
 };
 
 RestaurantCard.proptypes = {
   restaurant: PropTypes.shape({
+    id: PropTypes.string,
     restaurantsName: PropTypes.string,
     addressLocation: PropTypes.string,
     city: PropTypes.string,
