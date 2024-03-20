@@ -1,28 +1,26 @@
--- should be big int for primary key
+
 CREATE TABLE
   restaurants (
-    id SERIAL PRIMARY KEY,
+    id integer generated always as identity,
     restaurants_name VARCHAR(75) NOT NULL,
     address_location VARCHAR(75) NOT NULL,
     city VARCHAR(75) NOT NULL,
     zipcode CHAR(5) NOT NULL,
-    price_range INTEGER NOT NULL check(price_range>=0 and price_range<=5)
+    created_at timestamp with time zone NOT NULL DEFAULT date_trunc('second', now()::timestamp), 
+    updated_at timestamp with time zone NOT NULL DEFAULT date_trunc('second', now()::timestamp),
+    about TEXT
   );
 
-
--- store password as salt hash bcrypt? do it on server side--
 CREATE TABLE 
   yelp_users (
-    id SERIAL PRIMARY KEY,
+    id integer generated always as identity,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(60) NOT NULL,
-    middle_name VARCHAR(60),
     email  VARCHAR(254) UNIQUE NOT NULL,
     passhash VARCHAR(254) NOT NULL,
-    is_admin BOOLEAN DEFAULT false
+    created_at timestamp with time zone NOT NULL DEFAULT date_trunc('second', now()::timestamp), 
+    updated_at timestamp with time zone NOT NULL DEFAULT date_trunc('second', now()::timestamp)
   );
-
-
 
 CREATE TABLE
   user_favorites(
@@ -31,17 +29,98 @@ CREATE TABLE
     PRIMARY KEY (user_id,restaurants_id)
   );
 
+
+
+
+TRANSACTIONAL EXAMPLE
+  BEGIN
+  
+  
+  COMMIT
+
   CREATE TABLE 
   yelp_admin (
-    id SERIAL PRIMARY KEY,
+    id integer generated always as identity,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(60) NOT NULL,
     middle_name VARCHAR(60),
     email VARCHAR(254) NOT NULL,
     passhash VARCHAR(254) NOT NULL,
-    is_admin BOOLEAN NOT NULL
+   created_at timestamp with time zone NOT NULL DEFAULT date_trunc('second', now()::timestamp), 
+    updated_at timestamp with time zone NOT NULL DEFAULT date_trunc('second', now()::timestamp)
   );
 
+
+-- price range and rating should be its own tabe
+-- restaraunt id user id rating value
+
+CREATE TABLE
+  price_range(
+    user_id INTEGER REFERENCES yelp_users ON DELETE CASCADE NOT NULL,
+    restaurants_id INTEGER REFERENCES restaurants ON DELETE CASCADE NOT NULL,
+    PRIMARY KEY (user_id,restaurants_id)
+    price INTEGER NOT NULL check(price_range>=0 and price_range<=5)
+  )
+
+CREATE TABLE
+  ratings(
+    user_id INTEGER REFERENCES yelp_users ON DELETE CASCADE NOT NULL,
+    restaurants_id INTEGER REFERENCES restaurants ON DELETE CASCADE NOT NULL,
+    PRIMARY KEY (user_id,restaurants_id)
+    rating INTEGER NOT NULL check(price_range>=1 and price_range<=5)
+  )
+-- comment table
+
+
+
+
+--toy trigger updates updated_at time column
+CREATE OR REPLACE FUNCTION log_users_updated_at()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	IF NEW.first_name IS DISTINCT FROM OLD.first_name
+    OR NEW.last_name IS DISTINCT FROM OLD.last_name
+    OR NEW.email IS DISTINCT FROM OLD.email
+    OR NEW.passhash IS DISTINCT FROM OLD.passhash
+  THEN
+    NEW.updated_at := date_trunc('second', now()::timestamp);
+	END IF;
+	RETURN NEW;
+END;
+$$;
+
+
+CREATE TRIGGER trigger_log_users_updated_at
+  BEFORE UPDATE ON yelp_users
+  FOR EACH ROW
+  EXECUTE PROCEDURE log_users_updated_at();
+
+
+CREATE OR REPLACE FUNCTION log_restaurants_updated_at()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN 
+	IF NEW.restaurants_name IS DISTINCT FROM OLD.restaurants_name
+    OR NEW.address_location IS DISTINCT FROM OLD.address_location
+    OR NEW.city IS DISTINCT FROM OLD.city
+    OR NEW.zipcode IS DISTINCT FROM OLD.zipcode
+    OR NEW.about IS DISTINCT FROM OLD.about
+  THEN
+    NEW.updated_at := date_trunc('second', now()::timestamp);
+	END IF;
+	RETURN NEW;
+END;
+$$;
+
+CREATE  TRIGGER trigger_log_restaurants_updated_at
+  BEFORE UPDATE ON restaurants
+  FOR EACH ROW
+  EXECUTE PROCEDURE log_restaurants_updated_at();
 
 
 insert into yelp_users (first_name, last_name, middle_name, email, passhash) values ('Yvette', 'Mannock', 'Jere', 'sit amet lobortis sapien sapien non mi integer ac neque duis bibendum morbi', 'sed tincidunt eu felis fusce posuere felis sed lacus morbi sem mauris laoreet');

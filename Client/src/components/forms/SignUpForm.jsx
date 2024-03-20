@@ -7,7 +7,6 @@ const SignupForm = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    middleName: "",
     email: "",
     password: "",
     passwordConfirm: "",
@@ -71,16 +70,6 @@ const SignupForm = () => {
                   name="lastName"
                   className="form-control"
                   value={formData.lastName}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>middle name</label>
-                <input
-                  name="middleName"
-                  className="form-control"
-                  value={formData.middleName}
                   onChange={handleChange}
                 />
               </div>

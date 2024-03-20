@@ -9,6 +9,9 @@ const { v4: uuidv4 } = require("uuid");
 var session = require("express-session");
 const pgstore = require("./DB/pgstore");
 const isAuth = require("./middlewear/isAuth");
+const expressValidator = require("express-validator")
+const validateSchema = require("./middlewear/validateSchema")
+const getRestaurantIdSchema = require("./schema/getRestaurantIdSchema")
 
 const db = require("./DB");
 /**secrets */
@@ -83,19 +86,19 @@ app.use("/api/v1/logout", isAuth);
 
 // get all restaraunts or all restaurants on search data
 app.get("/api/v1/restaurants", async (req, res) => {
+
   if (req.query["restaurantsName"]) {
     const restaurantsName = req.query["restaurantsName"];
     const results = await db.query(
       "SELECT * FROM restaurants where LOWER(restaurants_name) LIKE   ('%'||$1||'%')",
       [restaurantsName]
     );
-    
+
     if (!results) {
       res.status(204).json({
-        restaurants: "",
+        restaurants: null,
       });
     }
-    console.log(results["rows"])
 
     res.status(200).json({
       restaurants: results["rows"],
@@ -109,18 +112,27 @@ app.get("/api/v1/restaurants", async (req, res) => {
 });
 
 // get a restaraunt by id
-app.get("/api/v1/restaurant/:id", async (req, res) => {
-  try {
-    const result = await db.query("select * from restaurants where id = $1", [
-      req.params.id,
-    ]);
-    console.log(result);
-    res.status(200).json({
-      restaurant: result["rows"][0],
+app.get("/api/v1/restaurant/:id", getRestaurantIdSchema,validateSchema, async (req, res) => {
+  
+  // if (!isNaN(req.params.id)) {
+  //   res.json({
+  //     msg: "there is no id",
+  //   });
+  // }
+
+  const result = await db.query("select * from restaurants where id = $1", [
+    req.params.id,
+  ]);
+
+  console.log("res",result);
+  if (!result) {
+    res.json({
+      restaurant: null,
     });
-  } catch (err) {
-    console.log(err);
   }
+  res.status(200).json({
+    restaurant: result["rows"][0],
+  });
 });
 
 //create a reastaruant
@@ -131,8 +143,8 @@ app.post("/api/v1/create_restaurant/", async (req, res) => {
   try {
     const result = await db.query(
       `INSERT INTO 
-      restaurants (restaurants_name, address_location, city, zipcode, price_range) 
-      VALUES ($1,$2,$3,$4,$5)
+      restaurants (restaurants_name, address_location, city, zipcode) 
+      VALUES ($1,$2,$3,$4)
       returning * `,
       sqlInput
     );
@@ -147,13 +159,13 @@ app.post("/api/v1/create_restaurant/", async (req, res) => {
 
 //update restaraunt
 
-app.put("/api/v1/restaurant/:id", async (req, res) => {
+app.patch("/api/v1/restaurant/:id", async (req, res) => {
+  console.log("in here");
   let allowedColumns = [
     "restaurants_name",
     "address_location",
     "city",
     "zipcode",
-    "price_range",
   ];
   let columns = [];
   let values = [];
@@ -166,6 +178,7 @@ app.put("/api/v1/restaurant/:id", async (req, res) => {
     }
   }
 
+  console.log("in here");
   const result = await db.query(
     `UPDATE restaurants SET ${columns.join(", ")} 
    WHERE id = $1 returning *`,
@@ -212,16 +225,17 @@ app.post("/api/v1/signup", async (req, res) => {
   delete data["password"];
   delete data["passwordConfirm"];
 
-  const [sqlInput] = Object.values(data);
-
+  const sqlInput = Object.values(data);
+  console.log(sqlInput);
   try {
     const result = await db.query(
       `INSERT INTO 
-      yelp_users (first_name, last_name, middle_name, email, passhash) 
-      VALUES ($1,$2,$3,$4,$5)
+      yelp_users (first_name, last_name, email, passhash) 
+      VALUES ($1,$2,$3,$4)
       returning * `,
       sqlInput
     );
+    console.log("result", result);
     res.status(201);
   } catch (err) {
     console.log(err);
