@@ -9,9 +9,13 @@ const { v4: uuidv4 } = require("uuid");
 var session = require("express-session");
 const pgstore = require("./DB/pgstore");
 const isAuth = require("./middlewear/isAuth");
-const expressValidator = require("express-validator")
-const validateSchema = require("./middlewear/validateSchema")
-const getRestaurantIdSchema = require("./schema/getRestaurantIdSchema")
+
+//schemas
+const expressValidator = require("express-validator");
+const validateSchema = require("./middlewear/validateSchema");
+const getRestaurantIdSchema = require("./schema/getRestaurantIdSchema");
+const getRestaurantNameSchema = require("./schema/getRestaurantNameSchema");
+const createRestaurantSchema = require("./schema/createRestaurantSchema");
 
 const db = require("./DB");
 /**secrets */
@@ -80,71 +84,81 @@ app.use("/api/v1/logout", isAuth);
 
 // TODO safer methods and middlewears look at react and previus projects
 // app.use((req, res, next) => {
-//   console.log("pre get",req.user, req.session.passport );
+//   console.log("pre get",req.body);
 //   next();
 // });
+getRestaurantNameSchema,
+  validateSchema,
+  // get all restaraunts or all restaurants on search data
+  app.get(
+    "/api/v1/restaurants",
+    getRestaurantNameSchema,
+    validateSchema,
+    async (req, res) => {
+      if (req.query["restaurantsName"]) {
+        const restaurantsName = req.query["restaurantsName"].toLowerCase();
+  
+        const results = await db.query(
+          "SELECT * FROM restaurants where LOWER(restaurants_name) LIKE   ('%'||$1||'%')",
+          [restaurantsName]
+        );
 
-// get all restaraunts or all restaurants on search data
-app.get("/api/v1/restaurants", async (req, res) => {
+        console.log(results)
 
-  if (req.query["restaurantsName"]) {
-    const restaurantsName = req.query["restaurantsName"];
-    const results = await db.query(
-      "SELECT * FROM restaurants where LOWER(restaurants_name) LIKE   ('%'||$1||'%')",
-      [restaurantsName]
-    );
+        if (!results) {
+          res.status(204).json({
+            restaurants: null,
+          });
+        }
 
-    if (!results) {
-      res.status(204).json({
-        restaurants: null,
-      });
+        res.status(200).json({
+          restaurants: results["rows"],
+        });
+      } else {
+        const results = await db.query("select * from restaurants");
+        res.status(200).json({
+          restaurants: results["rows"],
+        });
+      }
     }
-
-    res.status(200).json({
-      restaurants: results["rows"],
-    });
-  } else {
-    const results = await db.query("select * from restaurants");
-    res.status(200).json({
-      restaurants: results["rows"],
-    });
-  }
-});
+  );
 
 // get a restaraunt by id
-app.get("/api/v1/restaurant/:id", getRestaurantIdSchema,validateSchema, async (req, res) => {
-  
-  // if (!isNaN(req.params.id)) {
-  //   res.json({
-  //     msg: "there is no id",
-  //   });
-  // }
+app.get(
+  "/api/v1/restaurant/:id",
+  getRestaurantIdSchema,
+  validateSchema,
+  async (req, res) => {
+    const result = await db.query("select * from restaurants where id = $1", [
+      req.params.id,
+    ]);
 
-  const result = await db.query("select * from restaurants where id = $1", [
-    req.params.id,
-  ]);
-
-  console.log("res",result);
-  if (!result) {
-    res.json({
-      restaurant: null,
+    if (!result) {
+      res.json({
+        restaurant: null,
+      });
+    }
+    res.status(200).json({
+      restaurant: result["rows"][0],
     });
   }
-  res.status(200).json({
-    restaurant: result["rows"][0],
-  });
-});
+);
 
 //create a reastaruant
-// to do validate inputs``
-app.post("/api/v1/create_restaurant/", async (req, res) => {
-  const sqlInput = Object.values(req.body);
+// to do validate inputs`` do the camel to sql
 
-  try {
+app.post(
+  "/api/v1/create_restaurant/",
+  createRestaurantSchema,
+  validateSchema,
+  async (req, res) => {
+    const sqlInput = Object.values(req.body);
+
+    console.log("sql backend", sqlInput);
     const result = await db.query(
       `INSERT INTO 
-      restaurants (restaurants_name, address_location, city, zipcode) 
-      VALUES ($1,$2,$3,$4)
+      restaurants (restaurants_name, address_location, city, zipcode, about) 
+      VALUES ($1,$2,$3,$4,$5)
       returning * `,
       sqlInput
     );
@@ -152,15 +166,12 @@ app.post("/api/v1/create_restaurant/", async (req, res) => {
     res.status(201).json({
       restaurant: result["rows"][0],
     });
-  } catch (err) {
-    console.log(err);
   }
-});
+);
 
 //update restaraunt
 
 app.patch("/api/v1/restaurant/:id", async (req, res) => {
-  console.log("in here");
   let allowedColumns = [
     "restaurants_name",
     "address_location",
@@ -178,7 +189,6 @@ app.patch("/api/v1/restaurant/:id", async (req, res) => {
     }
   }
 
-  console.log("in here");
   const result = await db.query(
     `UPDATE restaurants SET ${columns.join(", ")} 
    WHERE id = $1 returning *`,
