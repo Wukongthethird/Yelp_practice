@@ -8,6 +8,10 @@ const createRestaurantSchema = [
     .isLength({ min: 1 })
     .escape()
     .bail(),
+  body("addressLocation").exists().trim().isLength({ min: 1 }).escape().bail(),
+  body("city").exists().trim().isLength({ min: 1 }).escape().bail(),
+  body("zipcode").isPostalCode("US").trim().escape().bail(),
+  body("about").trim().optional().escape().bail(),
   body().custom(async (value, { req }) => {
     // selects if restarant in db
     const existRestaurant = await db.query(
@@ -28,10 +32,6 @@ const createRestaurantSchema = [
       }
     }
   }),
-  body("addressLocation").exists().trim().isLength({ min: 1 }).escape().bail(),
-  body("city").exists().trim().isLength({ min: 1 }).escape().bail(),
-  body("zipcode").isPostalCode("US").trim().escape().bail(),
-  body("about").trim().optional().escape().bail(),
 ];
 
 module.exports = createRestaurantSchema;

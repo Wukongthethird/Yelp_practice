@@ -103,7 +103,6 @@ getRestaurantNameSchema,
           [restaurantsName]
         );
 
-        console.log(results)
 
         if (!results) {
           res.status(204).json({
@@ -154,7 +153,6 @@ app.post(
   async (req, res) => {
     const sqlInput = Object.values(req.body);
 
-    console.log("sql backend", sqlInput);
     const result = await db.query(
       `INSERT INTO 
       restaurants (restaurants_name, address_location, city, zipcode, about) 
@@ -177,6 +175,7 @@ app.patch("/api/v1/restaurant/:id", async (req, res) => {
     "address_location",
     "city",
     "zipcode",
+    "about"
   ];
   let columns = [];
   let values = [];
