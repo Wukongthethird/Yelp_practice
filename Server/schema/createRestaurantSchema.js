@@ -14,13 +14,13 @@ const createRestaurantSchema = [
   body("about").trim().optional().escape().bail(),
   body().custom(async (value, { req }) => {
     // selects if restarant in db
+    // this loop checks for if address matches with a restaurant maybe move it to router or its own middlewear    const restaurants = existRestaurant.rows;
+
     const existRestaurant = await db.query(
       "SELECT * FROM restaurants where LOWER(restaurants_name) = $1",
       [value.restaurantsName.toLowerCase()]
     );
 
-    // this loop checks for if address matches with a restaurant
-    const restaurants = existRestaurant.rows;
     for (let r of restaurants) {
       if (
         r.address_location.toLowerCase() ==

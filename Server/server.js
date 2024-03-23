@@ -16,6 +16,7 @@ const validateSchema = require("./middlewear/validateSchema");
 const getRestaurantIdSchema = require("./schema/getRestaurantIdSchema");
 const getRestaurantNameSchema = require("./schema/getRestaurantNameSchema");
 const createRestaurantSchema = require("./schema/createRestaurantSchema");
+const signUpUserSchema = require("./schema/signUpUserSchema")
 
 const db = require("./DB");
 /**secrets */
@@ -223,7 +224,8 @@ app.delete("/api/v1/restaurant/:id", async (req, res) => {
 
     to do validate data If data not valid, return err.
  */
-app.post("/api/v1/signup", async (req, res) => {
+app.post("/api/v1/signup",signUpUserSchema,validateSchema, async (req, res) => {
+  console.log('signupapi', req.body)
   let data = {};
   for (let key in req.body) {
     data[camelToSnakeCase(key)] = req.body[key];
@@ -231,21 +233,22 @@ app.post("/api/v1/signup", async (req, res) => {
 
   const passhash = await bcrypt.hash(data["password"].toString(), 10);
   data["passhash"] = passhash;
+
   delete data["password"];
-  delete data["passwordConfirm"];
+  delete data["confirmPassword"];
 
   const sqlInput = Object.values(data);
-  console.log(sqlInput);
+
   try {
     const result = await db.query(
       `INSERT INTO 
       yelp_users (first_name, last_name, email, passhash) 
       VALUES ($1,$2,$3,$4)
-      returning * `,
+      returning first_name, last_name, email `,
       sqlInput
     );
     console.log("result", result);
-    res.status(201);
+    res.status(201).json({user:result.rows[0]});
   } catch (err) {
     console.log(err);
   }
