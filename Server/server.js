@@ -278,10 +278,10 @@ app.delete("/api/v1/logout", async (req, res, next) => {
   await req.session.destroy((err) => {
     console.log("destroy in here", err);
     if (err) {
-      console.log(err, "Err");
+
       return res.json({ err });
     } else {
-      console.log("in here");
+
       req.sessionID = null;
       req.logout((err) => {
         if (err) {

@@ -11,8 +11,9 @@ import UserContext from "../auth/UserContext";
 
 export const Navbar = () => {
   const user = useContext(UserContext);
-  console.log("logout on nav" , user)
-  function logout() {
+
+  function logout(evt) {
+    evt.preventDefault()
     console.log("logout on nav")
     user.logout();
   }

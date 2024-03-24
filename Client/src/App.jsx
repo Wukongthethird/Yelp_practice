@@ -37,19 +37,21 @@ function App() {
   }
 
   async function logout(){
-    await yelpAPI.logout
+    await yelpAPI.logout()
     setUser({user:{}, status:"logout"})
   }
   
 
  
 
-  console.log("logging out", user)
+
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>
       <UserContext.Provider value={{user,logout }}>
+      <button onClick={logout}>something</button>
         <RoutesOrganizer />
+
         <Routes>
           <Route exact path="/login" element={<Login login={login} />} />
         </Routes>
