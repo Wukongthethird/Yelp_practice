@@ -15,6 +15,7 @@ const pgstore = new (require('connect-pg-simple')(session))({
   conObject,
   tableName : 'user_sessions' ,
   createTableIfMissing: true, // creates session table
+  unset: 'destroy' 
 })
 
 module.exports = pgstore;

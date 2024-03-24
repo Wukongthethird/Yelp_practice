@@ -52,7 +52,6 @@ class yelpAPI {
   /** Gets a list of all restaurants */
   static async getAllRestaurants(restaurantsName) {
     let res = await this.request(`api/v1/restaurants`, { restaurantsName });
-    console.log('api',res)
     return res.restaurants;
   }
 
@@ -87,7 +86,7 @@ class yelpAPI {
 
   static async logout() {
     const res = await this.request("api/v1/logout", {}, "delete");
-
+    console.log("api" , res)
     return res;
   }
 }

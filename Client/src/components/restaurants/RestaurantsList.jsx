@@ -13,8 +13,6 @@ import { SimpleGrid } from "@chakra-ui/react";
  * /routed at homes for now
  */
 const RestaurantList = () => {
-  console.debug("RestaurantList");
-
   const [restaurants, setRestaurants] = useState(null);
 
   useEffect(function getAllRestaurantsOnMount() {

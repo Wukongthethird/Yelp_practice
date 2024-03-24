@@ -29,7 +29,11 @@ CREATE TABLE
     PRIMARY KEY (user_id,restaurants_id)
   );
 
-
+CREATE TABLE user_sessions(
+  sid TEXT NOT NULL, 
+  sess json NOT NULL, 
+  expire timestamp without time zone NOT NULL;
+);
 
 
 TRANSACTIONAL EXAMPLE

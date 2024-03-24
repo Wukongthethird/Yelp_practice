@@ -16,7 +16,8 @@ const validateSchema = require("./middlewear/validateSchema");
 const getRestaurantIdSchema = require("./schema/getRestaurantIdSchema");
 const getRestaurantNameSchema = require("./schema/getRestaurantNameSchema");
 const createRestaurantSchema = require("./schema/createRestaurantSchema");
-const signUpUserSchema = require("./schema/signUpUserSchema")
+const signUpUserSchema = require("./schema/signUpUserSchema");
+const loginUserSchema = require("./schema/loginUserSchema");
 
 const db = require("./DB");
 /**secrets */
@@ -80,7 +81,7 @@ app.use(passport.session());
 // app.use("/api/v1/create_restaurant/", isAuth);
 
 // userAuth
-app.use("/api/v1/logout", isAuth);
+// app.use("/api/v1/logout", isAuth);
 // app.use("/api/v1/restaurants", isAuth);
 
 // TODO safer methods and middlewears look at react and previus projects
@@ -98,25 +99,24 @@ getRestaurantNameSchema,
     async (req, res) => {
       if (req.query["restaurantsName"]) {
         const restaurantsName = req.query["restaurantsName"].toLowerCase();
-  
+
         const results = await db.query(
           "SELECT * FROM restaurants where LOWER(restaurants_name) LIKE   ('%'||$1||'%')",
           [restaurantsName]
         );
 
-
         if (!results) {
-          res.status(204).json({
+          return res.status(204).json({
             restaurants: null,
           });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
           restaurants: results["rows"],
         });
       } else {
         const results = await db.query("select * from restaurants");
-        res.status(200).json({
+        return res.status(200).json({
           restaurants: results["rows"],
         });
       }
@@ -134,11 +134,11 @@ app.get(
     ]);
 
     if (!result) {
-      res.json({
+      return res.json({
         restaurant: null,
       });
     }
-    res.status(200).json({
+    return res.status(200).json({
       restaurant: result["rows"][0],
     });
   }
@@ -162,7 +162,7 @@ app.post(
       sqlInput
     );
 
-    res.status(201).json({
+    return res.status(201).json({
       restaurant: result["rows"][0],
     });
   }
@@ -176,7 +176,7 @@ app.patch("/api/v1/restaurant/:id", async (req, res) => {
     "address_location",
     "city",
     "zipcode",
-    "about"
+    "about",
   ];
   let columns = [];
   let values = [];
@@ -198,9 +198,10 @@ app.patch("/api/v1/restaurant/:id", async (req, res) => {
     return null;
   }
 
-  res.status(200).json({
+  return res.status(200).json({
     restaurant: result["rows"][0],
   });
+  return;
 });
 
 //delete restaurants based on id
@@ -213,7 +214,7 @@ app.delete("/api/v1/restaurant/:id", async (req, res) => {
     [req.params.id]
   );
 
-  res.status(204).json({
+  return res.status(204).json({
     status: "sucess",
   });
 });
@@ -224,22 +225,24 @@ app.delete("/api/v1/restaurant/:id", async (req, res) => {
 
     to do validate data If data not valid, return err.
  */
-app.post("/api/v1/signup",signUpUserSchema,validateSchema, async (req, res) => {
-  console.log('signupapi', req.body)
-  let data = {};
-  for (let key in req.body) {
-    data[camelToSnakeCase(key)] = req.body[key];
-  }
+app.post(
+  "/api/v1/signup",
+  signUpUserSchema,
+  validateSchema,
+  async (req, res) => {
+    let data = {};
+    for (let key in req.body) {
+      data[camelToSnakeCase(key)] = req.body[key];
+    }
 
-  const passhash = await bcrypt.hash(data["password"].toString(), 10);
-  data["passhash"] = passhash;
+    const passhash = await bcrypt.hash(data["password"].toString(), 10);
+    data["passhash"] = passhash;
 
-  delete data["password"];
-  delete data["confirmPassword"];
+    delete data["password"];
+    delete data["confirmPassword"];
 
-  const sqlInput = Object.values(data);
+    const sqlInput = Object.values(data);
 
-  try {
     const result = await db.query(
       `INSERT INTO 
       yelp_users (first_name, last_name, email, passhash) 
@@ -247,12 +250,10 @@ app.post("/api/v1/signup",signUpUserSchema,validateSchema, async (req, res) => {
       returning first_name, last_name, email `,
       sqlInput
     );
-    console.log("result", result);
-    res.status(201).json({user:result.rows[0]});
-  } catch (err) {
-    console.log(err);
+
+    return res.status(201).json({ user: result.rows[0] });
   }
-});
+);
 
 /**
  * logins user by email needs to validate later and do session
@@ -260,31 +261,72 @@ app.post("/api/v1/signup",signUpUserSchema,validateSchema, async (req, res) => {
 //https://github.com/jaredhanson/passport/issues/126#issuecomment-32333163
 app.post(
   "/api/v1/login",
+  loginUserSchema,
+  validateSchema,
   passport.authenticate("local", { failWithError: true }),
   (req, res, next) => {
-    console.log("login", req.user);
-    res.status(200).json({ user: req.user, status: "login" });
+    return res.status(200).json({ user: req.user, status: "login" });
   },
   (err, req, res, next) => {
-    res.send(err);
+    return res.send(err);
   }
 );
 
 app.delete("/api/v1/logout", async (req, res, next) => {
-  req.logout((err) => {
+  const sid = req.sessionID;
+
+  await req.session.destroy((err) => {
+    console.log("destroy in here", err);
     if (err) {
-      console.log("err", err);
+      console.log(err, "Err");
+      return res.json({ err });
+    } else {
+      console.log("in here");
+      req.sessionID = null;
+      req.logout((err) => {
+        if (err) {
+          console.log("err", err);
+        }
+      });
+      return res
+        .clearCookie("connect.sid", {
+          path: "/",
+          httpOnly: true,
+          credentials: true,
+        })
+        .json({ msg: "you have logout successfully" });
     }
   });
-  // these 2 lines remove/replace cookie on browser probably removing the thing that is sent
-  req.sessionID = null;
-  res.clearCookie("connect.sid", {
-    // path: "/",
-    httpOnly: true,
-    credentials: true,
-  });
+  //this works
+  // await  db.query('DELETE FROM user_sessions  "sid" in ($1)',[sid])
 
-  res.json({ msg: "you have logout successfully" });
+  //this does not
+  // const nea = await db.query(`DELETE FROM user_sessions where "sid" = "${sid}"`)
+
+  // req.session.destroy(sid)
+
+  // pgstore.destroy(req.sessionID , (err)=>{
+  //   if (err)=>{
+  //     console.log('deletre',err)
+  //   }
+
+  // })
+
+  // // these 2 lines remove/replace cookie on browser probably removing the thing that is sent
+  // req.sessionID = null;
+  // res.clearCookie("connect.sid", {
+  //   path: "/",
+  //   httpOnly: true,
+  //   credentials: true,
+  // });
+
+  // req.logout((err) => {
+  //   if (err) {
+  //     console.log("err", err);
+  //   }
+  // });
+
+  // return res.json({ msg: "you have logout successfully" });
 });
 
 //need to add global error messsage

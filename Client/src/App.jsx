@@ -29,18 +29,22 @@ function App() {
   // const user = await yelpAPI.loginUser(formData);
   async function login(loginData) {
     let user = await yelpAPI.loginUser(loginData);
+    console.log('app',user)
+    if (user.errors){
+      return
+    }
     setUser(user)
   }
 
   async function logout(){
     await yelpAPI.logout
-    setUser(user)
+    setUser({user:{}, status:"logout"})
   }
   
 
  
 
-
+  console.log("logging out", user)
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>

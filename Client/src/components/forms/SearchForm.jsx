@@ -14,7 +14,6 @@ import PropTypes from "prop-types";
  */
 
 const SearchForm = ({ searchFor }) => {
-  console.debug("SearchForm", "searchFor=", typeof searchFor);
 
   const [searchTerm, setSearchTerm] = useState("");
 
