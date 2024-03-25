@@ -13,13 +13,14 @@ export const Navbar = () => {
   const user = useContext(UserContext);
 
   function logout(evt) {
-    evt.preventDefault()
-    console.log("logout on nav")
+    evt.preventDefault();
     user.logout();
   }
 
+  console.log("navbar", user);
   let body =
-    user.user.status == "logout" && Object.keys(user.user.user).length === 0 ? (
+    // user.user.status == "logout" &&
+    Object.keys(user.user.user).length === 0 ? (
       <>
         <div>
           <Link href="/login">Login</Link>

@@ -8,10 +8,10 @@ import {
   Button,
   InputRightElement,
   InputGroup,
+  Input,
 } from "@chakra-ui/react";
 
-
-const LoginForm = ({login}) => {
+const LoginForm = ({ login }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -19,17 +19,6 @@ const LoginForm = ({login}) => {
   const [formErrors, setFormErrors] = useState([]);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
-
-
-  console.debug(
-    "LoginForm",
-    "Login=",
-    typeof login,
-    "formData=",
-    formData,
-    "formErrors=",
-    formErrors
-  );
 
   /** Handle form submit:
    *
@@ -39,11 +28,12 @@ const LoginForm = ({login}) => {
 
   async function handleSubmit(evt) {
     evt.preventDefault();
-    try {
-      login(formData)
+    const res = await login(formData);
+    if (res.errors) {
+      setFormErrors([res.errors.message]);
+    } 
+    else {
       navigate("/");
-    } catch (err) {
-      setFormErrors(err);
     }
   }
 
@@ -58,55 +48,11 @@ const LoginForm = ({login}) => {
   }
 
   return (
-    //   <div className="LoginForm">
-    //     <div className="container col-md-6 offset-md-3 col-lg-4 offset-lg-4">
-    //       <h2 className="mb-3">Login</h2>
-    //       <div className="card">
-    //         <div className="card-body">
-    //           <form onSubmit={handleSubmit}>
-    //             <div className="form-group">
-    //               <label>Email</label>
-    //               <input
-    //                 type="email"
-    //                 name="email"
-    //                 className="form-control"
-    //                 value={formData.email}
-    //                 onChange={handleChange}
-    //               />
-    //             </div>
-    //             <div className="form-group">
-    //               <label>Password</label>
-    //               <input
-    //                 type="password"
-    //                 name="password"
-    //                 className="form-control"
-    //                 value={formData.password}
-    //                 onChange={handleChange}
-    //               />
-    //             </div>
-    //             {formErrors.length ? (
-    //               <Alert type="danger" messages={formErrors} />
-    //             ) : null}
-
-    //             <button
-    //               type="submit"
-    //               className="btn btn-primary float-right"
-    //               onSubmit={handleSubmit}
-    //             >
-    //               Submit
-    //             </button>
-    //           </form>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // );
     <div className="LoginForm">
-
       <Box mt={8} mx="auto" maxW="800px" w="100%" color="teal">
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <input
+            <Input
               placeholder="Email"
               type="email"
               name="email"
@@ -118,7 +64,8 @@ const LoginForm = ({login}) => {
 
           <div className="form-group">
             <InputGroup>
-              <input
+              <Input
+                pr="4.5rem"
                 placeholder="Password"
                 type={show ? "text" : "password"}
                 name="password"
@@ -126,15 +73,13 @@ const LoginForm = ({login}) => {
                 value={formData.password}
                 onChange={handleChange}
               />
-              <InputRightElement onClick={handleShow}>
-                {show ? "Hide" : "Show"}
+              <InputRightElement>
+                <Button onClick={handleShow}> {show ? "Hide" : "Show"}</Button>
               </InputRightElement>
             </InputGroup>
           </div>
-
-          {formErrors.length ? (
-            <Alert type="danger" messages={formErrors} />
-          ) : null}
+          {console.log("handle submit", setFormErrors)}
+          {formErrors ? <Alert type="danger" messages={formErrors} /> : null}
 
           <Button
             mt={4}

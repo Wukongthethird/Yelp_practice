@@ -32,10 +32,10 @@ app.set("trust proxy", 1);
 
 app.use(
   cors({
-    // origin:"http://localhost:5173",
+ 
     // allowedHeaders: "X-Requested-With, Content-Type, Accept",
     //   credentials: true,
-    //   httpOnly: false,
+    //   httpOnly: true,
     // sameSite: "lax",
     // secure:false,
     //
@@ -265,10 +265,13 @@ app.post(
   validateSchema,
   passport.authenticate("local", { failWithError: true }),
   (req, res, next) => {
-    return res.status(200).json({ user: req.user, status: "login" });
+    return res.json({ user: req.user, status: "login" });
   },
   (err, req, res, next) => {
-    return res.send(err);
+    const output = JSON.parse(err)
+    
+
+    return res.json(output);
   }
 );
 
@@ -297,36 +300,6 @@ app.delete("/api/v1/logout", async (req, res, next) => {
         .json({ msg: "you have logout successfully" });
     }
   });
-  //this works
-  // await  db.query('DELETE FROM user_sessions  "sid" in ($1)',[sid])
-
-  //this does not
-  // const nea = await db.query(`DELETE FROM user_sessions where "sid" = "${sid}"`)
-
-  // req.session.destroy(sid)
-
-  // pgstore.destroy(req.sessionID , (err)=>{
-  //   if (err)=>{
-  //     console.log('deletre',err)
-  //   }
-
-  // })
-
-  // // these 2 lines remove/replace cookie on browser probably removing the thing that is sent
-  // req.sessionID = null;
-  // res.clearCookie("connect.sid", {
-  //   path: "/",
-  //   httpOnly: true,
-  //   credentials: true,
-  // });
-
-  // req.logout((err) => {
-  //   if (err) {
-  //     console.log("err", err);
-  //   }
-  // });
-
-  // return res.json({ msg: "you have logout successfully" });
 });
 
 //need to add global error messsage

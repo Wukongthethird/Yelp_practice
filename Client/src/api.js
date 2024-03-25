@@ -81,12 +81,12 @@ class yelpAPI {
 
   static async loginUser(data) {
     let res = await this.request("api/v1/login", data, "post");
+    console.log("api",res)
     return res;
   }
 
   static async logout() {
     const res = await this.request("api/v1/logout", {}, "delete");
-    console.log("api" , res)
     return res;
   }
 }

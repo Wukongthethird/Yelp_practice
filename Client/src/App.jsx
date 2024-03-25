@@ -20,41 +20,33 @@ const colors = {
 
 const theme = extendTheme({ colors });
 
-
-
 function App() {
-  const [user, setUser] = useState({user:{}, status:"logout"});
-
+  const [user, setUser] = useState({ user: {}, status: "logout" });
 
   // const user = await yelpAPI.loginUser(formData);
   async function login(loginData) {
-    let user = await yelpAPI.loginUser(loginData);
-    console.log('app',user)
-    if (user.errors){
-      return
-    }
-    setUser(user)
+    const res = await yelpAPI.loginUser(loginData);
+    
+    if (res.errors) {
+      return res;
+    } 
+      setUser(res);
+      return res
   }
 
-  async function logout(){
-    await yelpAPI.logout()
-    setUser({user:{}, status:"logout"})
+  async function logout() {
+    await yelpAPI.logout();
+    setUser({ user: {}, status: "logout" });
   }
-  
-
- 
-
 
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>
-      <UserContext.Provider value={{user,logout }}>
-      <button onClick={logout}>something</button>
-        <RoutesOrganizer />
-
-        <Routes>
-          <Route exact path="/login" element={<Login login={login} />} />
-        </Routes>
+        <UserContext.Provider value={{ user, logout }}>
+          <RoutesOrganizer />
+          <Routes>
+            <Route exact path="/login" element={<Login login={login} />} />
+          </Routes>
         </UserContext.Provider>
       </BrowserRouter>
     </ChakraProvider>
