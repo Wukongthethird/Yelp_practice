@@ -78,7 +78,6 @@ const LoginForm = ({ login }) => {
               </InputRightElement>
             </InputGroup>
           </div>
-          {console.log("handle submit", setFormErrors)}
           {formErrors ? <Alert type="danger" messages={formErrors} /> : null}
 
           <Button

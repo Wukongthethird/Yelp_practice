@@ -26,7 +26,7 @@ class yelpAPI {
     const headers = { "Access-Control-Allow-Origin": "http://localhost:3000" };
     const withCredentials = { withCredentials: true };
     const credentials = { credentials: "include" };
-
+      console.log("headers", data)
     const url = `${this.BASE_URL}/${endpoint}`;
     const params = method === "get" ? data : {};
     /**  this makes cookie save in browser */
@@ -73,15 +73,13 @@ class yelpAPI {
     let res = await this.request(`api/v1/restaurants/${id}`, "delete");
     return res.status;
   }
-
   static async signUpUser(data) {
     let res = await this.request("api/v1/signup", data, "post");
-    return res.status;
+    return res;
   }
 
   static async loginUser(data) {
     let res = await this.request("api/v1/login", data, "post");
-    console.log("api",res)
     return res;
   }
 

@@ -242,7 +242,8 @@ app.post(
     delete data["confirmPassword"];
 
     const sqlInput = Object.values(data);
-
+    console.log("past schema")
+        
     const result = await db.query(
       `INSERT INTO 
       yelp_users (first_name, last_name, email, passhash) 
