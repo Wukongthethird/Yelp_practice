@@ -1,7 +1,7 @@
 
 CREATE TABLE
   restaurants (
-    id integer generated always as identity,
+    id integer primary key generated always as identity,
     restaurants_name VARCHAR(75) NOT NULL,
     address_location VARCHAR(75) NOT NULL,
     city VARCHAR(75) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE
 
 CREATE TABLE 
   yelp_users (
-    id integer generated always as identity,
+    id integer  primary key generated always as identity,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(60) NOT NULL,
     email  VARCHAR(254) UNIQUE NOT NULL,
@@ -22,25 +22,13 @@ CREATE TABLE
     updated_at timestamp with time zone NOT NULL DEFAULT date_trunc('second', now()::timestamp)
   );
 
-CREATE TABLE
-  user_favorites(
-    user_id INTEGER REFERENCES yelp_users ON DELETE CASCADE NOT NULL,
-    restaurants_id INTEGER REFERENCES restaurants ON DELETE CASCADE NOT NULL,
-    PRIMARY KEY (user_id,restaurants_id)
-  );
+
 
 CREATE TABLE user_sessions(
   sid TEXT NOT NULL, 
   sess json NOT NULL, 
   expire timestamp without time zone NOT NULL;
 );
-
-
-TRANSACTIONAL EXAMPLE
-  BEGIN
-  
-  
-  COMMIT
 
   CREATE TABLE 
   yelp_admin (
@@ -55,6 +43,13 @@ TRANSACTIONAL EXAMPLE
   );
 
 
+
+TRANSACTIONAL EXAMPLE
+  BEGIN
+  
+  
+  COMMIT
+
 -- price range and rating should be its own tabe
 -- restaraunt id user id rating value
 
@@ -62,18 +57,28 @@ CREATE TABLE
   price_range(
     user_id INTEGER REFERENCES yelp_users ON DELETE CASCADE NOT NULL,
     restaurants_id INTEGER REFERENCES restaurants ON DELETE CASCADE NOT NULL,
-    PRIMARY KEY (user_id,restaurants_id)
-    price INTEGER NOT NULL check(price_range>=0 and price_range<=5)
-  )
+    PRIMARY KEY (user_id,restaurants_id),
+    price INTEGER NOT NULL CHECK (price>=1 and price<=5)
+);
 
 CREATE TABLE
   ratings(
     user_id INTEGER REFERENCES yelp_users ON DELETE CASCADE NOT NULL,
     restaurants_id INTEGER REFERENCES restaurants ON DELETE CASCADE NOT NULL,
+    PRIMARY KEY (user_id,restaurants_id),
+    rating INTEGER NOT NULL CHECK (rating>=1 and rating<=5)
+);
+
+CREATE TABLE
+  user_favorites(
+    user_id INTEGER REFERENCES yelp_users ON DELETE CASCADE NOT NULL,
+    restaurants_id INTEGER REFERENCES restaurants ON DELETE CASCADE NOT NULL,
     PRIMARY KEY (user_id,restaurants_id)
-    rating INTEGER NOT NULL check(price_range>=1 and price_range<=5)
-  )
--- comment table
+  );
+
+
+
+-- comment table do not cascade on user maybe on restaurant but lets think of this more
 
 
 

@@ -10,8 +10,9 @@ import {
   Heading,
   Text,
   IconButton,
-  Link,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
+import { Link as ReactRouterLink } from 'react-router-dom'
 import PropTypes from "prop-types";
 import yelpAPI from "../../api";
 /**
@@ -44,7 +45,7 @@ const RestaurantCard = ({ restaurant }) => {
         </Flex>
       </CardHeader>
       <CardBody>
-    <Link href={`/restaurants/${convertedRestaurant.id}`}> read more</Link>
+    <ChakraLink as={ReactRouterLink} to={`/restaurants/${convertedRestaurant.id}`}> read more</ChakraLink>
   </CardBody>
     </Card>
   );

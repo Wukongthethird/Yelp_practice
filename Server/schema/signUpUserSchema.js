@@ -21,15 +21,15 @@ const signUpUserSchema = [
   body("firstName")
     .trim()
     .isAlpha()
-    .withMessage("Required first name")
     .isLength({ min: 1 })
-    .escape(),
+    .escape()
+    .withMessage("Required first name"),
   body("lastName")
     .trim()
     .isAlpha()
-    .withMessage("Required last name")
     .isLength({ min: 1 })
-    .escape(),
+    .escape()
+    .withMessage("Required first name"),
   body("password")
     .isStrongPassword({
       minLength: 7,

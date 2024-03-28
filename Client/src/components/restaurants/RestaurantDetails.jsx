@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import yelpAPI from "../../api";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
+import { Link as ChakraLink } from "@chakra-ui/react";
+import { Link as ReactRouterLink } from 'react-router-dom'
 /**
  * SOMEHOw add reviews and like functionality
  *
@@ -31,6 +33,7 @@ const RestaurantDetails = () => {
   return (
     <div className="Restaurant card">
       <div className="card-body">
+        <ChakraLink as={ReactRouterLink} to="/">press here</ChakraLink>
         <h6 className="card-title">{restaurant.restaurants_name} </h6>
       </div>
     </div>

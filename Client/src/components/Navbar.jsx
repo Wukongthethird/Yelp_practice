@@ -1,11 +1,13 @@
 import {
   Box,
-  Link,
+  Link as ChakraLink,
   Heading,
   Flex,
   Button,
   ChakraProvider,
 } from "@chakra-ui/react";
+import { Link as ReactRouterLink } from 'react-router-dom'
+
 import { useContext } from "react";
 import UserContext from "../auth/UserContext";
 
@@ -17,23 +19,23 @@ export const Navbar = () => {
     user.logout();
   }
 
-  console.log("navbar", user);
+  console.log("nav" ,  user )
+
   let body =
     // user.user.status == "logout" &&
-    Object.keys(user.user.user).length === 0 ? (
+    Object.keys(user.user).length === 0 ? (
       <>
         <div>
-          <Link href="/login">Login</Link>
-          <Link href="/signup">Register</Link>
+          <ChakraLink as={ReactRouterLink} to="/login">Login</ChakraLink>
+          <ChakraLink  as={ReactRouterLink}  to="/signup">Register</ChakraLink>
         </div>
       </>
     ) : (
       <div>
-        <Link href="/">Home</Link>
-        <Link href="/">
-          {" "}
-          <button onClick={logout}>Log Out</button>{" "}
-        </Link>
+        <ChakraLink as={ReactRouterLink}  to="/">Home</ChakraLink>
+        <ChakraLink as={ReactRouterLink}  to="/">
+          <Button onClick={logout}>Log Out</Button>
+        </ChakraLink>
       </div>
     );
 
@@ -49,9 +51,9 @@ export const Navbar = () => {
           align="center"
         >
           <Flex flex={1} m="auto" maxW={800} align="center">
-            <Link href="/">
+            <ChakraLink as={ReactRouterLink}  to="/">
               <Heading>Yelp</Heading>
-            </Link>
+            </ChakraLink>
 
             <Box ml={"auto"}>{body}</Box>
           </Flex>

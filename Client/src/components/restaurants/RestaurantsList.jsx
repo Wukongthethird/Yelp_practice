@@ -20,7 +20,6 @@ const RestaurantList = () => {
     search();
   }, []);
 
-
   /** Triggered by search form submit; reloads restaurants. */
   async function search(restaurantsName) {
     let restaurants = await yelpAPI.getAllRestaurants(restaurantsName);
@@ -30,14 +29,14 @@ const RestaurantList = () => {
   if (!restaurants) return <LoadingSpinner />;
 
   return (
-    <div>
+    <>
       <SearchForm searchFor={search} />
       {restaurants[0] !== null ? (
         <RestaurantCardList restaurants={restaurants} />
       ) : (
         <p className="lead">Sorry, no results were found!</p>
       )}
-    </div>
+    </>
   );
 };
 

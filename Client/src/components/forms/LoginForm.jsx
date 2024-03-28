@@ -16,6 +16,7 @@ const LoginForm = ({ login }) => {
     email: "",
     password: "",
   });
+
   const [formErrors, setFormErrors] = useState([]);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const LoginForm = ({ login }) => {
    *
    */
 
+  // checks from app level
   async function handleSubmit(evt) {
     evt.preventDefault();
     const res = await login(formData);

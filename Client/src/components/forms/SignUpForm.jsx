@@ -44,7 +44,6 @@ const SignupForm = () => {
     evt.preventDefault();
     const res = await yelpAPI.signUpUser(formData);
 
-
     if(res.errors) { 
       let msgs =[]
       for(let msg of res.errors){

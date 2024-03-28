@@ -6,8 +6,11 @@ import Update from "./Update";
 import AddNewRestaurant from "./AddNewRestaurant";
 import SignUp from "./SignUp";
 import Login from "./Login";
-
+import{useContext} from 'react'
+import UserContext from "../auth/UserContext";
 const RoutesOrganizer = () => {
+  
+
   return (
     <>
       <Routes>
