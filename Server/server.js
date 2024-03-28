@@ -180,13 +180,14 @@ app.get("/api/v1/fetchuser/", async (req, res) => {
    req.sessionID,
   ]);
 
+
   if (result.rows.length === 0) {
     return res.json({ user: {}, status: "logout" });
   }
-  console.log("session", result.rows[0].sess);
+
   const user = result.rows[0].sess.passport.user;
   if (JSON.stringify(req.session.passport.user) === JSON.stringify(user)) {
-    return res.json({ user, status: "login" });
+    return res.json({ user, status: "login", token:req.sessionID });
   }
 
   return res.json({ user: {}, status: "logout" });

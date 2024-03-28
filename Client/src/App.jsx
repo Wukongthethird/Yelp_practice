@@ -23,7 +23,7 @@ const colors = {
 const theme = extendTheme({ colors });
 
 // Key name for storing token in localStorage for "remember me" re-login
-export const TOKEN_STORAGE_ID = "jobly-token";
+export const TOKEN_STORAGE_ID = "yelp-token";
 
 
 function App() {
@@ -41,7 +41,7 @@ function App() {
       }
       getCurrentUser();
     },
-    []
+    [token]
   );
 
   // const user = await yelpAPI.loginUser(formData);
@@ -52,7 +52,7 @@ function App() {
       return res;
     }
     // sends user object
-    setToken
+    setToken(res.token)
     setUser(res);
     return res;
   }
@@ -62,7 +62,7 @@ function App() {
     setUser({ user: {}, status: "logout" });
   }
 
-console.log("token", yelpAPI.token)
+
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>

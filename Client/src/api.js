@@ -76,7 +76,7 @@ class yelpAPI {
   }
 
   static async fetchUser(){
-    let res = await this.request( "api/v1/fetchuser");
+    let res = await this.request( `api/v1/fetchuser/`);
     return res;
   }
 
