@@ -43,6 +43,7 @@ function App() {
       async function getCurrentUser() {
         //check session db to seee if i have logged in then save to state chang back
         const currentUser = await yelpAPI.fetchUser();
+        
         setUser({...currentUser})
       }
       getCurrentUser();
@@ -68,11 +69,15 @@ function App() {
     setUser({ user: {}, status: "logout" });
   }
 
+  async function favoriting({userId, restaurantId}){
+    const res = await yelpAPI.favoriting({userId, restaurantId})
+  }
+
 
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>
-        <UserContext.Provider value={{ ...user, logout }}>
+        <UserContext.Provider value={{ ...user, logout, favoriting }}>
           <RoutesOrganizer />
           <Routes>
             <Route exact path="/login" element={<Login login={login} />} />

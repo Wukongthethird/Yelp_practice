@@ -18,8 +18,13 @@ function initializePassport(passport) {
       );
     }
 
+    // const results = await db.query(
+    //   "select id , email, passhash from yelp_users where LOWER(email) = $1",
+    //   [email]
+    // );
+
     const results = await db.query(
-      "select id , email, passhash from yelp_users where LOWER(email) = $1",
+      "select id , email, passhash, array_agg(restaurants_id) as restaurants from yelp_users JOIN  user_favorites ON id = user_id where LOWER(email)  = $1 GROUP BY yelp_users.id ",
       [email]
     );
 

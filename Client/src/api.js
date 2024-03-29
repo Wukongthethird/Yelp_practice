@@ -95,11 +95,17 @@ class yelpAPI {
     return res;
   }
 
-  static async favorite(data){
+  static async favoriting(data){
     let res = await this.request("api/v1/login", data, "post");
     return res;
-
   }
+
+  //DEPRECATED
+  // static async getfavorites(id){
+  //   let res = await this.request(`api/v1/getfavorites/${id}`, );
+  //   return res;
+  // }
+
 }
 
 export default yelpAPI;

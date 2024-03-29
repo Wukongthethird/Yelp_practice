@@ -18,10 +18,9 @@ const FavoriteButton = ({userId, restaurantId})=>{
 
   // needs to handle the functionaliy if it is liked or not and flips if so
   function onClick({userId, restaurantId}){
-    console.log(userId,restaurantId)
-    const res = 
-
+    const res = await yelpAPI.favoriting({userId, restaurantId})
   }
+
     return(
       <>
       <FontAwesomeIcon aria-hidden="true" icon={faHeartOutline} onClick={onClick} size ='4x'/>

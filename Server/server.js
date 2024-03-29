@@ -294,16 +294,16 @@ app.post("/api/v1/favorite", isAuth, async (req, res, next) => {
     `INSERT INTO user_favorites (user_id, restaurants_id) VALUES($1,$2) returning *`,
     [userId, restaurantId]
   );
-
-  return res.json({ msg: result.rows[0] });
+  return res.json({ msg: 'favorite' });
 });
 
-app.get("/api/v1/getfavorites/:userId" , async (req,res ) =>{
-  const userId = req.params.userId
-  const results = await db.query(`SELECT array_agg(restaurants_id) as restaurants FROM user_favorites where user_id = $1`, [userId])
-  const favorites = results.rows[0].restaurants
-  return res.json({favorites})
-})
+// DONT NEED THIS queried on login
+// app.get("/api/v1/getfavorites/:userId" , async (req,res ) =>{
+//   const userId = req.params.userId
+//   const results = await db.query(`SELECT array_agg(restaurants_id) as restaurants FROM user_favorites where user_id = $1`, [userId])
+//   const favorites = results.rows[0].restaurants
+//   return res.json({favorites})
+// })
 
 //need to add global error messsage
 app.listen(PORT, () => {

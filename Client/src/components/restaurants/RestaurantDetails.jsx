@@ -33,7 +33,7 @@ const RestaurantDetails = () => {
   
 
   if(!restaurant) return <LoadingSpinner/>
-  console.log("restauya, ", user)
+  
 
 
   return (
