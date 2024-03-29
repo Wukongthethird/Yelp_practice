@@ -8,8 +8,7 @@ const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 var session = require("express-session");
 const pgstore = require("./DB/pgstore");
-const jwt = require('jsonwebtoken')
-
+const jwt = require("jsonwebtoken");
 
 const isAuth = require("./middlewear/isAuth");
 
@@ -30,8 +29,8 @@ const db = require("./DB");
 /**secrets */
 const PORT = process.env.PORT || 3001;
 const SESSIONSECRET = process.env.SESSION_SECRET;
-const GENSALT = process.env.GENSALT
-const JWTSECRET = process.env.JWT_SECRET
+const GENSALT = process.env.GENSALT;
+const JWTSECRET = process.env.JWT_SECRET;
 
 /** helper function */
 const { camelToSnakeCase } = require("./helper");
@@ -89,7 +88,7 @@ app.use(passport.session());
 // app.use("/api/v1/create_restaurant/", isAuth);
 
 // userAuth
-app.use("/ap  i/v1/logout", isAuth);
+app.use("/api/v1/logout", isAuth);
 // app.use("/api/v1/restaurants", isAuth);
 
 // TODO safer methods and middlewears look at react and previus projects
@@ -175,11 +174,9 @@ app.delete("/api/v1/restaurant/:id", async (req, res) => {
 });
 
 app.get("/api/v1/fetchuser/", async (req, res) => {
-
   const result = await db.query(`select * from user_sessions where sid = $1`, [
-   req.sessionID,
+    req.sessionID,
   ]);
-
 
   if (result.rows.length === 0) {
     return res.json({ user: {}, status: "logout" });
@@ -187,7 +184,7 @@ app.get("/api/v1/fetchuser/", async (req, res) => {
 
   const user = result.rows[0].sess.passport.user;
   if (JSON.stringify(req.session.passport.user) === JSON.stringify(user)) {
-    return res.json({ user, status: "login", token:req.sessionID });
+    return res.json({ user, status: "login", token: req.sessionID });
   }
 
   return res.json({ user: {}, status: "logout" });
@@ -241,8 +238,8 @@ app.post(
   passport.authenticate("local", { failWithError: true }),
   (req, res, next) => {
     // sub uuid for token
-    console.log(req.sessionID)
-    return res.json({ user: req.user, status: "login", token:req.sessionID });
+    console.log(req.sessionID);
+    return res.json({ user: req.user, status: "login", token: req.sessionID });
   },
   (err, req, res, next) => {
     const output = JSON.parse(err);
@@ -255,7 +252,6 @@ app.delete("/api/v1/logout", async (req, res, next) => {
   const sid = req.sessionID;
 
   await req.session.destroy((err) => {
-
     if (err) {
       return res.json({ err });
     } else {
@@ -276,7 +272,38 @@ app.delete("/api/v1/logout", async (req, res, next) => {
   });
 });
 
-app.get;
+/********** FAVORITES */
+// SHould i check if userId matches with user on state what about impersonating another user should function in general
+// need to do validation
+// check if liked if sends again its unlike maybe its own endpoint
+app.post("/api/v1/favorite", isAuth, async (req, res, next) => {
+  const userId = req.body["userId"];
+  const restaurantId = req.body["restaurantId"];
+  const isUser = await db.query(`select * from yelp_users where id = $1`, [
+    userId,
+  ]);
+  const isRestaurant = await db.query(`select * from restaurants where id=$1`, [
+    restaurantId,
+  ]);
+
+  if (isUser.rows.length === 0 || isRestaurant.rows.length === 0) {
+    return res.json({ msg: "does not exist" });
+  }
+
+  const result = await db.query(
+    `INSERT INTO user_favorites (user_id, restaurants_id) VALUES($1,$2) returning *`,
+    [userId, restaurantId]
+  );
+
+  return res.json({ msg: result.rows[0] });
+});
+
+app.get("/api/v1/getfavorites/:userId" , async (req,res ) =>{
+  const userId = req.params.userId
+  const results = await db.query(`SELECT array_agg(restaurants_id) as restaurants FROM user_favorites where user_id = $1`, [userId])
+  const favorites = results.rows[0].restaurants
+  return res.json({favorites})
+})
 
 //need to add global error messsage
 app.listen(PORT, () => {

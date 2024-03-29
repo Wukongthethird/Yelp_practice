@@ -12,6 +12,11 @@ import Login from "./routes/Login";
 import UserContext from "./auth/UserContext";
 import useLocalStorage from "./hooks/useLocalStorage"
 
+
+
+
+
+
 const colors = {
   brand: {
     200: "#90CDF4",
@@ -30,6 +35,7 @@ function App() {
 
   //move this to future routes so I do not need to fetch user for every page logged in
     const [user, setUser] = useState({ user: {}, status: "logout" });
+    const [favoriteIds, favoriteIds] = useState(new Set([]));
     const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID);
 
   useEffect(

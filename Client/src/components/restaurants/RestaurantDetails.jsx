@@ -3,9 +3,13 @@ import PropTypes from "prop-types";
 import yelpAPI from "../../api";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
-import { Link as ChakraLink } from "@chakra-ui/react";
+import { Button, Link as ChakraLink } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from 'react-router-dom'
+import FavoriteButton  from "../favorites/FavoriteButton";
+import UserContext from "../../auth/UserContext";
+
 /**
+ * 
  * SOMEHOw add reviews and like functionality
  *
  *RestaurantCardList will hand down the info of what to render
@@ -14,6 +18,7 @@ import { Link as ReactRouterLink } from 'react-router-dom'
 
 const RestaurantDetails = () => {
   const { id } = useParams();
+  const user = useContext(UserContext).user;
 
   const [restaurant, setRestaurant] = useState(null);
 
@@ -25,15 +30,17 @@ const RestaurantDetails = () => {
   }, []);
 
   
+  
 
   if(!restaurant) return <LoadingSpinner/>
-  console.log("restauya, ", restaurant)
+  console.log("restauya, ", user)
 
 
   return (
     <div className="Restaurant card">
       <div className="card-body">
         <ChakraLink as={ReactRouterLink} to="/">press here</ChakraLink>
+        <FavoriteButton userId={user.id} restaurantId={id}/>
         <h6 className="card-title">{restaurant.restaurants_name} </h6>
       </div>
     </div>

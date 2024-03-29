@@ -15,6 +15,7 @@ import {
 import { Link as ReactRouterLink } from 'react-router-dom'
 import PropTypes from "prop-types";
 import yelpAPI from "../../api";
+
 /**
  * only renders limited info on a restaraunt
  *
