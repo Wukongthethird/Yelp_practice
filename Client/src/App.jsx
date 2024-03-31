@@ -35,7 +35,7 @@ function App() {
 
   //move this to future routes so I do not need to fetch user for every page logged in
     const [user, setUser] = useState({ user: {}, status: "logout" });
-    const [favoriteIds, favoriteIds] = useState(new Set([]));
+    const [favoriteRestaurantsById, setfavoriteRestaurantsById] = useState(new Set([]));
     const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID);
 
   useEffect(
@@ -43,8 +43,8 @@ function App() {
       async function getCurrentUser() {
         //check session db to seee if i have logged in then save to state chang back
         const currentUser = await yelpAPI.fetchUser();
-        
         setUser({...currentUser})
+        setfavoriteRestaurantsById(new Set(currentUser.user.favoriteRestaurants))
       }
       getCurrentUser();
     },
@@ -69,15 +69,19 @@ function App() {
     setUser({ user: {}, status: "logout" });
   }
 
-  async function favoriting({userId, restaurantId}){
-    const res = await yelpAPI.favoriting({userId, restaurantId})
+  async function favoriting( restaurantId){
+    const isFavorited = favoriteRestaurantsById.has(restaurantId)
+
+    const res = await yelpAPI.favoriting({ restaurantId})
+    setfavoriteRestaurantsById(new Set([...favoriteRestaurantsById, +restaurantId]));
   }
 
+  console.log("see the id after liking",favoriteRestaurantsById.has(12))
 
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>
-        <UserContext.Provider value={{ ...user, logout, favoriting }}>
+        <UserContext.Provider value={{ ...user, logout,  favoriteRestaurantsById,favoriting }}>
           <RoutesOrganizer />
           <Routes>
             <Route exact path="/login" element={<Login login={login} />} />

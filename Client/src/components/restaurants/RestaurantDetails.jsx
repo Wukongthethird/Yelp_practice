@@ -18,9 +18,9 @@ import UserContext from "../../auth/UserContext";
 
 const RestaurantDetails = () => {
   const { id } = useParams();
-  const user = useContext(UserContext).user;
 
   const [restaurant, setRestaurant] = useState(null);
+
 
   useEffect(function getRestaurantByID() {
     async function getRestaurant() {
@@ -29,18 +29,14 @@ const RestaurantDetails = () => {
     getRestaurant();
   }, []);
 
-  
-  
 
   if(!restaurant) return <LoadingSpinner/>
-  
-
-
   return (
     <div className="Restaurant card">
       <div className="card-body">
         <ChakraLink as={ReactRouterLink} to="/">press here</ChakraLink>
-        <FavoriteButton userId={user.id} restaurantId={id}/>
+       {/* {user.id ? <FavoriteButton userId={user.id} restaurantId={id} isFavorited={isFavorited}/>: null }  */}
+       <FavoriteButton  restaurantId={id} />
         <h6 className="card-title">{restaurant.restaurants_name} </h6>
       </div>
     </div>

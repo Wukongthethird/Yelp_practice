@@ -96,7 +96,8 @@ class yelpAPI {
   }
 
   static async favoriting(data){
-    let res = await this.request("api/v1/login", data, "post");
+    console.log('api',data)
+    let res = await this.request("api/v1/favorite", data, "post");
     return res;
   }
 

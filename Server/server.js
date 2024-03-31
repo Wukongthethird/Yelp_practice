@@ -277,11 +277,13 @@ app.delete("/api/v1/logout", async (req, res, next) => {
 // need to do validation
 // check if liked if sends again its unlike maybe its own endpoint
 app.post("/api/v1/favorite", isAuth, async (req, res, next) => {
-  const userId = req.body["userId"];
+  const userId = req.session.passport.user.id;
   const restaurantId = req.body["restaurantId"];
+  // Maybe remove
   const isUser = await db.query(`select * from yelp_users where id = $1`, [
     userId,
   ]);
+
   const isRestaurant = await db.query(`select * from restaurants where id=$1`, [
     restaurantId,
   ]);
@@ -291,10 +293,25 @@ app.post("/api/v1/favorite", isAuth, async (req, res, next) => {
   }
 
   const result = await db.query(
+    `SELECT * FROM user_favorites where user_id = $1 and restaurants_id =$2`,
+    [userId, restaurantId]
+  ).then( res=> res.rows[0]);
+
+  if(!result){
+      const result = await db.query(
     `INSERT INTO user_favorites (user_id, restaurants_id) VALUES($1,$2) returning *`,
     [userId, restaurantId]
   );
-  return res.json({ msg: 'favorite' });
+  return res.json({ status: "Favorited" });
+  }
+  else{
+    const result = await db.query(
+      `DELETE FROM user_favorites  where user_id = $1 AND restaurants_id =$2  returning *`,
+      [userId, restaurantId]
+    );
+    return res.json({ status: "Unfavorited" });
+  }
+  
 });
 
 // DONT NEED THIS queried on login
