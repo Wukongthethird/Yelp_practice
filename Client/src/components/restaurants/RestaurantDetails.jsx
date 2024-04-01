@@ -23,11 +23,6 @@ const RestaurantDetails = () => {
 
   const [restaurant, setRestaurant] = useState(null);
 
-  useEffect(() => {
-    console.log("component rerendered");
-  });
-  console.log("res", restaurant)
-
 
   useEffect(function getRestaurantByID() {
     async function getRestaurant() {
@@ -36,14 +31,13 @@ const RestaurantDetails = () => {
     getRestaurant();
   }, []);
 
-
   if(!restaurant) return <LoadingSpinner/>
   return (
     <div className="Restaurant card">
       <div className="card-body">
         <ChakraLink as={ReactRouterLink} to="/">press here</ChakraLink>
        {/* {user.id ? <FavoriteButton userId={user.id} restaurantId={id} isFavorited={isFavorited}/>: null }  */}
-       <FavoriteButton  restaurantId={id} isFavorited={false}/>
+       <FavoriteButton  restaurantId={id} isFavorited={restaurant.favorited}/>
         <h6 className="card-title">{restaurant.restaurants_name} </h6>
       </div>
     </div>
