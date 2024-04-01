@@ -9,42 +9,52 @@ import { faHeart as faHeartFilled } from "@fortawesome/free-solid-svg-icons";
 import UserContext from "../../auth/UserContext";
 
 // {userId, restaurantId}
-const FavoriteButton = ({restaurantId, isFavorited=false }) => {
+const FavoriteButton = ({restaurantId, isFavorited }) => {
   
-  const context = useContext(UserContext)
-  const favoriting = context.favoriting // function to favorite from app
-  // original state from app from server of all liked restaurants
-  // const [isFavorited , setIsFavorited] = useState(favoriteRestaurantsById.has(+restaurantId)) // this should control the state of the button/ maybe just color of button
+  
 
 
+  const [favoriteStatus , setFavoriteStatus] = useState( isFavorited ) // this should control the state of the button/ maybe just color of button
 
-  async function onClick(evt){
-    evt.preventDefault(
+ async function favoriting(restaurantId){
+  await yelpAPI.favoriting({restaurantId});
+  setFavoriteStatus(!favoriteStatus)
+ }
 
-    )
-  }
+  // const favoriteButton = isFavorited ? (
+  //   <FontAwesomeIcon
+  //     aria-hidden="true"
+  //     icon={faHeartFilled}
+  //     size="4x"
+  //     onClick={(evt) => {
+  //       evt.preventDefault();
+  //       favoriting(restaurantId);
+  //     }}
+  //   />
+  // ) : (
+  //   <FontAwesomeIcon
+  //     aria-hidden="true"
+  //     icon={faHeartOutline}
+  //     size="4x"
+  //     onClick={(evt) => {
+  //       evt.preventDefault();
+  //       favoriting(restaurantId);
+  //     }}
+  //   />
+  // );
 
-  const favoriteButton = isFavorited ? (
+  const favoriteIcon = isFavorited ? faHeartFilled : faHeartOutline
+
+  const favoriteButton =  (
     <FontAwesomeIcon
       aria-hidden="true"
-      icon={faHeartFilled}
+      icon={favoriteIcon}
       size="4x"
-      onClick={(evt) => {
-        evt.preventDefault();
-        favoriting(restaurantId);
-      }}
+      onClick={(evt)=>{
+        evt.preventDefault()
+        favoriting(restaurantId)}}
     />
-  ) : (
-    <FontAwesomeIcon
-      aria-hidden="true"
-      icon={faHeartOutline}
-      size="4x"
-      onClick={(evt) => {
-        evt.preventDefault();
-        favoriting(restaurantId);
-      }}
-    />
-  );
+  ) 
 
   return <>{favoriteButton}</>;
 };

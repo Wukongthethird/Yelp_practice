@@ -280,15 +280,13 @@ app.post("/api/v1/favorite", isAuth, async (req, res, next) => {
   const userId = req.session.passport.user.id;
   const restaurantId = req.body["restaurantId"];
   // Maybe remove
-  const isUser = await db.query(`select * from yelp_users where id = $1`, [
-    userId,
-  ]);
+
 
   const isRestaurant = await db.query(`select * from restaurants where id=$1`, [
     restaurantId,
   ]);
 
-  if (isUser.rows.length === 0 || isRestaurant.rows.length === 0) {
+  if ( isRestaurant.rows.length === 0) {
     return res.json({ msg: "does not exist" });
   }
 
@@ -302,14 +300,14 @@ app.post("/api/v1/favorite", isAuth, async (req, res, next) => {
     `INSERT INTO user_favorites (user_id, restaurants_id) VALUES($1,$2) returning *`,
     [userId, restaurantId]
   );
-  return res.json({ status: "Favorited" });
+  return res.json({ msg: "Favorited" });
   }
   else{
     const result = await db.query(
       `DELETE FROM user_favorites  where user_id = $1 AND restaurants_id =$2  returning *`,
       [userId, restaurantId]
     );
-    return res.json({ status: "Unfavorited" });
+    return res.json({ msg: "Unfavorited" });
   }
   
 });

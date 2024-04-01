@@ -16,10 +16,17 @@ import UserContext from "../../auth/UserContext";
  *
  */
 
+
+
 const RestaurantDetails = () => {
   const { id } = useParams();
 
   const [restaurant, setRestaurant] = useState(null);
+
+  useEffect(() => {
+    console.log("component rerendered");
+  });
+  console.log("res", restaurant)
 
 
   useEffect(function getRestaurantByID() {
@@ -36,7 +43,7 @@ const RestaurantDetails = () => {
       <div className="card-body">
         <ChakraLink as={ReactRouterLink} to="/">press here</ChakraLink>
        {/* {user.id ? <FavoriteButton userId={user.id} restaurantId={id} isFavorited={isFavorited}/>: null }  */}
-       <FavoriteButton  restaurantId={id} />
+       <FavoriteButton  restaurantId={id} isFavorited={false}/>
         <h6 className="card-title">{restaurant.restaurants_name} </h6>
       </div>
     </div>

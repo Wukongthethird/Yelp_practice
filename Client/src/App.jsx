@@ -35,7 +35,7 @@ function App() {
 
   //move this to future routes so I do not need to fetch user for every page logged in
     const [user, setUser] = useState({ user: {}, status: "logout" });
-    const [favoriteRestaurantsById, setfavoriteRestaurantsById] = useState(new Set([]));
+    const [favoriteRestaurantsById, setFavoriteRestaurantsById] = useState(new Set([]));
     const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID);
 
   useEffect(
@@ -44,7 +44,7 @@ function App() {
         //check session db to seee if i have logged in then save to state chang back
         const currentUser = await yelpAPI.fetchUser();
         setUser({...currentUser})
-        setfavoriteRestaurantsById(new Set(currentUser.user.favoriteRestaurants))
+        // setFavoriteRestaurantsById(new Set(currentUser.user.favoriteRestaurants))
       }
       getCurrentUser();
     },
@@ -69,19 +69,26 @@ function App() {
     setUser({ user: {}, status: "logout" });
   }
 
-  async function favoriting( restaurantId){
-    const isFavorited = favoriteRestaurantsById.has(restaurantId)
+  // async function favoriting( restaurantId){
+  //   console.log("this should trigger")
+  //   const res = await yelpAPI.favoriting({ restaurantId})
+  //   if(res.msg === "Favorited"){
+  //     setFavoriteRestaurantsById(new Set([...favoriteRestaurantsById, +restaurantId]));
+  //   }
+  //   if(res.msg ==="Unfavorited"){
+  //     let temp = new Set(favoriteRestaurantsById)
+  //     temp.delete(+restaurantId)
+  //     setFavoriteRestaurantsById(new Set([...temp]))
+  //   }
 
-    const res = await yelpAPI.favoriting({ restaurantId})
-    setfavoriteRestaurantsById(new Set([...favoriteRestaurantsById, +restaurantId]));
-  }
+  // }
 
-  console.log("see the id after liking",favoriteRestaurantsById.has(12))
+  console.log("App" , user )
 
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>
-        <UserContext.Provider value={{ ...user, logout,  favoriteRestaurantsById,favoriting }}>
+        <UserContext.Provider value={{ ...user, logout }}>
           <RoutesOrganizer />
           <Routes>
             <Route exact path="/login" element={<Login login={login} />} />
