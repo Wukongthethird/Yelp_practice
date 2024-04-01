@@ -11,6 +11,7 @@ const pgstore = require("./DB/pgstore");
 const jwt = require("jsonwebtoken");
 
 const isAuth = require("./middlewear/isAuth");
+const isRestaurant = require("./middlewear/isRestaurant")
 
 //schemas
 const validateSchema = require("./middlewear/validateSchema");
@@ -281,35 +282,62 @@ app.post("/api/v1/favorite", isAuth, async (req, res, next) => {
   const restaurantId = req.body["restaurantId"];
   // Maybe remove
 
-
   const isRestaurant = await db.query(`select * from restaurants where id=$1`, [
     restaurantId,
   ]);
 
-  if ( isRestaurant.rows.length === 0) {
+  if (isRestaurant.rows.length === 0) {
     return res.json({ msg: "does not exist" });
   }
 
-  const result = await db.query(
-    `SELECT * FROM user_favorites where user_id = $1 and restaurants_id =$2`,
-    [userId, restaurantId]
-  ).then( res=> res.rows[0]);
+  const result = await db
+    .query(
+      `SELECT * FROM user_favorites where user_id = $1 and restaurants_id =$2`,
+      [userId, restaurantId]
+    )
+    .then((res) => res.rows[0]);
 
-  if(!result){
-      const result = await db.query(
-    `INSERT INTO user_favorites (user_id, restaurants_id) VALUES($1,$2) returning *`,
-    [userId, restaurantId]
-  );
-  return res.json({ msg: "Favorited" });
-  }
-  else{
+  if (!result) {
+    const result = await db.query(
+      `INSERT INTO user_favorites (user_id, restaurants_id) VALUES($1,$2) returning *`,
+      [userId, restaurantId]
+    );
+    return res.json({ msg: "Favorited" });
+  } else {
     const result = await db.query(
       `DELETE FROM user_favorites  where user_id = $1 AND restaurants_id =$2  returning *`,
       [userId, restaurantId]
     );
     return res.json({ msg: "Unfavorited" });
   }
-  
+});
+
+app.post("/api/v1/pricevoting", isAuth, isRestaurant, async (req, res, next) => {
+  const userId = req.session.passport.user.id;
+  const restaurantId = req.body["restaurantId"];
+  const voteValue = req.body["voteValue"];
+
+  const isRestaurant = await db.query(`select * from restaurants where id=$1`, [
+    restaurantId,
+  ]);
+
+  if (isRestaurant.rows.length === 0) {
+    return res.json({ msg: "does not exist" });
+  }
+
+  // IM Going to lock out the user after they voted so this check does not need to do
+  // const result = await db.query(
+  //   `SELECT * FROM user_favorites where user_id = $1 and restaurants_id =$2`,
+  //   [userId, restaurantId]
+  // ).then( res=> res.rows[0]);
+
+  const result = await db.query(
+    `INSERT INTO price_range (user_id, restaurants_id ,price) VALUES($1,$2, $3) returning *`,
+    [userId, restaurantId, voteValue]
+  );
+
+  console.log("res" , result.rows[0])
+  return res.json({ msg: "voted" });
 });
 
 // DONT NEED THIS queried on login

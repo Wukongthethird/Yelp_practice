@@ -7,6 +7,7 @@ restaurants detail page itself
 work on button
 liking/favoriting restaurant
 rating system
+pricing system
 
 persist session in localstorage the jwt do the fetch user if context is empty?
 
@@ -14,9 +15,6 @@ watch video
 commenting on restaurant watch vudeo soon
 
 make navbar its own thing dont shrink or grow base on restarants size
-
-fetch user based off of cookie
-
 
 
 do this later no really required

@@ -10,43 +10,17 @@ import { faHeart as faHeartFilled } from "@fortawesome/free-solid-svg-icons";
 // {userId, restaurantId}
 const FavoriteButton = ({ restaurantId, isFavorited }) => {
   const [favoriteStatus, setFavoriteStatus] = useState(isFavorited); // this should control the state of the button/ maybe just color of button
-  const favoriteIcon = isFavorited ? faHeartFilled : faHeartOutline;
   
   async function favoriting(restaurantId) {
     await yelpAPI.favoriting({ restaurantId });
     setFavoriteStatus(!favoriteStatus);
   }
 
-  // const favoriteButton = isFavorited ? (
-
-  //     <FontAwesomeIcon
-  //       aria-hidden="true"
-  //       icon={faHeartFilled}
-  //       size="4x"
-  //       onClick={(evt) => {
-  //         evt.preventDefault();
-  //         favoriting(restaurantId);
-  //       }}
-  //     />
-  // ) : (
-  //     <FontAwesomeIcon
-  //       aria-hidden="true"
-  //       icon={faHeartOutline}
-  //       size="4x"
-  //       onClick={(evt) => {
-  //         evt.preventDefault();
-  //         favoriting(restaurantId);
-  //       }}
-  //     />
-
-  // );
-
-  // let favoriteIcon = isFavorited ? faHeartFilled : faHeartOutline
   const favoriteButton =  (
     <FontAwesomeIcon
     key={uuidv4()}
       aria-hidden="true"
-      icon={favoriteStatus ?faHeartFilled :faHeartOutline }
+      icon={favoriteStatus ?faHeartFilled :faHeartOutline } // this needs to be updated in the icon and not as a variable outside
       size="4x"
       onClick={(evt)=>{
         evt.preventDefault()
