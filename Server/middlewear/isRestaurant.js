@@ -1,4 +1,5 @@
 // handles if restaurant exists 
+const db = require("../DB");
 
 const isRestaurant = async (req, res, next) => {
 

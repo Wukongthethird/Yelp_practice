@@ -75,8 +75,8 @@ class yelpAPI {
     return res.status;
   }
 
-  static async fetchUser(){
-    let res = await this.request( `api/v1/fetchuser/`);
+  static async fetchUser() {
+    let res = await this.request(`api/v1/fetchuser/`);
     return res;
   }
 
@@ -95,10 +95,14 @@ class yelpAPI {
     return res;
   }
 
-  static async favoriting(data){
-
+  static async favoriting(data) {
     let res = await this.request("api/v1/favorite", data, "post");
-    console.log('api',res)
+    return res;
+  }
+
+  static async priceVoting(data){
+    let res = await this.request("api/v1/favorite", data, "post");
+    console.log("api", res);
     return res;
   }
 
@@ -107,7 +111,6 @@ class yelpAPI {
   //   let res = await this.request(`api/v1/getfavorites/${id}`, );
   //   return res;
   // }
-
 }
 
 export default yelpAPI;

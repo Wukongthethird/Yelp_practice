@@ -6,6 +6,7 @@ import LoadingSpinner from "../LoadingSpinner";
 import { Button, Link as ChakraLink } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from 'react-router-dom'
 import FavoriteButton  from "../favorites/FavoriteButton";
+import PriceVotingButton from "../priceReview/PriceVotingButton";
 import UserContext from "../../auth/UserContext";
 
 /**
@@ -31,6 +32,7 @@ const RestaurantDetails = () => {
     getRestaurant();
   }, []);
 
+  console.log( 'restaurant', restaurant)
   if(!restaurant) return <LoadingSpinner/>
   return (
     <div className="Restaurant card">
@@ -38,6 +40,7 @@ const RestaurantDetails = () => {
         <ChakraLink as={ReactRouterLink} to="/">press here</ChakraLink>
        {/* {user.id ? <FavoriteButton userId={user.id} restaurantId={id} isFavorited={isFavorited}/>: null }  */}
        <FavoriteButton  restaurantId={id} isFavorited={restaurant.favorited}/>
+       <PriceVotingButton restaurantId={id}/>
         <h6 className="card-title">{restaurant.restaurants_name} </h6>
       </div>
     </div>
