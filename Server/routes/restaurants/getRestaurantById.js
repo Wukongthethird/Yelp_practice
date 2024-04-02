@@ -15,7 +15,11 @@ const getRestaurantId = async (req, res, next) => {
 
   // Multiple small queries is better for DB usage allows one to customize
   const restaurant = await db
-    .query("select * from restaurants where id = $1", [req.params.id])
+    .query(`select id, city, zipcode, about, restaurants_name as "restaurantsName",
+    address_location as "addressLocation",
+    created_at as "createdAt",
+    updated_at as "updatedAt"
+    from restaurants where id = $1`, [req.params.id])
     .then((res) => res.rows[0]);
 
   if (!restaurant) {
@@ -32,10 +36,11 @@ const getRestaurantId = async (req, res, next) => {
     )
     .then(( res => res.rows[0]));
 
-    console.log("allUser" ,  allUsersPrice)
+  
   if (!isLogin) {
+    console.log("this should hit")
     return res.json({
-      restuarant:{...restaurant},
+      restaurant:{...restaurant},
       generalUsers:{...allUsersPrice},
     })
   }
@@ -73,7 +78,7 @@ const getRestaurantId = async (req, res, next) => {
   //     ]);
 
   return res.json({
-    restuarant:{...restaurant},
+    restaurant:{...restaurant},
     generalUsers:{...allUsersPrice},
     user:{
       ...favorited,

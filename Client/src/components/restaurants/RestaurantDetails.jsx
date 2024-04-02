@@ -24,7 +24,6 @@ const RestaurantDetails = () => {
 
   const [restaurant, setRestaurant] = useState(null);
 
-
   useEffect(function getRestaurantByID() {
     async function getRestaurant() {
       setRestaurant(await yelpAPI.getRestaurantByID(id));
@@ -32,16 +31,17 @@ const RestaurantDetails = () => {
     getRestaurant();
   }, []);
 
-  console.log( 'restaurant', restaurant)
+  console.log(restaurant)
+
   if(!restaurant) return <LoadingSpinner/>
   return (
     <div className="Restaurant card">
       <div className="card-body">
         <ChakraLink as={ReactRouterLink} to="/">press here</ChakraLink>
        {/* {user.id ? <FavoriteButton userId={user.id} restaurantId={id} isFavorited={isFavorited}/>: null }  */}
-       <FavoriteButton  restaurantId={id} isFavorited={restaurant.favorited}/>
+       <FavoriteButton  restaurantId={id} isFavorited={restaurant.user? restaurant.user.favorited : false}/>
        <PriceVotingButton restaurantId={id}/>
-        <h6 className="card-title">{restaurant.restaurants_name} </h6>
+        <h6 className="card-title">{restaurant.restaurant.restaurantsName} </h6>
       </div>
     </div>
   );

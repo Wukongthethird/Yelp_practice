@@ -60,7 +60,7 @@ class yelpAPI {
   static async getRestaurantByID(id) {
     let res = await this.request(`api/v1/restaurant/${id}`);
 
-    return res.restaurant;
+    return res;
   }
 
   /** adds new restaurant based on form data */
