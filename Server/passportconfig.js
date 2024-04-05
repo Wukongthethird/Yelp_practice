@@ -6,7 +6,8 @@ const db = require("./DB");
 /** https://www.youtube.com/watch?v=vxu1RrR0vbw&t=4381s 1 hrs 06 min */
 function initializePassport(passport) {
   const authenticateUser = async (req, email, password, done) => {
-    
+
+    console.log("pass",email,password )
     if(req.session.passport){
       return done(
         JSON.stringify({
@@ -22,12 +23,12 @@ function initializePassport(passport) {
     //   "select id , email, passhash from yelp_users where LOWER(email) = $1",
     //   [email]
     // );
-
     const results = await db.query(
       `select id , email, passhash, array_agg(restaurants_id) as "favoriteRestaurants" from yelp_users JOIN  user_favorites ON id = user_id where LOWER(email)  = $1 GROUP BY yelp_users.id `,
       [email]
     );
-
+    
+    console.log("pgpassport" , results)
     let user = results.rows[0];
 
     if (!user) {

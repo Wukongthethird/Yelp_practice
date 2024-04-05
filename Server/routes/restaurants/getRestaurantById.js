@@ -15,11 +15,14 @@ const getRestaurantId = async (req, res, next) => {
 
   // Multiple small queries is better for DB usage allows one to customize
   const restaurant = await db
-    .query(`select id, city, zipcode, about, restaurants_name as "restaurantsName",
+    .query(
+      `select id, city, zipcode, about, restaurants_name as "restaurantsName",
     address_location as "addressLocation",
     created_at as "createdAt",
     updated_at as "updatedAt"
-    from restaurants where id = $1`, [req.params.id])
+    from restaurants where id = $1`,
+      [req.params.id]
+    )
     .then((res) => res.rows[0]);
 
   if (!restaurant) {
@@ -31,18 +34,26 @@ const getRestaurantId = async (req, res, next) => {
 
   const allUsersPrice = await db
     .query(
-      `SELECT AVG(CAST(price as FLOAT)) as "averageVotes"  from price_range WHERE restaurants_id =$1`,
+      `SELECT AVG(CAST(price as FLOAT)) as "averagePrice"  from price_range WHERE restaurants_id =$1`,
       [req.params.id]
     )
-    .then(( res => res.rows[0]));
+    .then((res) => res.rows[0]);
 
-  
+  const allUsersRating = await db
+    .query(
+      `SELECT AVG(CAST(rating as FLOAT)) as "averageRating"  from ratings WHERE restaurants_id =$1`,
+      [req.params.id]
+    )
+    .then((res) => res.rows[0]);
+
   if (!isLogin) {
-    console.log("this should hit")
     return res.json({
-      restaurant:{...restaurant},
-      generalUsers:{...allUsersPrice},
-    })
+      restaurant: { ...restaurant },
+      generalUsers: {
+        ...allUsersPrice,
+        ...allUsersRating,
+      },
+    });
   }
 
   //User dependent DATA
@@ -54,37 +65,37 @@ const getRestaurantId = async (req, res, next) => {
     )
     .then((res) => res.rows[0]);
 
-  const userPriceRange = await db
+  const userPrice = await db
     .query(
-      `SELECT * FROM price_range
+      `SELECT price FROM price_range
       WHERE  user_id =$1  and  restaurants_id =$2`,
       [req.session.passport.user.id, restaurantId]
     )
     .then((res) => res.rows[0]);
 
-  // console.log("user req.session.passport.user.id", req.session.passport.user.id, req.params.id)
-  // const result = isLogin
-  //   ?
-  //   await db.query(
-  //     `
-  //     SELECT id , restaurants_name,  address_location, city, zipcode,about,
-  //     (EXISTS (SELECT restaurants_id FROM user_favorites JOIN restaurants ON  restaurants_id = id WHERE user_id=$1 and restaurants_id=$2)) as favorited
-  //     from restaurants where id = $2
-  //     `,
-  // [ req.session.passport.user.id, req.params.id]
-  //   )
-  //   : await db.query("select * from restaurants where id = $1", [
-  //       req.params.id,
-  //     ]);
+  const userRating = await db
+    .query(
+      `SELECT rating FROM ratings
+      WHERE  user_id =$1  and  restaurants_id =$2`,
+      [req.session.passport.user.id, restaurantId]
+    )
+    .then((res) => res.rows[0]);
+
+
+
 
   return res.json({
-    restaurant:{...restaurant},
-    generalUsers:{...allUsersPrice},
-    user:{
+    restaurant: { ...restaurant },
+    generalUsers: {
+      ...allUsersPrice,
+      ...allUsersRating,
+    },
+    user: {
       ...favorited,
-      ...userPriceRange
-    }
-  })
+      ...userPrice,
+      ...userRating,
+    },
+  });
 };
 
 module.exports = getRestaurantId;

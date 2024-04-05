@@ -100,8 +100,15 @@ class yelpAPI {
     return res;
   }
 
+  // so turns out this is a survey on yelp no one votes on this repurpose to rating
   static async priceVoting(data){
     let res = await this.request("api/v1/favorite", data, "post");
+    console.log("api", res);
+    return res;
+  }
+
+  static async rating(data){
+    let res = await this.request("api/v1/restaurantrating", data, "post");
     console.log("api", res);
     return res;
   }

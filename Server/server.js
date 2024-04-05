@@ -207,7 +207,7 @@ app.post(
       data[camelToSnakeCase(key)] = req.body[key];
     }
 
-    const passhash = await bcrypt.hash(data["password"].toString(), GENSALT);
+    const passhash = await bcrypt.hash(data["password"].toString(), 10);
     data["passhash"] = passhash;
 
     delete data["password"];
@@ -239,12 +239,10 @@ app.post(
   passport.authenticate("local", { failWithError: true }),
   (req, res, next) => {
     // sub uuid for token
-    console.log(req.sessionID);
     return res.json({ user: req.user, status: "login", token: req.sessionID });
   },
   (err, req, res, next) => {
     const output = JSON.parse(err);
-
     return res.json(output);
   }
 );
@@ -277,18 +275,11 @@ app.delete("/api/v1/logout", async (req, res, next) => {
 // SHould i check if userId matches with user on state what about impersonating another user should function in general
 // need to do validation
 // check if liked if sends again its unlike maybe its own endpoint
-app.post("/api/v1/favorite", isAuth, async (req, res, next) => {
+app.post("/api/v1/favorite", isAuth,isRestaurant ,async (req, res, next) => {
   const userId = req.session.passport.user.id;
   const restaurantId = req.body["restaurantId"];
   // Maybe remove
-
-  const isRestaurant = await db.query(`select * from restaurants where id=$1`, [
-    restaurantId,
-  ]);
-
-  if (isRestaurant.rows.length === 0) {
-    return res.json({ msg: "does not exist" });
-  }
+console.log("should not be gere")
 
   const result = await db
     .query(
@@ -312,18 +303,14 @@ app.post("/api/v1/favorite", isAuth, async (req, res, next) => {
   }
 });
 
+
+
+// so turns out this is a survey on yelp no one votes on this repurpose this as a submission
+// repurpose to rating
 app.post("/api/v1/pricevoting", isAuth, isRestaurant, async (req, res, next) => {
   const userId = req.session.passport.user.id;
   const restaurantId = req.body["restaurantId"];
   const voteValue = req.body["voteValue"];
-
-  const isRestaurant = await db.query(`select * from restaurants where id=$1`, [
-    restaurantId,
-  ]);
-
-  if (isRestaurant.rows.length === 0) {
-    return res.json({ msg: "does not exist" });
-  }
 
   // IM Going to lock out the user after they voted so this check does not need to do
   // const result = await db.query(
@@ -340,13 +327,28 @@ app.post("/api/v1/pricevoting", isAuth, isRestaurant, async (req, res, next) => 
   return res.json({ msg: "voted" });
 });
 
-// DONT NEED THIS queried on login
-// app.get("/api/v1/getfavorites/:userId" , async (req,res ) =>{
-//   const userId = req.params.userId
-//   const results = await db.query(`SELECT array_agg(restaurants_id) as restaurants FROM user_favorites where user_id = $1`, [userId])
-//   const favorites = results.rows[0].restaurants
-//   return res.json({favorites})
-// })
+
+app.post("/api/v1/restaurantrating", isAuth, isRestaurant, async (req, res, next) => {
+  const userId = req.session.passport.user.id;
+  const restaurantId = req.body["restaurantId"];
+  const voteValue = req.body["voteValue"];
+ 
+
+  // IM Going to lock out the user after they voted so this check does not need to do
+  // const result = await db.query(
+  //   `SELECT * FROM user_favorites where user_id = $1 and restaurants_id =$2`,
+  //   [userId, restaurantId]
+  // ).then( res=> res.rows[0]);
+
+  const result = await db.query(
+    `INSERT INTO ratings (user_id, restaurants_id ,rating) VALUES($1,$2, $3) returning *`,
+    [userId, restaurantId, voteValue]
+  );
+
+  console.log("res" , result.rows[0])
+  return res.json({ msg: "voted" });
+});
+
 
 //need to add global error messsage
 app.listen(PORT, () => {
