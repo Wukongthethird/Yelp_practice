@@ -6,12 +6,12 @@ const getRestaurantId = async (req, res, next) => {
   const isLogin = req.session.passport;
   const restaurantId = req.params.id;
   // console.log('server',req.session.passport.user.id)
-  // await db.query(
-  //   ` SELECT id, restaurants_name, address_location, city, zipcode, about ,
-  //   (EXISTS (SELECT restaurants_id FROM user_favorites WHERE user_id=$1 and restaurants_id=$2)) as favorited
-  //   from restaurants JOIN user_favorites ON id = restaurants_id where id = $2 `,
-  //   [req.session.passport.user.id, req.params.id]
-  // )
+  await db.query(
+    ` SELECT id, restaurants_name, address_location, city, zipcode, about ,
+    (EXISTS (SELECT restaurants_id FROM user_favorites WHERE user_id=$1 and restaurants_id=$2)) as favorited
+    from restaurants JOIN user_favorites ON id = restaurants_id where id = $2 `,
+    [req.session.passport.user.id, req.params.id]
+  )
 
   // Multiple small queries is better for DB usage allows one to customize
   const restaurant = await db
