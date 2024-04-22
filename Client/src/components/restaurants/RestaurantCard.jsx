@@ -32,7 +32,6 @@ const RestaurantCard = ({ restaurant }) => {
   }
   
  // TO DO ADD IMAGE TO BACK DROP
- // TO DO ADD LIKE BUTTON AND REVIEW
   return (
     <Card maxW="md">
       <CardHeader>

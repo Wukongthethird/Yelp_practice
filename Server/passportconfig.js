@@ -7,7 +7,6 @@ const db = require("./DB");
 function initializePassport(passport) {
   const authenticateUser = async (req, email, password, done) => {
 
-    console.log("pass",email,password )
     if(req.session.passport){
       return done(
         JSON.stringify({
@@ -19,19 +18,18 @@ function initializePassport(passport) {
       );
     }
 
-    // const results = await db.query(
-    //   "select id , email, passhash from yelp_users where LOWER(email) = $1",
-    //   [email]
-    // );
-    const results = await db.query(
-      `select id , email, passhash, array_agg(restaurants_id) as "favoriteRestaurants" from yelp_users JOIN  user_favorites ON id = user_id where LOWER(email)  = $1 GROUP BY yelp_users.id `,
-      [email]
-    );
-    
-    console.log("pgpassport" , results)
-    let user = results.rows[0];
+ 
+    const result = await db.query(
+      `select id , email, passhash from yelp_users where LOWER(email)=$1`,
+      // `select id , email, passhash, array_agg(restaurants_id) as "favoriteRestaurants" from yelp_users JOIN  user_favorites ON id = user_id where LOWER(email)=$1 GROUP BY yelp_users.id `,
 
-    if (!user) {
+      [email]
+    ).then((res) => res.rows[0]);
+    
+    // console.log("pgpassport" , results)
+    // let user = results.rows[0];
+
+    if (!result) {
       return done(
         JSON.stringify({
           errors: {
@@ -42,8 +40,9 @@ function initializePassport(passport) {
       );
     }
 
-    if (user) {
-      const isValid = await bcrypt.compare(password, user["passhash"]);
+    if (result) {
+      const isValid = await bcrypt.compare(password, result["passhash"]);
+    
       if (!isValid) {
         return done(
           JSON.stringify({
@@ -56,7 +55,25 @@ function initializePassport(passport) {
       }
     }
 
-    delete user["passhash"];
+    const favoriteRestaurants = await db.query( 
+      `select array_agg(restaurants_id) as "favoriteRestaurants" from user_favorites where user_id =$1 `
+      ,[result.id]
+     ).then((rows)=>rows.rows[0])
+
+     const ratings = await db.query( 
+      `select json_object_agg(restaurants_id, rating) as ratings from ratings where user_id =$1 `
+      ,[result.id]
+     ).then((rows)=>rows.rows[0])
+    
+    delete result["passhash"]
+    const  user =  {
+      ...result,
+      ...favoriteRestaurants,
+      ...ratings
+    
+    }
+
+
    
     return done(null, user);
   };

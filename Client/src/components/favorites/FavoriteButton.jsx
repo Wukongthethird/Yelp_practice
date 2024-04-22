@@ -22,7 +22,7 @@ const FavoriteButton = ({ restaurantId, isFavorited ,isLoggedin=false}) => {
     <FontAwesomeIcon
     key={uuidv4()}
       aria-hidden="true"
-      icon={favoriteStatus ?faHeartFilled :faHeartOutline } // this needs to be updated in the icon and not as a variable outside
+      icon={favoriteStatus ?faHeartFilled :faHeartOutline } // this needs to be updated in the icon and not as a variable outside maybe should be useeffect
       size="4x"
       onClick={(evt)=>{
         evt.preventDefault()

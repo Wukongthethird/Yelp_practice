@@ -18,9 +18,10 @@ const StarVotesContainer = ({ restaurantId, rating = null }) => {
 
   async function handleRating(restaurantId, voteValue) {
     const res = await yelpAPI.rating({ restaurantId, voteValue });
-    if (res.msg == "voted") {
-      setVoted(voteValue);
+    if (res.err) {
+      return
     }
+    setVoted(voteValue);
   }
 
   function hoverOver(ind) {
@@ -74,7 +75,7 @@ const StarVotesContainer = ({ restaurantId, rating = null }) => {
   // jave some bg color light up if on hover permentaly lock in the hover if have voted
   const starIconContainer = 
   voted ? <StarRatingContainer rating={voted} />
-  : starIconsUnvoted
+  :<HStack spacing="20px">{starIconsUnvoted}</HStack>
 
   // const starIconContainer = 
   // (
@@ -83,7 +84,7 @@ const StarVotesContainer = ({ restaurantId, rating = null }) => {
   //       <HStack spacing="20px">{starIconsUnvoted}</HStack>
   // );
 
-  return <> <HStack spacing="20px">{starIconContainer} </HStack></>;
+  return <> {starIconContainer} </>;
 };
 
 export default StarVotesContainer;

@@ -11,7 +11,7 @@ const pgstore = require("./DB/pgstore");
 const jwt = require("jsonwebtoken");
 
 const isAuth = require("./middlewear/isAuth");
-const isRestaurant = require("./middlewear/isRestaurant")
+const isRestaurant = require("./middlewear/isRestaurant");
 
 //schemas
 const validateSchema = require("./middlewear/validateSchema");
@@ -81,6 +81,7 @@ app.use(
 // passport sessions stuff
 const passport = require("passport");
 const initializePassport = require("./passportconfig");
+const { restart } = require("nodemon");
 initializePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
@@ -207,7 +208,7 @@ app.post(
       data[camelToSnakeCase(key)] = req.body[key];
     }
 
-    const passhash = await bcrypt.hash(data["password"].toString(), 10);
+    const passhash = await bcrypt.hash(data["password"].toString(), +GENSALT);
     data["passhash"] = passhash;
 
     delete data["password"];
@@ -275,11 +276,11 @@ app.delete("/api/v1/logout", async (req, res, next) => {
 // SHould i check if userId matches with user on state what about impersonating another user should function in general
 // need to do validation
 // check if liked if sends again its unlike maybe its own endpoint
-app.post("/api/v1/favorite", isAuth,isRestaurant ,async (req, res, next) => {
+app.post("/api/v1/favorite", isAuth, isRestaurant, async (req, res, next) => {
   const userId = req.session.passport.user.id;
   const restaurantId = req.body["restaurantId"];
   // Maybe remove
-console.log("should not be gere")
+  console.log("should not be gere");
 
   const result = await db
     .query(
@@ -303,52 +304,105 @@ console.log("should not be gere")
   }
 });
 
-
-
 // so turns out this is a survey on yelp no one votes on this repurpose this as a submission
 // repurpose to rating
-app.post("/api/v1/pricevoting", isAuth, isRestaurant, async (req, res, next) => {
-  const userId = req.session.passport.user.id;
-  const restaurantId = req.body["restaurantId"];
-  const voteValue = req.body["voteValue"];
+app.post(
+  "/api/v1/pricevoting",
+  isAuth,
+  isRestaurant,
+  async (req, res, next) => {
+    const userId = req.session.passport.user.id;
+    const restaurantId = req.body["restaurantId"];
+    const voteValue = req.body["voteValue"];
 
-  // IM Going to lock out the user after they voted so this check does not need to do
-  // const result = await db.query(
-  //   `SELECT * FROM user_favorites where user_id = $1 and restaurants_id =$2`,
-  //   [userId, restaurantId]
-  // ).then( res=> res.rows[0]);
+    // IM Going to lock out the user after they voted so this check does not need to do
+    // const result = await db.query(
+    //   `SELECT * FROM user_favorites where user_id = $1 and restaurants_id =$2`,
+    //   [userId, restaurantId]
+    // ).then( res=> res.rows[0]);
 
-  const result = await db.query(
-    `INSERT INTO price_range (user_id, restaurants_id ,price) VALUES($1,$2, $3) returning *`,
-    [userId, restaurantId, voteValue]
-  );
+    const result = await db.query(
+      `INSERT INTO price_range (user_id, restaurants_id ,price) VALUES($1,$2, $3) returning *`,
+      [userId, restaurantId, voteValue]
+    );
 
-  console.log("res" , result.rows[0])
-  return res.json({ msg: "voted" });
-});
+    console.log("res", result.rows[0]);
+    return res.json({ msg: "voted" });
+  }
+);
+
+app.post(
+  "/api/v1/restaurantrating",
+  isAuth,
+  isRestaurant,
+  async (req, res, next) => {
+    const userId = req.session.passport.user.id;
+    const restaurantId = req.body["restaurantId"];
+    const voteValue = req.body["voteValue"];
+
+    // IM Going to lock out the user after they voted so this check does not need to do
+    const hasRated = await db
+      .query(
+        `SELECT * FROM ratings where user_id = $1 and restaurants_id =$2`,
+        [userId, restaurantId]
+      )
+      .then((res) => res.rows[0]);
+
+    if (hasRated) {
+      return res.json({ err: "you've already rated this restaurant" });
+    }
+
+    const result = await db.query(
+      `INSERT INTO ratings (user_id, restaurants_id ,rating) VALUES($1,$2, $3) returning *`,
+      [userId, restaurantId, voteValue]
+    );
+
+    console.log("res", result.rows[0]);
+    return res.json({});
+  }
+);
+
+app.post(
+  "/api/v1/commentorreply",
+  isAuth,
+  isRestaurant,
+  async (req, res, next) => {
+    const userId = +req.session.passport.user.id;
+    const commentMessage = req.body["commentMessage"];
+    const restaurantId = +req.body["restaurantId"];
+    const parentId = +req.body["parentId"] ;
+
+    if(parentId){
+      const parent_comment = await db.query(`
+        select * from comments where comment_id = $1
+      `,[parentId]).then( (parent) => parent.rows[0])
+      
+      if( !parent_comment){
+        return res.json({msg: "who are you even talking to?"})
+      }
+      
+      if(parent_comment.restaurant_id !== restaurantId){
+        return res.json({msg:" you've some how strayed"})
+      }
+    }
 
 
-app.post("/api/v1/restaurantrating", isAuth, isRestaurant, async (req, res, next) => {
-  const userId = req.session.passport.user.id;
-  const restaurantId = req.body["restaurantId"];
-  const voteValue = req.body["voteValue"];
- 
 
-  // IM Going to lock out the user after they voted so this check does not need to do
-  // const result = await db.query(
-  //   `SELECT * FROM user_favorites where user_id = $1 and restaurants_id =$2`,
-  //   [userId, restaurantId]
-  // ).then( res=> res.rows[0]);
 
-  const result = await db.query(
-    `INSERT INTO ratings (user_id, restaurants_id ,rating) VALUES($1,$2, $3) returning *`,
-    [userId, restaurantId, voteValue]
-  );
 
-  console.log("res" , result.rows[0])
-  return res.json({ msg: "voted" });
-});
+    const result = await db.query(
+      `
+    INSERT INTO comments( comment_message, user_id, restaurant_id, parent_id)
+    values($1, $2,$3,$4) returning *
+    `,
+      [commentMessage, userId, restaurantId, parentId]
+    ).then( (res) => res.rows[0] );
 
+    return res.json({msg:"commented"})
+
+  }
+
+);
 
 //need to add global error messsage
 app.listen(PORT, () => {

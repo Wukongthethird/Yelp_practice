@@ -25,6 +25,7 @@ const RestaurantDetails = () => {
 
   const [restaurant, setRestaurant] = useState(null);
 
+
   useEffect(function getRestaurantByID() {
     async function getRestaurant() {
       setRestaurant(await yelpAPI.getRestaurantByID(id));
@@ -41,10 +42,8 @@ const RestaurantDetails = () => {
        <FavoriteButton  restaurantId={id} isFavorited={restaurant.user? restaurant.user.favorited : false} isLoggedin={restaurant.user}/>
        {/*only renders total User Population votes*/ }
        <PriceIconContainer usersPrice={restaurant.generalUsers.averagePrice}/> 
-       {/* PriceVotingContaienr handles users submission of how expensive it is */}
-      {/* <StarVotesContainer restaurantId={id} rating={restaurant.user? restaurant.user.rating: null}/> */}
-      <StarVotesContainer restaurantId={id} rating={restaurant.generalUsers.averageRating}/>
-
+      <StarRatingContainer restaurantId={id} rating={restaurant.generalUsers.averageRating}/>
+      <StarVotesContainer restaurantId={id} rating={restaurant.user.rating}/>
         <h6 className="card-title">{restaurant.restaurant.restaurantsName} </h6>
       </div>
     </div>

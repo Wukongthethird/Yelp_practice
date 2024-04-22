@@ -9,18 +9,16 @@ import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 
 
 //user ansd average variable useleess most likely
-const StarRatingContainer = ({ rating = null }) => {
+const StarRatingContainer = ({ rating  }) => {
 
   // need a state to check if voted or not
   // renders all 5 clickable as rating system on hover?
-
- 
 
   const starIcons = []
 
   //parent restauarant details will have  to manage which rating conatiners
 
-  let count = rating;
+  let count =  rating;
   for (let ind = 1; ind < 6; ind++) {
     if (count <= 0.25) {
       starIcons.push(<StarIcon key={uuidv4()} fillValue={faStarOutlined} />);
@@ -37,13 +35,13 @@ const StarRatingContainer = ({ rating = null }) => {
     
   
   // jave some bg color light up if on hover permentaly lock in the hover if have voted
-  // const starIconContainer = (
-  //   <HStack spacing = '20px'>
-  //      {starIcons}
-  //   </HStack>
-  // );
+  const starIconContainer = (
+    <HStack spacing = '20px'>
+       {starIcons}
+    </HStack>
+  );
 
-  return <>{starIcons}</>;
+  return <>{starIconContainer}</>;
 };
 
 export default StarRatingContainer;

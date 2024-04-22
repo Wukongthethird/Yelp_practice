@@ -4,10 +4,7 @@ ALEX
 layout for main page
 restaurants detail page itself
 
-work on button
-liking/favoriting restaurant
-rating system
-pricing system
+
 
 persist session in localstorage the jwt do the fetch user if context is empty?
 
@@ -33,3 +30,6 @@ hottest what's new restaraunts
 ratings of the comment 1 out of 5 star or upvote or downfvote
 view more comment and page 
 user page to show off to other people
+
+
+why does my db not query the new users

@@ -78,9 +78,18 @@ CREATE TABLE
 
 
 
+
 -- comment table do not cascade on user maybe on restaurant but lets think of this more
-
-
+CREATE TABLE
+  comments(
+    comment_id integer  primary key generated always as identity, 
+    comment_message TEXT NOT NULL,
+    created_at timestamp with time zone NOT NULL DEFAULT date_trunc('second', now()::timestamp), 
+    updated_at timestamp with time zone NOT NULL DEFAULT date_trunc('second', now()::timestamp),
+    user_id INTEGER REFERENCES yelp_users, -- if user is deleted this will will be null and delete will render maybe not null but not scacade
+    restaurant_id INTEGER REFERENCES restaurants ON DELETE CASCADE NOT NULL,
+    parent_id INTEGER REFERENCES comments(comment_id) 
+  );
 
 
 --toy trigger updates updated_at time column
