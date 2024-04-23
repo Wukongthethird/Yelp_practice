@@ -113,6 +113,12 @@ class yelpAPI {
     return res;
   }
 
+
+  static async commentingOrReplying(data){
+    let res = await this.request("api/v1/commentorreply", data, "post");
+    return res;
+  }
+
   //DEPRECATED
   // static async getfavorites(id){
   //   let res = await this.request(`api/v1/getfavorites/${id}`, );

@@ -33,3 +33,11 @@ user page to show off to other people
 
 
 why does my db not query the new users
+
+comment section
+
+DB design
+add a comment
+reply comment
+
+render comment section parent ? then comment  each click on replies comment shows all its children

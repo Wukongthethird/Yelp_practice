@@ -17,6 +17,10 @@ const StarVotesContainer = ({ restaurantId, rating = null }) => {
   const [hoverStatus, setHoverStatus] = useState(0);
 
   async function handleRating(restaurantId, voteValue) {
+    if( !rating){
+      // maybe redirect to login page 
+      return
+    }
     const res = await yelpAPI.rating({ restaurantId, voteValue });
     if (res.err) {
       return

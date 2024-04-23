@@ -6,8 +6,7 @@ const db = require("./DB");
 /** https://www.youtube.com/watch?v=vxu1RrR0vbw&t=4381s 1 hrs 06 min */
 function initializePassport(passport) {
   const authenticateUser = async (req, email, password, done) => {
-
-    if(req.session.passport){
+    if (req.session.passport) {
       return done(
         JSON.stringify({
           errors: {
@@ -18,16 +17,14 @@ function initializePassport(passport) {
       );
     }
 
- 
-    const result = await db.query(
-      `select id , email, passhash from yelp_users where LOWER(email)=$1`,
-      // `select id , email, passhash, array_agg(restaurants_id) as "favoriteRestaurants" from yelp_users JOIN  user_favorites ON id = user_id where LOWER(email)=$1 GROUP BY yelp_users.id `,
+    const result = await db
+      .query(
+        `select id , email, passhash from yelp_users where LOWER(email)=$1`,
+        // `select id , email, passhash, array_agg(restaurants_id) as "favoriteRestaurants" from yelp_users JOIN  user_favorites ON id = user_id where LOWER(email)=$1 GROUP BY yelp_users.id `,
 
-      [email]
-    ).then((res) => res.rows[0]);
-    
-    // console.log("pgpassport" , results)
-    // let user = results.rows[0];
+        [email]
+      )
+      .then((res) => res.rows[0]);
 
     if (!result) {
       return done(
@@ -42,7 +39,7 @@ function initializePassport(passport) {
 
     if (result) {
       const isValid = await bcrypt.compare(password, result["passhash"]);
-    
+
       if (!isValid) {
         return done(
           JSON.stringify({
@@ -55,26 +52,27 @@ function initializePassport(passport) {
       }
     }
 
-    const favoriteRestaurants = await db.query( 
-      `select array_agg(restaurants_id) as "favoriteRestaurants" from user_favorites where user_id =$1 `
-      ,[result.id]
-     ).then((rows)=>rows.rows[0])
+    const favoriteRestaurants = await db
+      .query(
+        `select array_agg(restaurants_id) as "favoriteRestaurants" from user_favorites where user_id =$1 `,
+        [result.id]
+      )
+      .then((rows) => rows.rows[0]);
 
-     const ratings = await db.query( 
-      `select json_object_agg(restaurants_id, rating) as ratings from ratings where user_id =$1 `
-      ,[result.id]
-     ).then((rows)=>rows.rows[0])
-    
-    delete result["passhash"]
-    const  user =  {
+    const ratings = await db
+      .query(
+        `select json_object_agg(restaurants_id, rating) as ratings from ratings where user_id =$1 `,
+        [result.id]
+      )
+      .then((rows) => rows.rows[0]);
+
+    delete result["passhash"];
+    const user = {
       ...result,
       ...favoriteRestaurants,
-      ...ratings
-    
-    }
+      ...ratings,
+    };
 
-
-   
     return done(null, user);
   };
 
@@ -96,11 +94,12 @@ function initializePassport(passport) {
   /**
    * this will take the session stored on req.user and matches the info on the server/db
    */
-  passport.deserializeUser(async (user,done) => {
-    const results = await db.query(`Select email , id  FROM yelp_users where id = $1`, [
-      user.id,
-    ]);
-  
+  passport.deserializeUser(async (user, done) => {
+    const results = await db.query(
+      `Select email , id  FROM yelp_users where id = $1`,
+      [user.id]
+    );
+
     if (!results) {
       return done(
         JSON.stringify({
@@ -112,8 +111,7 @@ function initializePassport(passport) {
       );
     }
 
-    return done(null,results)
-
+    return done(null, results);
   });
 }
 

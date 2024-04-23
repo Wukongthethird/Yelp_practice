@@ -10,6 +10,7 @@ import PriceIconContainer from "../priceReview/PriceIconContainer";
 import UserContext from "../../auth/UserContext";
 import StarRatingContainer from "../starRating/StarRatingContainer";
 import StarVotesContainer from "../starRating/StarVotesContainer";
+import CommentForm from "../forms/CommentForm";
 /**
  * 
  * SOMEHOw add reviews and like functionality
@@ -17,7 +18,6 @@ import StarVotesContainer from "../starRating/StarVotesContainer";
  *RestaurantCardList will hand down the info of what to render
  *
  */
-
 
 
 const RestaurantDetails = () => {
@@ -32,7 +32,7 @@ const RestaurantDetails = () => {
     }
     getRestaurant();
   }, []);
-
+  console.log("res", restaurant)
   if(!restaurant) return <LoadingSpinner/>
   return (
     <div className="Restaurant card">
@@ -43,9 +43,12 @@ const RestaurantDetails = () => {
        {/*only renders total User Population votes*/ }
        <PriceIconContainer usersPrice={restaurant.generalUsers.averagePrice}/> 
       <StarRatingContainer restaurantId={id} rating={restaurant.generalUsers.averageRating}/>
-      <StarVotesContainer restaurantId={id} rating={restaurant.user.rating}/>
+      {/**terneary the bottom thing ig is no user allows hover but no vote */}
+      <StarVotesContainer restaurantId={id} rating={ restaurant.user ? restaurant.user.rating : null } />
         <h6 className="card-title">{restaurant.restaurant.restaurantsName} </h6>
       </div>
+      <CommentForm/>
+  
     </div>
   );
 };
