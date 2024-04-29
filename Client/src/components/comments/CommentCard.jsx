@@ -23,10 +23,11 @@ import yelpAPI from "../../api";
  *
  */
 
-const RestaurantCard = ({ restaurant }) => {
+ // restaurantDetails -> CommentCardList -> CommentContainer -> CommentCard
+const CommentCard = ({ comment }) => {
   // I did it at this level so i didnt have to loop on every api request. TBD if i leave this in here seems weird
 
-  console.log(restaurant)
+
  // TO DO ADD IMAGE TO BACK DROP
   return (
     <Card maxW="md">
@@ -35,27 +36,15 @@ const RestaurantCard = ({ restaurant }) => {
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
             {/* <Avatar name='Hung Bro' src='https://bit.ly/sage-adebayo' /> */}
             <Box>
-              <Heading size="sm">{restaurant.restaurantsName}</Heading>
+              <Heading size="sm">{comment.commentMessage}</Heading>
             </Box>
           </Flex>
         </Flex>
       </CardHeader>
       <CardBody>
-    <ChakraLink as={ReactRouterLink} to={`/restaurants/${restaurant.id}`}> read more</ChakraLink>
   </CardBody>
     </Card>
   );
 };
 
-RestaurantCard.proptypes = {
-  restaurant: PropTypes.shape({
-    id: PropTypes.string,
-    restaurantsName: PropTypes.string,
-    addressLocation: PropTypes.string,
-    city: PropTypes.string,
-    zipcode: PropTypes.string,
-    priceRange: PropTypes.number,
-  }),
-};
-
-export default RestaurantCard;
+export default CommentCard;

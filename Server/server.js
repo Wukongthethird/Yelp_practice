@@ -367,10 +367,11 @@ app.post(
   isAuth,
   isRestaurant,
   async (req, res, next) => {
-    const userId = +req.session.passport.user.id;
+    const userId = req.session.passport.user.id;
     const commentMessage = req.body["commentMessage"];
-    const restaurantId = +req.body["restaurantId"];
-    const parentId = +req.body["parentId"] ;
+    const restaurantId = req.body["restaurantId"];
+    const parentId = req.body["parentId"] ;
+    console.log("here", req.body)
 
     if(parentId){
       const parent_comment = await db.query(`
@@ -380,16 +381,12 @@ app.post(
       if( !parent_comment){
         return res.json({msg: "who are you even talking to?"})
       }
-      
+
       if(parent_comment.restaurant_id !== restaurantId){
         return res.json({msg:" you've some how strayed"})
       }
     }
-
-
-
-
-
+    
     const result = await db.query(
       `
     INSERT INTO comments( comment_message, user_id, restaurant_id, parent_id)

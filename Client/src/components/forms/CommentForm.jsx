@@ -1,28 +1,30 @@
 import React, { useState } from "react";
 import yelpAPI from "../../api";
-import {
-  Box,
-  Flex,
-  Button,
-  InputRightElement,
-  InputGroup,
-  Input,
-} from "@chakra-ui/react";
+import { Box, Flex, Button, Textarea } from "@chakra-ui/react";
 
 // form should really handle only state to text submission/repluying will be handled by a parent?
 
+// restaurantDetails -> CommentCardList -> CommentContainer -> CommentCard
 // is reply or parent maybe a prop?
-const CommentForm = () => {
+const CommentForm = ({ restaurantId, parentId = null, cancleReply = null }) => {
   const [comment, setComment] = useState("");
-
+  // button comes from somehwwree else. button should be its owb thing
+  //  if not user do something else
   async function handleSubmit(evt) {
     evt.preventDefault();
     const cleaned_comment = comment.trim();
     if (cleaned_comment.length == 0) {
+      //should redirect to login page
       return;
     }
-    await yelpAPI.commentingOrReplying(cleaned_comment);
-    setComment(cleaned_comment);
+    // send data with everything this just sends comment
+    const data = {
+      commentMessage: cleaned_comment,
+      restaurantId,
+      parentId,
+    };
+    await yelpAPI.commentingOrReplying(data);
+    setComment("");
   }
 
   /** Update form fields */
@@ -36,7 +38,7 @@ const CommentForm = () => {
       <Box>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <Input
+            <Textarea
               placeholder="Comment"
               type="text"
               name="comment"
@@ -55,6 +57,12 @@ const CommentForm = () => {
           >
             Submit
           </Button>
+
+          {cancleReply ? (
+            <Button onClick={cancleReply}>Cancle</Button>
+          ) : (
+            cancleReply
+          )}
         </form>
       </Box>
     </div>

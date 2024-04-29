@@ -11,11 +11,12 @@ import UserContext from "../../auth/UserContext";
 import StarRatingContainer from "../starRating/StarRatingContainer";
 import StarVotesContainer from "../starRating/StarVotesContainer";
 import CommentForm from "../forms/CommentForm";
+import CommentList from "../comments/CommentList"
 /**
  * 
  * SOMEHOw add reviews and like functionality
  *
- *RestaurantCardList will hand down the info of what to render
+ *Should handle getting comments
  *
  */
 
@@ -32,8 +33,9 @@ const RestaurantDetails = () => {
     }
     getRestaurant();
   }, []);
-  console.log("res", restaurant)
+
   if(!restaurant) return <LoadingSpinner/>
+  console.log("res", restaurant.generalUsers)
   return (
     <div className="Restaurant card">
       <div className="card-body">
@@ -47,7 +49,8 @@ const RestaurantDetails = () => {
       <StarVotesContainer restaurantId={id} rating={ restaurant.user ? restaurant.user.rating : null } />
         <h6 className="card-title">{restaurant.restaurant.restaurantsName} </h6>
       </div>
-      <CommentForm/>
+      <CommentForm restaurantId={id}/>
+      <CommentList comments={restaurant.generalUsers.allParentComments } restaurantId={id}/>
   
     </div>
   );

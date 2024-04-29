@@ -5,7 +5,9 @@ const getAllRestarauntsOrByName = async (req, res) => {
     const restaurantsName = req.query["restaurantsName"].toLowerCase();
 
     const results = await db.query(
-      "SELECT * FROM restaurants where LOWER(restaurants_name) LIKE   ('%'||$1||'%')",
+      `SELECT id, restaurants_name as "restaurantsName" , address_location as "addressLocation" ,
+      city, zipcode, created_at as "createdAt", updated_at as "updatedAt", about
+      FROM restaurants where LOWER(restaurants_name) LIKE   ('%'||$1||'%')`,
       [restaurantsName]
     );
 
@@ -20,7 +22,8 @@ const getAllRestarauntsOrByName = async (req, res) => {
     });
   } 
   else {
-    const results = await db.query("select * from restaurants");
+    const results = await db.query(`select id, restaurants_name as "restaurantsName" , address_location as "addressLocation",
+    city, zipcode, created_at as "createdAt", updated_at as "updatedAt", about from restaurants`);
     return res.status(200).json({
       restaurants: results["rows"],
     });

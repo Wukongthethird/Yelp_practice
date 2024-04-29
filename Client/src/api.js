@@ -116,6 +116,7 @@ class yelpAPI {
 
   static async commentingOrReplying(data){
     let res = await this.request("api/v1/commentorreply", data, "post");
+    console.log("api" , res )
     return res;
   }
 

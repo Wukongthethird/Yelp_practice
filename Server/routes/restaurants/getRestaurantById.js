@@ -48,12 +48,22 @@ const getRestaurantId = async (req, res, next) => {
     )
     .then((res) => res.rows[0]);
 
+  const allParentComments = await db.query(
+    `SELECT comment_id as "commentId", comment_message as "commentMessage",
+    created_at as "createdAt", updated_at as "updatedAt",
+    user_id as "userId", restaurant_id as "restaurantId",
+    parent_id as "parentId" 
+    FROM comments where restaurant_id = $1 and parent_id is NULL
+    `,[restaurantId]
+    ).then((res) => res.rows);
+  
   if (!isLogin) {
     return res.json({
       restaurant: { ...restaurant },
       generalUsers: {
         ...allUsersPrice,
         ...allUsersRating,
+        allParentComments
       },
     });
   }
@@ -91,6 +101,7 @@ const getRestaurantId = async (req, res, next) => {
     generalUsers: {
       ...allUsersPrice,
       ...allUsersRating,
+      allParentComments
     },
     user: {
       ...favorited,
