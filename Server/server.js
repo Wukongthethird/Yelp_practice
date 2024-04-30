@@ -25,7 +25,12 @@ const loginUserSchema = require("./schema/loginUserSchema");
 const getAllRestarauntsOrByName = require("./routes/restaurants/getAllRestarauntsOrByName");
 const getRestaurantById = require("./routes/restaurants/getRestaurantById");
 const createRestaurant = require("./routes/restaurants/createRestaurant");
-
+const updateRestaurant = require("./routes/restaurants/updateRestaurant");
+const deleteRestaurant = require("./routes/restaurants/deleteRestaurant");
+const fetchUser = require("./routes/user/fetchuser");
+const signup = require("./routes/loginsignup/signup");
+const logout = require("./routes/loginsignup/logout");
+const favorite = require("./routes/user/favorite")
 const db = require("./DB");
 /**secrets */
 const PORT = process.env.PORT || 3001;
@@ -82,7 +87,7 @@ app.use(
 const passport = require("passport");
 const initializePassport = require("./passportconfig");
 const { restart } = require("nodemon");
-const updateRestaurant = require("./routes/restaurants/updateRestaurant");
+
 initializePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
@@ -128,36 +133,9 @@ app.post(
 app.patch("/api/v1/restaurant/:id", isAuth, isRestaurant, updateRestaurant);
 
 //delete restaurants based on id
-app.delete("/api/v1/restaurant/:id", async (req, res) => {
-  await db.query(
-    `
-  DELETE FROM restaurants
-  WHERE id = $1
-   `,
-    [req.params.id]
-  );
+app.delete("/api/v1/restaurant/:id", isRestaurant, deleteRestaurant);
 
-  return res.status(204).json({
-    status: "sucess",
-  });
-});
-
-app.get("/api/v1/fetchuser/", async (req, res) => {
-  const result = await db.query(`select * from user_sessions where sid = $1`, [
-    req.sessionID,
-  ]);
-
-  if (result.rows.length === 0) {
-    return res.json({ user: {}, status: "logout" });
-  }
-
-  const user = result.rows[0].sess.passport.user;
-  if (JSON.stringify(req.session.passport.user) === JSON.stringify(user)) {
-    return res.json({ user, status: "login", token: req.sessionID });
-  }
-
-  return res.json({ user: {}, status: "logout" });
-});
+app.get("/api/v1/fetchuser/", fetchUser);
 /**
  * 
  *  Create new user and add to DB.
@@ -169,31 +147,7 @@ app.post(
   "/api/v1/signup",
   // signUpUserSchema,
   // validateSchema,
-  async (req, res) => {
-    let data = {};
-    for (let key in req.body) {
-      data[camelToSnakeCase(key)] = req.body[key];
-    }
-
-    const passhash = await bcrypt.hash(data["password"].toString(), +GENSALT);
-    data["passhash"] = passhash;
-
-    delete data["password"];
-    delete data["confirmPassword"];
-
-    const sqlInput = Object.values(data);
-    console.log("past schema");
-
-    const result = await db.query(
-      `INSERT INTO 
-      yelp_users (first_name, last_name, email, passhash) 
-      VALUES ($1,$2,$3,$4)
-      returning first_name, last_name, email `,
-      sqlInput
-    );
-
-    return res.status(201).json({ user: result.rows[0] });
-  }
+  signup
 );
 
 /**
@@ -207,6 +161,7 @@ app.post(
   passport.authenticate("local", { failWithError: true }),
   (req, res, next) => {
     // sub uuid for token
+    console.log("inside login")
     return res.json({ user: req.user, status: "login", token: req.sessionID });
   },
   (err, req, res, next) => {
@@ -215,61 +170,13 @@ app.post(
   }
 );
 
-app.delete("/api/v1/logout", async (req, res, next) => {
-  const sid = req.sessionID;
-
-  await req.session.destroy((err) => {
-    if (err) {
-      return res.json({ err });
-    } else {
-      req.sessionID = null;
-      req.logout((err) => {
-        if (err) {
-          console.log("err", err);
-        }
-      });
-      return res
-        .clearCookie("connect.sid", {
-          path: "/",
-          httpOnly: true,
-          credentials: true,
-        })
-        .json({ msg: "you have logout successfully" });
-    }
-  });
-});
+app.delete("/api/v1/logout", logout);
 
 /********** FAVORITES */
 // SHould i check if userId matches with user on state what about impersonating another user should function in general
 // need to do validation
 // check if liked if sends again its unlike maybe its own endpoint
-app.post("/api/v1/favorite", isAuth, isRestaurant, async (req, res, next) => {
-  const userId = req.session.passport.user.id;
-  const restaurantId = req.body["restaurantId"];
-  // Maybe remove
-  console.log("should not be gere");
-
-  const result = await db
-    .query(
-      `SELECT * FROM user_favorites where user_id = $1 and restaurants_id =$2`,
-      [userId, restaurantId]
-    )
-    .then((res) => res.rows[0]);
-
-  if (!result) {
-    const result = await db.query(
-      `INSERT INTO user_favorites (user_id, restaurants_id) VALUES($1,$2) returning *`,
-      [userId, restaurantId]
-    );
-    return res.json({ msg: "Favorited" });
-  } else {
-    const result = await db.query(
-      `DELETE FROM user_favorites  where user_id = $1 AND restaurants_id =$2  returning *`,
-      [userId, restaurantId]
-    );
-    return res.json({ msg: "Unfavorited" });
-  }
-});
+app.post("/api/v1/favorite", isAuth, isRestaurant, favorite);
 
 // so turns out this is a survey on yelp no one votes on this repurpose this as a submission
 // repurpose to rating
