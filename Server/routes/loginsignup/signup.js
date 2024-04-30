@@ -15,7 +15,7 @@ const signup = async (req, res) => {
 
   const result = await db.query(
     `INSERT INTO 
-      yelp_users (first_name, last_name, email, passhash) 
+      yelp_users (first_name, last_name,   email, passhash) 
       VALUES ($1,$2,$3,$4)
       returning first_name, last_name, email `,
     sqlInput

@@ -35,7 +35,7 @@ const RestaurantDetails = () => {
   }, []);
 
   if(!restaurant) return <LoadingSpinner/>
-  console.log("res", restaurant.generalUsers)
+  console.log("res", restaurant)
   return (
     <div className="Restaurant card">
       <div className="card-body">
@@ -46,7 +46,7 @@ const RestaurantDetails = () => {
        <PriceIconContainer usersPrice={restaurant.generalUsers.averagePrice}/> 
       <StarRatingContainer restaurantId={id} rating={restaurant.generalUsers.averageRating}/>
       {/**terneary the bottom thing ig is no user allows hover but no vote */}
-      <StarVotesContainer restaurantId={id} rating={ restaurant.user ? restaurant.user.rating : null } />
+      <StarVotesContainer restaurantId={id} rating={ restaurant.user && restaurant.user.rating ? restaurant.user.rating : null } />
         <h6 className="card-title">{restaurant.restaurant.restaurantsName} </h6>
       </div>
       <CommentForm restaurantId={id}/>

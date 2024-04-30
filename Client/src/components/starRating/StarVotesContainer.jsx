@@ -11,16 +11,15 @@ import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 import StarRatingContainer from "./StarRatingContainer";
 
 const StarVotesContainer = ({ restaurantId, rating = null }) => {
-  // need a state to check if voted or not
-  // renders all 5 clickable as rating system on hover?
   const [voted, setVoted] = useState(rating);
   const [hoverStatus, setHoverStatus] = useState(0);
 
   async function handleRating(restaurantId, voteValue) {
-    if( !rating){
+    if( rating){
       // maybe redirect to login page 
       return
     }
+
     const res = await yelpAPI.rating({ restaurantId, voteValue });
     if (res.err) {
       return

@@ -9,6 +9,7 @@ const { v4: uuidv4 } = require("uuid");
 var session = require("express-session");
 const pgstore = require("./DB/pgstore");
 const jwt = require("jsonwebtoken");
+const db = require("./DB");
 
 const isAuth = require("./middlewear/isAuth");
 const isRestaurant = require("./middlewear/isRestaurant");
@@ -31,7 +32,8 @@ const fetchUser = require("./routes/user/fetchuser");
 const signup = require("./routes/loginsignup/signup");
 const logout = require("./routes/loginsignup/logout");
 const favorite = require("./routes/user/favorite")
-const db = require("./DB");
+const restaurantRating = require("./routes/restaurants/restaurantRating");
+
 /**secrets */
 const PORT = process.env.PORT || 3001;
 const SESSIONSECRET = process.env.SESSION_SECRET;
@@ -209,31 +211,7 @@ app.post(
   "/api/v1/restaurantrating",
   isAuth,
   isRestaurant,
-  async (req, res, next) => {
-    const userId = req.session.passport.user.id;
-    const restaurantId = req.body["restaurantId"];
-    const voteValue = req.body["voteValue"];
-
-    // IM Going to lock out the user after they voted so this check does not need to do
-    const hasRated = await db
-      .query(
-        `SELECT * FROM ratings where user_id = $1 and restaurants_id =$2`,
-        [userId, restaurantId]
-      )
-      .then((res) => res.rows[0]);
-
-    if (hasRated) {
-      return res.json({ err: "you've already rated this restaurant" });
-    }
-
-    const result = await db.query(
-      `INSERT INTO ratings (user_id, restaurants_id ,rating) VALUES($1,$2, $3) returning *`,
-      [userId, restaurantId, voteValue]
-    );
-
-    console.log("res", result.rows[0]);
-    return res.json({});
-  }
+restaurantRating
 );
 
 app.post(
