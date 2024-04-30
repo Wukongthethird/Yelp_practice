@@ -5,8 +5,8 @@ import { Box, SimpleGrid } from "@chakra-ui/react";
 import CommentContainer from "./CommentContainer";
 
 // restaurantDetails -> CommentList -> CommentContainer -> CommentCard
-const CommentCardList = ({ comments, restaurantId }) => {
-  console.log("comments" , comments)
+const CommentContainerList = ({ comments, restaurantId }) => {
+
   return (
     <>
       {comments.map((comment) => {
@@ -34,4 +34,4 @@ const CommentCardList = ({ comments, restaurantId }) => {
 //   ),
 // };
 
-export default CommentCardList;
+export default CommentContainerList;

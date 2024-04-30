@@ -82,6 +82,7 @@ app.use(
 const passport = require("passport");
 const initializePassport = require("./passportconfig");
 const { restart } = require("nodemon");
+const updateRestaurant = require("./routes/restaurants/updateRestaurant");
 initializePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
@@ -115,8 +116,6 @@ app.get(
 );
 
 //create a reastaruant
-// to do validate inputs`` do the camel to sql
-
 app.post(
   "/api/v1/create_restaurant/",
   createRestaurantSchema,
@@ -126,39 +125,7 @@ app.post(
 
 //update restaraunt
 
-app.patch("/api/v1/restaurant/:id", async (req, res) => {
-  let allowedColumns = [
-    "restaurants_name",
-    "address_location",
-    "city",
-    "zipcode",
-    "about",
-  ];
-  let columns = [];
-  let values = [];
-  let count = 2;
-  for (let c of allowedColumns) {
-    if (req.body[c]) {
-      columns.push(`${c} = $${count}`);
-      values.push(req.body[c]);
-      count++;
-    }
-  }
-
-  const result = await db.query(
-    `UPDATE restaurants SET ${columns.join(", ")} 
-   WHERE id = $1 returning *`,
-    [req.params.id, ...values]
-  );
-  if (!result) {
-    return null;
-  }
-
-  return res.status(200).json({
-    restaurant: result["rows"][0],
-  });
-  return;
-});
+app.patch("/api/v1/restaurant/:id", isAuth, isRestaurant, updateRestaurant);
 
 //delete restaurants based on id
 app.delete("/api/v1/restaurant/:id", async (req, res) => {
@@ -370,36 +337,64 @@ app.post(
     const userId = req.session.passport.user.id;
     const commentMessage = req.body["commentMessage"];
     const restaurantId = req.body["restaurantId"];
-    const parentId = req.body["parentId"] ;
-    console.log("here", req.body)
+    const parentId = req.body["parentId"];
+    console.log("req", req.body, parentId);
+    if (parentId) {
+      const parentComment = await db
+        .query(
+          `
+        select comment_id as "commentId", comment_message as "commentMessage",
+        created_at as "createdAt", updated_at as "updatedAt",
+        user_id as "userId", restaurant_id as "restaurantId",
+        parent_id as "parentId"  from comments where comment_id = $1
+      `,
+          [parentId]
+        )
+        .then((parent) => parent.rows[0]);
 
-    if(parentId){
-      const parent_comment = await db.query(`
-        select * from comments where comment_id = $1
-      `,[parentId]).then( (parent) => parent.rows[0])
-      
-      if( !parent_comment){
-        return res.json({msg: "who are you even talking to?"})
+      console.log("parent", parentComment);
+      if (!parentComment) {
+        return res.json({ msg: "who are you even talking to?" });
       }
 
-      if(parent_comment.restaurant_id !== restaurantId){
-        return res.json({msg:" you've some how strayed"})
+      if (+parentComment.restaurantId !== +restaurantId) {
+        return res.json({ msg: " you've some how strayed" });
       }
     }
-    
-    const result = await db.query(
-      `
+
+    const result = await db
+      .query(
+        `
     INSERT INTO comments( comment_message, user_id, restaurant_id, parent_id)
     values($1, $2,$3,$4) returning *
     `,
-      [commentMessage, userId, restaurantId, parentId]
-    ).then( (res) => res.rows[0] );
+        [commentMessage, userId, restaurantId, parentId]
+      )
+      .then((res) => res.rows[0]);
 
-    return res.json({msg:"commented"})
-
+    return res.json({ msg: "commented" });
   }
-
 );
+
+app.post("/api/v1/seereplies", isRestaurant, async (req, res, next) => {
+  const restaurantId = req.body["restaurantId"];
+  const parentId = req.body["parentId"];
+
+  const result = await db
+    .query(
+      `
+    SELECT comment_id as "commentId", comment_message as "commentMessage",
+    created_at as "createdAt", updated_at as "updatedAt",
+    user_id as "userId", restaurant_id as "restaurantId",
+    parent_id as "parentId" 
+    FROM comments where restaurant_id = $1 and parent_id = $2
+    `,
+      [restaurantId, parentId]
+    )
+    .then((res) => res.rows);
+
+  return res.json({ result });
+});
 
 //need to add global error messsage
 app.listen(PORT, () => {

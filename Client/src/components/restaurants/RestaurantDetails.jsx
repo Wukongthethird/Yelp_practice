@@ -11,7 +11,7 @@ import UserContext from "../../auth/UserContext";
 import StarRatingContainer from "../starRating/StarRatingContainer";
 import StarVotesContainer from "../starRating/StarVotesContainer";
 import CommentForm from "../forms/CommentForm";
-import CommentList from "../comments/CommentList"
+import CommentContainerList from "../comments/CommentContainerList"
 /**
  * 
  * SOMEHOw add reviews and like functionality
@@ -50,7 +50,7 @@ const RestaurantDetails = () => {
         <h6 className="card-title">{restaurant.restaurant.restaurantsName} </h6>
       </div>
       <CommentForm restaurantId={id}/>
-      <CommentList comments={restaurant.generalUsers.allParentComments } restaurantId={id}/>
+      <CommentContainerList comments={restaurant.generalUsers.allParentComments } restaurantId={id}/>
   
     </div>
   );

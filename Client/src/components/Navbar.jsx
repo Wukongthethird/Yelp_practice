@@ -19,7 +19,7 @@ export const Navbar = () => {
     user.logout();
   }
 
-  console.log("nav" ,  user )
+
 
   let body =
     // user.user.status == "logout" &&

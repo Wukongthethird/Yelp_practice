@@ -6,7 +6,7 @@ import { Box, Flex, Button, Textarea } from "@chakra-ui/react";
 
 // restaurantDetails -> CommentCardList -> CommentContainer -> CommentCard
 // is reply or parent maybe a prop?
-const CommentForm = ({ restaurantId, parentId = null, cancleReply = null }) => {
+const CommentForm = ({ restaurantId, parentId = null, cancelReply = null }) => {
   const [comment, setComment] = useState("");
   // button comes from somehwwree else. button should be its owb thing
   //  if not user do something else
@@ -58,10 +58,10 @@ const CommentForm = ({ restaurantId, parentId = null, cancleReply = null }) => {
             Submit
           </Button>
 
-          {cancleReply ? (
-            <Button onClick={cancleReply}>Cancle</Button>
+          {cancelReply ? (
+            <Button onClick={cancelReply}>Cancel</Button>
           ) : (
-            cancleReply
+            cancelReply
           )}
         </form>
       </Box>

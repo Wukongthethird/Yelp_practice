@@ -26,7 +26,6 @@ import yelpAPI from "../../api";
 const RestaurantCard = ({ restaurant }) => {
   // I did it at this level so i didnt have to loop on every api request. TBD if i leave this in here seems weird
 
-  console.log(restaurant)
  // TO DO ADD IMAGE TO BACK DROP
   return (
     <Card maxW="md">
