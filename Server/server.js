@@ -11,6 +11,9 @@ const pgstore = require("./DB/pgstore");
 const jwt = require("jsonwebtoken");
 const db = require("./DB");
 
+const corsConfig = require("./configs/corsConfig");
+const sessionConfig = require("./configs/sessionConfig");
+
 const isAuth = require("./middlewear/isAuth");
 const isRestaurant = require("./middlewear/isRestaurant");
 
@@ -31,58 +34,26 @@ const deleteRestaurant = require("./routes/restaurants/deleteRestaurant");
 const fetchUser = require("./routes/user/fetchuser");
 const signup = require("./routes/loginsignup/signup");
 const logout = require("./routes/loginsignup/logout");
-const favorite = require("./routes/user/favorite")
+const favorite = require("./routes/user/favorite");
 const restaurantRating = require("./routes/restaurants/restaurantRating");
+const commentOrReply = require("./routes/comments/commentOrReply");
+const seeReplies = require("./routes/comments/seeReplies");
 
 /**secrets */
 const PORT = process.env.PORT || 3001;
 const SESSIONSECRET = process.env.SESSION_SECRET;
 const GENSALT = process.env.GENSALT;
-const JWTSECRET = process.env.JWT_SECRET;
-
-/** helper function */
-const { camelToSnakeCase } = require("./helper");
+// const JWTSECRET = process.env.JWT_SECRET;
 
 /** MIDDLEWARE */
 app.set("trust proxy", 1);
 
-app.use(
-  cors({
-    // allowedHeaders: "X-Requested-With, Content-Type, Accept",
-    //   credentials: true,
-    //   httpOnly: true,
-    // sameSite: "lax",
-    // secure:false,
-    //
-    // origin: "*",
-    /**  this makes cookie save in browser */
-    credentials: true,
-    origin: "http://localhost:5173",
-  })
-);
+app.use(cors(corsConfig));
 app.use(morgan("dev"));
 app.use(express.json());
 
 // express session store
-app.use(
-  session({
-    id: function (req) {
-      return uuidv4(); // replace with jwt
-    },
-    store: pgstore,
-    cookie: {
-      /**  this makes cookie save in browser */
-      credentials: true,
-      httpOnly: true,
-      // sameSite: "none",
-      // secure: false, //
-      maxAge: 1000 * 60 * 60 * 24,
-    },
-    secret: SESSIONSECRET,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+app.use(session(sessionConfig));
 
 /** passport */
 // passport sessions stuff
@@ -163,7 +134,6 @@ app.post(
   passport.authenticate("local", { failWithError: true }),
   (req, res, next) => {
     // sub uuid for token
-    console.log("inside login")
     return res.json({ user: req.user, status: "login", token: req.sessionID });
   },
   (err, req, res, next) => {
@@ -207,79 +177,11 @@ app.post(
   }
 );
 
-app.post(
-  "/api/v1/restaurantrating",
-  isAuth,
-  isRestaurant,
-restaurantRating
-);
+app.post("/api/v1/restaurantrating", isAuth, isRestaurant, restaurantRating);
 
-app.post(
-  "/api/v1/commentorreply",
-  isAuth,
-  isRestaurant,
-  async (req, res, next) => {
-    const userId = req.session.passport.user.id;
-    const commentMessage = req.body["commentMessage"];
-    const restaurantId = req.body["restaurantId"];
-    const parentId = req.body["parentId"];
-    console.log("req", req.body, parentId);
-    if (parentId) {
-      const parentComment = await db
-        .query(
-          `
-        select comment_id as "commentId", comment_message as "commentMessage",
-        created_at as "createdAt", updated_at as "updatedAt",
-        user_id as "userId", restaurant_id as "restaurantId",
-        parent_id as "parentId"  from comments where comment_id = $1
-      `,
-          [parentId]
-        )
-        .then((parent) => parent.rows[0]);
+app.post("/api/v1/commentorreply", isAuth, isRestaurant, commentOrReply);
 
-      console.log("parent", parentComment);
-      if (!parentComment) {
-        return res.json({ msg: "who are you even talking to?" });
-      }
-
-      if (+parentComment.restaurantId !== +restaurantId) {
-        return res.json({ msg: " you've some how strayed" });
-      }
-    }
-
-    const result = await db
-      .query(
-        `
-    INSERT INTO comments( comment_message, user_id, restaurant_id, parent_id)
-    values($1, $2,$3,$4) returning *
-    `,
-        [commentMessage, userId, restaurantId, parentId]
-      )
-      .then((res) => res.rows[0]);
-
-    return res.json({ msg: "commented" });
-  }
-);
-
-app.post("/api/v1/seereplies", isRestaurant, async (req, res, next) => {
-  const restaurantId = req.body["restaurantId"];
-  const parentId = req.body["parentId"];
-
-  const result = await db
-    .query(
-      `
-    SELECT comment_id as "commentId", comment_message as "commentMessage",
-    created_at as "createdAt", updated_at as "updatedAt",
-    user_id as "userId", restaurant_id as "restaurantId",
-    parent_id as "parentId" 
-    FROM comments where restaurant_id = $1 and parent_id = $2
-    `,
-      [restaurantId, parentId]
-    )
-    .then((res) => res.rows);
-
-  return res.json({ result });
-});
+app.post("/api/v1/seereplies", isRestaurant, seeReplies);
 
 //need to add global error messsage
 app.listen(PORT, () => {

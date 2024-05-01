@@ -4,7 +4,6 @@ const restaurantRating = async (req, res) => {
   const userId = req.session.passport.user.id;
   const restaurantId = req.body["restaurantId"];
   const voteValue = req.body["voteValue"];
-  console.log("in here");
   // IM Going to lock out the user after they voted so this check does not need to do
   const hasRated = await db
     .query(`SELECT * FROM ratings where user_id = $1 and restaurants_id =$2`, [
