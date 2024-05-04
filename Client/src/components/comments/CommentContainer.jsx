@@ -30,7 +30,7 @@ const CommentContainer = ({ comment, restaurantId }) => {
   const user = useContext(UserContext).user;
   const [reply, setReply] = useState(false);
   const [seeRepliesState, setSeeRepliesState] = useState([]);
-  const [toggleSeeReplies, setToggleSeeReplies] = useState(true)
+  const [toggleSeeReplies, setToggleSeeReplies] = useState(true);
   const [editComment, setEditComment] = useState(false);
 
   function replying(evt) {
@@ -41,8 +41,7 @@ const CommentContainer = ({ comment, restaurantId }) => {
   async function seeReplies(parentId, restaurantId) {
     const result = await yelpAPI.seeReplies({ parentId, restaurantId });
     setSeeRepliesState([...result]);
-    setToggleSeeReplies(!toggleSeeReplies)
-
+    setToggleSeeReplies(!toggleSeeReplies);
   }
 
   // function replyToggle(evt){
@@ -55,17 +54,35 @@ const CommentContainer = ({ comment, restaurantId }) => {
     setEditComment(!editComment);
   }
 
-  
-  const buttonContainers = (
-    comment.userId == user.id?
-    <>
-    <Button onClick={replying}>reply</Button>  
-    <Button onClick={editing}>edit</Button>
- </>: null);
+  //iconconatiner and function
+  const buttonContainers =
+    user.id && comment.userId == user.id ? (
+      <>
+        <Button onClick={replying}>reply</Button>
+        <Button onClick={editing}>edit</Button>
+      </>
+    ) : user.id ? (
+      <Button onClick={replying}>reply</Button>
+    ) : null;
+
+  //     comment.userId == user.id?
+  //     <>
+  //     <Button onClick={replying}>reply</Button>
+  //     <Button onClick={editing}>edit</Button>
+  //  </>: null);
   return (
     <>
-      {!editComment ? <CommentCard comment={comment}/> : <CommentForm restaurantId={restaurantId} commentMessage={comment.commentMessage} edit={editComment} commentId={comment.commentId}/>}
-     {/* <CommentCard comment={comment} /> */}
+      {!editComment ? (
+        <CommentCard comment={comment} />
+      ) : (
+        <CommentForm
+          restaurantId={restaurantId}
+          commentMessage={comment.commentMessage}
+          edit={editComment}
+          commentId={comment.commentId}
+        />
+      )}
+      {/* <CommentCard comment={comment} /> */}
       {buttonContainers}
       {reply ? (
         <CommentForm
@@ -81,20 +98,17 @@ const CommentContainer = ({ comment, restaurantId }) => {
         />
       )}
 
-  
-
       {/* this should be seperate from body*/}
-      {toggleSeeReplies?
-      <Button
-        onClick={(evt) => {
-          evt.preventDefault();
-          seeReplies(comment.commentId, restaurantId);
-        }}
-      >
-        see replies
-      </Button>
-      :null
-}
+      {toggleSeeReplies ? (
+        <Button
+          onClick={(evt) => {
+            evt.preventDefault();
+            seeReplies(comment.commentId, restaurantId);
+          }}
+        >
+          see replies
+        </Button>
+      ) : null}
     </>
   );
 };
