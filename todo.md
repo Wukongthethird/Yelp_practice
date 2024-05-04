@@ -5,10 +5,18 @@ layout for main page
 restaurants detail page itself
 
 
+comment section
+edit delete comment
+fake data
 
-persist session in localstorage the jwt do the fetch user if context is empty?
 
-watch video
+
+carasel -> do it by finding at least 4 stars randomized 7-10 restaurant 
+
+some front end stuff
+
+
+
 commenting on restaurant watch vudeo soon
 
 make navbar its own thing dont shrink or grow base on restarants size
@@ -27,17 +35,21 @@ color button popout
 
 hottest what's new restaraunts
 
-ratings of the comment 1 out of 5 star or upvote or downfvote
-view more comment and page 
 user page to show off to other people
 
 
-why does my db not query the new users
 
-comment section
 
-DB design
-add a comment
-reply comment
 
-render comment section parent ? then comment  each click on replies comment shows all its children
+
+protein powder
+kleenex
+straberry
+4x 2x clorox wipes
+water
+soy sauce
+oil
+
+shrimp breast steak
+
+

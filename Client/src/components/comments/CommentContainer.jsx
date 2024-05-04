@@ -19,15 +19,19 @@ import yelpAPI from "../../api";
 import CommentCard from "./CommentCard";
 import CommentForm from "../forms/CommentForm";
 import CommentContainerList from "./CommentContainerList";
+import UserContext from "../../auth/UserContext";
 
 // restaurantDetails -> CommentList -> CommentContainer -> CommentCard
 const CommentContainer = ({ comment, restaurantId }) => {
   // maybe doesnt render comment go one more deeper for comment card
   // container handles reply see replies and layout of container
-  // see replies is a function that render out another comment list?
   // replies renders a comment form
+  // need some barreir to edit prob need user context here
+  const user = useContext(UserContext).user;
   const [reply, setReply] = useState(false);
   const [seeRepliesState, setSeeRepliesState] = useState([]);
+  const [toggleSeeReplies, setToggleSeeReplies] = useState(true)
+  const [editComment, setEditComment] = useState(false);
 
   function replying(evt) {
     evt.preventDefault();
@@ -36,20 +40,51 @@ const CommentContainer = ({ comment, restaurantId }) => {
 
   async function seeReplies(parentId, restaurantId) {
     const result = await yelpAPI.seeReplies({ parentId, restaurantId });
-    setSeeRepliesState([...result])
+    setSeeRepliesState([...result]);
+    setToggleSeeReplies(!toggleSeeReplies)
+
   }
 
+  // function replyToggle(evt){
+  //   evt.preventDefault()
+  //   setToggleSeeReplies(!toggleSeeReplies)
+  // }
+  // body contingent on user context
+  function editing(evt) {
+    evt.preventDefault();
+    setEditComment(!editComment);
+  }
+
+  
+  const buttonContainers = (
+    comment.userId == user.id?
+    <>
+    <Button onClick={replying}>reply</Button>  
+    <Button onClick={editing}>edit</Button>
+ </>: null);
   return (
     <>
-      <CommentCard comment={comment} />
-      <Button onClick={replying}>reply</Button>
+      {!editComment ? <CommentCard comment={comment}/> : <CommentForm restaurantId={restaurantId} commentMessage={comment.commentMessage} edit={editComment} commentId={comment.commentId}/>}
+     {/* <CommentCard comment={comment} /> */}
+      {buttonContainers}
       {reply ? (
         <CommentForm
           restaurantId={restaurantId}
-          parentId={ comment.commentId }
+          parentId={comment.commentId}
           cancelReply={replying}
         />
       ) : null}
+      {seeReplies.length == 0 ? null : (
+        <CommentContainerList
+          comments={seeRepliesState}
+          restaurantId={restaurantId}
+        />
+      )}
+
+  
+
+      {/* this should be seperate from body*/}
+      {toggleSeeReplies?
       <Button
         onClick={(evt) => {
           evt.preventDefault();
@@ -58,10 +93,8 @@ const CommentContainer = ({ comment, restaurantId }) => {
       >
         see replies
       </Button>
-      {
-        seeReplies.length ==0 ?null:
-        <CommentContainerList comments={seeRepliesState} restaurantId={restaurantId} />
-      }
+      :null
+}
     </>
   );
 };

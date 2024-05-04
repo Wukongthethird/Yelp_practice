@@ -15,14 +15,13 @@ const StarVotesContainer = ({ restaurantId, rating = null }) => {
   const [hoverStatus, setHoverStatus] = useState(0);
 
   async function handleRating(restaurantId, voteValue) {
-    if( rating){
-      // maybe redirect to login page 
-      return
+    if (rating) {
+      // maybe redirect to login page
+      return;
     }
-
     const res = await yelpAPI.rating({ restaurantId, voteValue });
     if (res.err) {
-      return
+      return;
     }
     setVoted(voteValue);
   }
@@ -53,39 +52,12 @@ const StarVotesContainer = ({ restaurantId, rating = null }) => {
     }
   }
 
-  // const starIcons = [];
-  // renders out stars on how much was rated
-
-  // if (voted) {
-  //   let count = rating;
-  //   for (let ind = 1; ind < 6; ind++) {
-  //     if (count < 0.25) {
-  //       starIcons.push(<StarIcon key={uuidv4()} fillValue={faStarOutlined} />);
-  //     }
-  //     if (count < 0.65 && count > 0.25) {
-  //       starIcons.push(
-  //         <StarIcon key={uuidv4()} fillValue={faStarHalfStroke} />
-  //       );
-  //       count = 0;
-  //     }
-  //     if (count >= 0.65) {
-  //       starIcons.push(<StarIcon key={uuidv4()} fillValue={faStarSolid} />);
-  //       count--;
-  //     }
-  //   }
-  // }
-
   // jave some bg color light up if on hover permentaly lock in the hover if have voted
-  const starIconContainer = 
-  voted ? <StarRatingContainer rating={voted} />
-  :<HStack spacing="20px">{starIconsUnvoted}</HStack>
-
-  // const starIconContainer = 
-  // (
-
-  //   // <HStack spacing="20px">{voted ? starIcons : starIconsUnvoted}</HStack>
-  //       <HStack spacing="20px">{starIconsUnvoted}</HStack>
-  // );
+  const starIconContainer = voted ? (
+    <StarRatingContainer rating={voted} />
+  ) : (
+    <HStack spacing="20px">{starIconsUnvoted}</HStack>
+  );
 
   return <> {starIconContainer} </>;
 };

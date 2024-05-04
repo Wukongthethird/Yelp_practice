@@ -26,7 +26,6 @@ const RestaurantDetails = () => {
 
   const [restaurant, setRestaurant] = useState(null);
 
-
   useEffect(function getRestaurantByID() {
     async function getRestaurant() {
       setRestaurant(await yelpAPI.getRestaurantByID(id));
@@ -35,7 +34,6 @@ const RestaurantDetails = () => {
   }, []);
 
   if(!restaurant) return <LoadingSpinner/>
-  console.log("res", restaurant)
   return (
     <div className="Restaurant card">
       <div className="card-body">

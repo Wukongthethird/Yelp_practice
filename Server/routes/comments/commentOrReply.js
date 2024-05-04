@@ -6,6 +6,7 @@ const commentOrReply = async (req, res) => {
   const restaurantId = req.body["restaurantId"];
   const parentId = req.body["parentId"];
 
+
   if (parentId) {
     const parentComment = await db
       .query(

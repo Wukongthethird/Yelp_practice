@@ -97,6 +97,7 @@ class yelpAPI {
 
   static async favoriting(data) {
     let res = await this.request("api/v1/favorite", data, "post");
+    console.log("res", res)
     return res;
   }
 
@@ -116,7 +117,7 @@ class yelpAPI {
 
   static async commentingOrReplying(data){
     let res = await this.request("api/v1/commentorreply", data, "post");
-
+    console.log("res", res)
     return res;
   }
 
@@ -125,6 +126,12 @@ class yelpAPI {
     let res = await this.request("api/v1/seereplies", data, "post");
     return res.result;
   }
+
+  static async editComment(data){
+    let res = await this.request("api/v1/editcomment", data, "post");
+    return res;
+  }
+  
 
   //DEPRECATED
   // static async getfavorites(id){

@@ -24,6 +24,8 @@ const getRestaurantNameSchema = require("./schema/getRestaurantNameSchema");
 const createRestaurantSchema = require("./schema/createRestaurantSchema");
 const signUpUserSchema = require("./schema/signUpUserSchema");
 const loginUserSchema = require("./schema/loginUserSchema");
+const commentOrReplySchema = require("./schema/commentOrReplySchema");
+const seeRepliesSchema = require("./schema/seeRepliesSchema")
 
 //Routes
 const getAllRestarauntsOrByName = require("./routes/restaurants/getAllRestarauntsOrByName");
@@ -38,6 +40,8 @@ const favorite = require("./routes/user/favorite");
 const restaurantRating = require("./routes/restaurants/restaurantRating");
 const commentOrReply = require("./routes/comments/commentOrReply");
 const seeReplies = require("./routes/comments/seeReplies");
+const editComment = require("./routes/comments/editComment");
+
 
 /**secrets */
 const PORT = process.env.PORT || 3001;
@@ -106,7 +110,7 @@ app.post(
 app.patch("/api/v1/restaurant/:id", isAuth, isRestaurant, updateRestaurant);
 
 //delete restaurants based on id
-app.delete("/api/v1/restaurant/:id", isRestaurant, deleteRestaurant);
+app.delete("/api/v1/restaurant/:id", isAuth, isRestaurant, deleteRestaurant);
 
 app.get("/api/v1/fetchuser/", fetchUser);
 /**
@@ -159,7 +163,11 @@ app.post(
   async (req, res, next) => {
     const userId = req.session.passport.user.id;
     const restaurantId = req.body["restaurantId"];
-    const voteValue = req.body["voteValue"];
+    const voteValue = +req.body["voteValue"];
+
+    if (!(voteValue in [1, 2, 3, 4, 5])) {
+      return;
+    }
 
     // IM Going to lock out the user after they voted so this check does not need to do
     // const result = await db.query(
@@ -172,16 +180,30 @@ app.post(
       [userId, restaurantId, voteValue]
     );
 
-    console.log("res", result.rows[0]);
     return res.json({ msg: "voted" });
   }
 );
 
 app.post("/api/v1/restaurantrating", isAuth, isRestaurant, restaurantRating);
 
-app.post("/api/v1/commentorreply", isAuth, isRestaurant, commentOrReply);
+app.post(
+  "/api/v1/commentorreply",
+  isAuth,
+  isRestaurant,
+  commentOrReplySchema,
+  validateSchema,
+  commentOrReply
+);
 
-app.post("/api/v1/seereplies", isRestaurant, seeReplies);
+app.post(
+  "/api/v1/seereplies",
+  isRestaurant,
+  seeRepliesSchema,
+  validateSchema,
+  seeReplies
+);
+
+app.post("/api/v1/editcomment", isAuth,editComment )
 
 //need to add global error messsage
 app.listen(PORT, () => {

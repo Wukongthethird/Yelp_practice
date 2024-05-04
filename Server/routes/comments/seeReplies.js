@@ -8,10 +8,11 @@ const seeReplies = async (req, res) => {
     .query(
       `
     SELECT comment_id as "commentId", comment_message as "commentMessage",
-    created_at as "createdAt", updated_at as "updatedAt",
+    comments.created_at as "createdAt", comments.updated_at as "updatedAt",
     user_id as "userId", restaurant_id as "restaurantId",
-    parent_id as "parentId" 
-    FROM comments where restaurant_id = $1 and parent_id = $2
+    parent_id as "parentId" ,
+    first_name as "firstName", last_name as "lastName"
+    FROM comments JOIN yelp_users ON user_id = id where restaurant_id = $1 and parent_id = $2  ORDER BY comments.created_at
     `,
       [restaurantId, parentId]
     )

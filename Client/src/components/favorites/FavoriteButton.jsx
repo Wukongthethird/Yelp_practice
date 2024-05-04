@@ -10,7 +10,7 @@ import { faHeart as faHeartFilled } from "@fortawesome/free-solid-svg-icons";
 // {userId, restaurantId}
 const FavoriteButton = ({ restaurantId, isFavorited ,isLoggedin=false}) => {
   const [favoriteStatus, setFavoriteStatus] = useState(isFavorited); // this should control the state of the button/ maybe just color of button
-  
+  console.log(isLoggedin)
   async function favoriting(restaurantId) {
     await yelpAPI.favoriting({ restaurantId });
     setFavoriteStatus(!favoriteStatus);

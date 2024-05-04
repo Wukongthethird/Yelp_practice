@@ -25,7 +25,6 @@ import yelpAPI from "../../api";
 
  // restaurantDetails -> CommentCardList -> CommentContainer -> CommentCard
 const CommentCard = ({ comment }) => {
-  // I did it at this level so i didnt have to loop on every api request. TBD if i leave this in here seems weird
 
 
  // TO DO ADD IMAGE TO BACK DROP
@@ -36,7 +35,9 @@ const CommentCard = ({ comment }) => {
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
             {/* <Avatar name='Hung Bro' src='https://bit.ly/sage-adebayo' /> */}
             <Box>
+
               <Heading size="sm">{comment.commentMessage}</Heading>
+              <Heading size="sm">{comment.firstName +" " + comment.lastName}</Heading>
             </Box>
           </Flex>
         </Flex>
