@@ -12,6 +12,7 @@ import Login from "./routes/Login";
 import UserContext from "./auth/UserContext";
 import useLocalStorage from "./hooks/useLocalStorage"
 import theme from "./theme/theme"
+import { Navbar } from "./components/Navbar";
 
 
 
@@ -26,7 +27,6 @@ export const TOKEN_STORAGE_ID = "yelp-token";
 
 function App() {
 
-  console.log("theme" , theme)
   //move this to future routes so I do not need to fetch user for every page logged in
     const [user, setUser] = useState({ user: {}, status: "logout" });
     const [favoriteRestaurantsById, setFavoriteRestaurantsById] = useState(new Set([]));
@@ -83,6 +83,7 @@ function App() {
     <ChakraProvider theme={theme} cssVarsRoot="body">
       <BrowserRouter>
         <UserContext.Provider value={{ ...user, logout }}>
+
           <RoutesOrganizer />
           <Routes>
             <Route exact path="/login" element={<Login login={login} />} />

@@ -9,7 +9,7 @@ const theme = extendTheme({
  
 fonts: {
   body: "system-ui, sans-serif",
-  // heading: "Georgia, serif",
+  heading: "Nunito Sans",
   mono: "Menlo, monospace",
 },
 components :{

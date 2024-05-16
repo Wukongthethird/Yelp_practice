@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
+import { Flex, Box , Input, FormControl , Button,} from "@chakra-ui/react";
 /** Search widget.
  *
  * Appears on RestaurantsList so it can be filtered
@@ -21,31 +22,35 @@ const SearchForm = ({ searchFor }) => {
   function handleSubmit(evt) {
     // take care of accidentally trying to search for just spaces
     evt.preventDefault();
+    // if (evt.key == "Enter"){
+    //   searchFor(searchTerm.trim() || undefined);
+    //   setSearchTerm(searchTerm.trim()); 
+    // }
     searchFor(searchTerm.trim() || undefined);
     setSearchTerm(searchTerm.trim());
   }
+
 
   /** Update form fields */
   function handleChange(evt) {
     evt.preventDefault()
     setSearchTerm(evt.target.value);
-  }
+  } 
 
   return (
-    <div className="SearchForm mb-4">
-      <form className="form-inline" onSubmit={handleSubmit}>
-        <input
+    <Box className="SearchForm mb-4" marginTop={4} width ={""}>
+      <form className="form-inline" onSubmit={handleSubmit}  >
+      {/* <FormControl className="form-inline" onSubmit={handleSubmit}> */}
+        <Input
           className="form-control form-control-lg flex-grow-1"
           name="searchTerm"
           placeholder="Enter search term.."
           value={searchTerm}
           onChange={handleChange}
         />
-        <button type="submit" className="btn btn-lg btn-primary">
-          Submit
-        </button>
+      {/* </FormControl > */}
       </form>
-    </div>
+     </Box  >
   );
 };
 

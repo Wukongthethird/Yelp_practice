@@ -6,7 +6,7 @@ import {
   Button,
   ChakraProvider,
 } from "@chakra-ui/react";
-import { Link as ReactRouterLink } from 'react-router-dom'
+import { Link as ReactRouterLink } from "react-router-dom";
 
 import { useContext } from "react";
 import UserContext from "../auth/UserContext";
@@ -19,46 +19,56 @@ export const Navbar = () => {
     user.logout();
   }
 
-
-
   let body =
     // user.user.status == "logout" &&
     Object.keys(user.user).length === 0 ? (
       <>
-        <div>
-          <ChakraLink as={ReactRouterLink} to="/login">Login</ChakraLink>
-          <ChakraLink  as={ReactRouterLink}  to="/signup">Register</ChakraLink>
-        </div>
+        <ChakraLink as={ReactRouterLink} to="/login">
+          Login
+        </ChakraLink>
+        <ChakraLink as={ReactRouterLink} to="/signup">
+          Register
+        </ChakraLink>
       </>
     ) : (
-      <div>
-        <ChakraLink as={ReactRouterLink}  to="/">Home</ChakraLink>
-        <ChakraLink as={ReactRouterLink}  to="/">
+      <>
+        <ChakraLink as={ReactRouterLink} to="/">
+          Home
+        </ChakraLink>
+        <ChakraLink as={ReactRouterLink} to="/">
           <Button onClick={logout}>Log Out</Button>
         </ChakraLink>
-      </div>
+      </>
     );
 
   return (
     <div>
-      <div>
+      <Flex
+        zIndex={1}
+        justify="center"
+        pos="relative"
+        position={"fixed"}
+        bg="red.500"
+        align="center"
+        width={"100%"}
+        top={0}
+        left={0}
+
+      >
         <Flex
-          zIndex={1}
-          position={"sticky"}
-          top={0}
-          bg="tan"
-          p={4}
+          position={"static"}
+          flex={1}
+          m="auto"
+          maxW={"100%"}
           align="center"
         >
-          <Flex flex={1} m="auto" maxW={800} align="center">
-            <ChakraLink as={ReactRouterLink}  to="/">
-              <Heading>Yelp</Heading>
-            </ChakraLink>
+          <ChakraLink as={ReactRouterLink} to="/">
+            <Heading>Yelp</Heading>
+          </ChakraLink>
 
-            <Box ml={"auto"}>{body}</Box>
-          </Flex>
+          <Box ml={"auto"}>{body}</Box>
         </Flex>
-      </div>
+      </Flex>
     </div>
   );
 };
