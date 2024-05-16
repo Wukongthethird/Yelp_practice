@@ -19,7 +19,9 @@ const StarVotesContainer = ({ restaurantId, rating = null }) => {
       // maybe redirect to login page
       return;
     }
+   
     const res = await yelpAPI.rating({ restaurantId, voteValue });
+    console.log("vote" , res)
     if (res.err) {
       return;
     }

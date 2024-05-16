@@ -8,8 +8,11 @@ import {
   Button,
   InputRightElement,
   InputGroup,
-  Input,
+  Input,IconButton
 } from "@chakra-ui/react";
+import { faEye } from "@fortawesome/free-regular-svg-icons";
+import { faEye as faEyeSolid } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const LoginForm = ({ login }) => {
   const [formData, setFormData] = useState({
@@ -21,6 +24,11 @@ const LoginForm = ({ login }) => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
+  const eyeIcon = show? (
+    <FontAwesomeIcon icon={faEye} />
+  ) : (
+    <FontAwesomeIcon icon={faEyeSolid} />
+  );
   /** Handle form submit:
    *
    * Calls login func prop and, if successful, redirect to /companies.
@@ -51,7 +59,7 @@ const LoginForm = ({ login }) => {
 
   return (
     <div className="LoginForm">
-      <Box mt={8} mx="auto" maxW="800px" w="100%" color="teal">
+      <Box  mt={8} mx="auto" maxW="300px" w="100% " variant="floating">
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <Input
@@ -75,21 +83,30 @@ const LoginForm = ({ login }) => {
                 value={formData.password}
                 onChange={handleChange}
               />
-              <InputRightElement>
-                <Button onClick={handleShow}> {show ? "Hide" : "Show"}</Button>
-              </InputRightElement>
+              <InputRightElement top={"50%"} transform={"translateY(-50%)"}>
+                <IconButton
+                  margin={"auto"}
+                  isRound={true}
+                  icon={eyeIcon}
+                  padding={"EdgeInsets.zero"}
+                  size={"s"}
+                  onClick={() => {
+                    handleShow();
+                  }}
+                >
+                </IconButton>
+                </InputRightElement>
             </InputGroup>
           </div>
           {formErrors ? <Alert type="danger" messages={formErrors} /> : null}
 
           <Button
-            mt={4}
-            color={"red"}
+            size={"login"}
             type="submit"
             className="btn btn-primary float-right"
             onSubmit={handleSubmit}
           >
-            Submit
+            Login
           </Button>
         </form>
       </Box>

@@ -44,11 +44,6 @@ const CommentContainer = ({ comment, restaurantId }) => {
     setToggleSeeReplies(!toggleSeeReplies);
   }
 
-  // function replyToggle(evt){
-  //   evt.preventDefault()
-  //   setToggleSeeReplies(!toggleSeeReplies)
-  // }
-  // body contingent on user context
   function editing(evt) {
     evt.preventDefault();
     setEditComment(!editComment);

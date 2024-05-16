@@ -33,6 +33,8 @@ const RestaurantDetails = () => {
     getRestaurant();
   }, []);
 
+
+
   if(!restaurant) return <LoadingSpinner/>
   return (
     <div className="Restaurant card">

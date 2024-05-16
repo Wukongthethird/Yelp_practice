@@ -4,28 +4,21 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./App.css";
 
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 
 import RoutesOrganizer from "./routes/RoutesOrganizer";
 import yelpAPI from "./api";
 import Login from "./routes/Login";
 import UserContext from "./auth/UserContext";
 import useLocalStorage from "./hooks/useLocalStorage"
+import theme from "./theme/theme"
 
 
 
 
 
 
-const colors = {
-  brand: {
-    200: "#90CDF4",
-    800: "#153e75",
-    700: "#2a69ac",
-  },
-};
 
-const theme = extendTheme({ colors });
 
 // Key name for storing token in localStorage for "remember me" re-login
 export const TOKEN_STORAGE_ID = "yelp-token";
@@ -33,6 +26,7 @@ export const TOKEN_STORAGE_ID = "yelp-token";
 
 function App() {
 
+  console.log("theme" , theme)
   //move this to future routes so I do not need to fetch user for every page logged in
     const [user, setUser] = useState({ user: {}, status: "logout" });
     const [favoriteRestaurantsById, setFavoriteRestaurantsById] = useState(new Set([]));
@@ -86,7 +80,7 @@ function App() {
   console.log("App" , user )
 
   return (
-    <ChakraProvider theme={theme}>
+    <ChakraProvider theme={theme} cssVarsRoot="body">
       <BrowserRouter>
         <UserContext.Provider value={{ ...user, logout }}>
           <RoutesOrganizer />

@@ -8,7 +8,14 @@ import {
   InputGroup,
   Button,
   InputRightElement,
+  IconButton,
+  FormControl,
+  FormLabel,
 } from "@chakra-ui/react";
+
+import { faEye } from "@fortawesome/free-regular-svg-icons";
+import { faEye as faEyeSolid } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -44,19 +51,16 @@ const SignupForm = () => {
     evt.preventDefault();
     const res = await yelpAPI.signUpUser(formData);
 
-    if(res.errors) { 
-      let msgs =[]
-      for(let msg of res.errors){
-        msgs.push(msg.msg)
+    if (res.errors) {
+      let msgs = [];
+      for (let msg of res.errors) {
+        msgs.push(msg.msg);
       }
-      setFormErrors(msgs)
+      setFormErrors(msgs);
+    } else {
+      navigate("/login");
     }
-  
-    else{
-    navigate("/login");
-    
   }
-}
 
   /** Update form data field */
   function handleChange(evt) {
@@ -68,11 +72,24 @@ const SignupForm = () => {
     setShowState(!showState);
   }
 
+  const eyeIcon1 = show1 ? (
+    <FontAwesomeIcon icon={faEye} />
+  ) : (
+    <FontAwesomeIcon icon={faEyeSolid} />
+  );
+
+  const eyeIcon2 = show2 ? (
+    <FontAwesomeIcon icon={faEye} />
+  ) : (
+    <FontAwesomeIcon icon={faEyeSolid} />
+  );
+
   return (
     <div className="SignUpForm">
-      <Box mt={8} mx="auto" maxW="800px" w="100%" color="teal">
+      <Box mt={8} mx="auto" maxW="300px" w="100% " variant="floating">
         <form onSubmit={handleSubmit}>
           <div className="form-group">
+            {/* <FormControl variant="floating" id="first-name"> */}
             <Input
               placeholder="First Name"
               type="firstName"
@@ -80,7 +97,11 @@ const SignupForm = () => {
               className="form-control"
               value={formData.firstName}
               onChange={handleChange}
+              // bg={"gray.200"}
+              // variants={'floating'}
             />
+            {/* <FormLabel>First Name</FormLabel>
+            </FormControl> */}
             <Input
               placeholder="Last Name"
               type="lastName"
@@ -101,7 +122,7 @@ const SignupForm = () => {
           <div className="form-group">
             <InputGroup>
               <Input
-                pr="4.5rem"
+                // pr="4.5rem"
                 placeholder="Password"
                 type={show1 ? "text" : "password"}
                 name="password"
@@ -109,14 +130,19 @@ const SignupForm = () => {
                 value={formData.password}
                 onChange={handleChange}
               />
-              <InputRightElement>
-                <Button
+              <InputRightElement top={"50%"} transform={"translateY(-50%)"}>
+                <IconButton
+                  margin={"auto"}
+                  isRound={true}
+                  icon={eyeIcon1}
+                  padding={"EdgeInsets.zero"}
+                  size={"s"}
                   onClick={() => {
                     handleShow(show1, setShow1);
                   }}
                 >
                   {show1 ? "Hide" : "Show"}
-                </Button>
+                </IconButton>
               </InputRightElement>
             </InputGroup>
             <InputGroup>
@@ -129,28 +155,31 @@ const SignupForm = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
               />
-              <InputRightElement>
-                <Button
+              <InputRightElement top={"50%"} transform={"translateY(-50%)"}>
+                <IconButton
+                  isRound={true}
+                  padding={"EdgeInsets.zero"}
+                  icon={eyeIcon2}
+                  size={"s"}
                   onClick={() => {
                     handleShow(show2, setShow2);
                   }}
                 >
                   {" "}
                   {show2 ? "Hide" : "Show"}
-                </Button>
+                </IconButton>
               </InputRightElement>
             </InputGroup>
           </div>
           {formErrors ? <Alert type="danger" messages={formErrors} /> : null}
 
           <Button
-            mt={4}
-            color={"red"}
+            size={"login"}
             type="submit"
             className="btn btn-primary float-right"
             onSubmit={handleSubmit}
           >
-            Submit
+            Sign up
           </Button>
         </form>
       </Box>

@@ -5,10 +5,13 @@ import { Route } from "react-router-dom";
 
 const Login = ({login}) =>{
   return (
+    <>
+
     <div className = "Login">
 
       <LoginForm login={login}/>
     </div>
+    </>
   
   ) 
 }

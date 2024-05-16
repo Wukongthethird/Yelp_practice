@@ -41,7 +41,7 @@ const StarIcon = ({
       onMouseLeave={leaveHover}
       onClick={(evt) => {
         evt.preventDefault();
-
+     
         voteFunction(restaurantId, voteValue);
       }}
     />
@@ -53,6 +53,7 @@ const StarIcon = ({
     />
   );
 
+  console.log(starIcon)
   return <>{starIcon}</>;
 };
 

@@ -5,8 +5,8 @@ const restaurantRating = async (req, res) => {
   const restaurantId = req.body["restaurantId"];
   const voteValue = +req.body["voteValue"];
 
-  if ( !(voteValue in  [1,2,3,4,5]) ){
-    return
+  if ( voteValue<0 || voteValue>5) { 
+    return;
   }
 
   // IM Going to lock out the user after they voted so this check does not need to do
