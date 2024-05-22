@@ -12,6 +12,7 @@ const RoutesOrganizer = () => {
   
 
   return (
+
     <>
       <Routes>
         <Route exact path="/" element={<Home />} />
@@ -21,9 +22,9 @@ const RoutesOrganizer = () => {
           element={<Restaurantsdetailpage />}
         />
         {/* <Route exact path="/restaurants/:id/update" element={<Update />} /> */}
+        <Route exact path="/login" element={<Login/>} />
         <Route exact path="/create_restaurant" element={<AddNewRestaurant />} />
         <Route exact path="/signup" element={<SignUp />} />
-    
       </Routes>
     </>
   );

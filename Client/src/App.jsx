@@ -63,31 +63,14 @@ function App() {
     setUser({ user: {}, status: "logout" });
   }
 
-  // async function favoriting( restaurantId){
-  //   console.log("this should trigger")
-  //   const res = await yelpAPI.favoriting({ restaurantId})
-  //   if(res.msg === "Favorited"){
-  //     setFavoriteRestaurantsById(new Set([...favoriteRestaurantsById, +restaurantId]));
-  //   }
-  //   if(res.msg ==="Unfavorited"){
-  //     let temp = new Set(favoriteRestaurantsById)
-  //     temp.delete(+restaurantId)
-  //     setFavoriteRestaurantsById(new Set([...temp]))
-  //   }
 
-  // }
-
-  console.log("App" , user )
 
   return (
     <ChakraProvider theme={theme} cssVarsRoot="body">
       <BrowserRouter>
-        <UserContext.Provider value={{ ...user, logout }}>
-
+        <UserContext.Provider value={{ ...user, logout , login}}>
           <RoutesOrganizer />
-          <Routes>
-            <Route exact path="/login" element={<Login login={login} />} />
-          </Routes>
+          <Navbar/>
         </UserContext.Provider>
       </BrowserRouter>
     </ChakraProvider>

@@ -5,10 +5,17 @@ import RestaurantList from "../components/restaurants/RestaurantsList";
 import SearchForm from "../components/forms/SearchForm";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
+import Carousel from "../components/Carousel";
+import { Image, VStack, Box } from "@chakra-ui/react";
 
 const Home = () => {
   const [restaurants, setRestaurants] = useState(null);
-
+  const images = [
+    "/pexels-adrienn-638530-1537635.jpg",
+    "/pexels-asadphoto-1449773.jpg",
+    "/pexels-pixabay-460537.jpg",
+    "/pexels-pixabay-262978.jpg",
+  ];
   useEffect(function getAllRestaurantsOnMount() {
     console.debug("restaurants useEffect getallrestauranrs");
     getAllrestaurants();
@@ -22,10 +29,12 @@ const Home = () => {
   if (!restaurants) return <LoadingSpinner />;
 
   return (
-    <div>
-      <Navbar />
-      <RestaurantList />
-    </div>
+    <>
+      <Box maxW={"75rem"}  margin={" 0 auto"}>
+        <Carousel data={images} />
+      </Box>
+      {/* <RestaurantList /> */}
+    </>
   );
 };
 

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import yelpAPI from "../../api";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
-import { Button, Link as ChakraLink } from "@chakra-ui/react";
+import { Button, Link as ChakraLink, Flex } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from 'react-router-dom'
 import FavoriteButton  from "../favorites/FavoriteButton";
 import PriceIconContainer from "../priceReview/PriceIconContainer";
@@ -12,6 +12,7 @@ import StarRatingContainer from "../starRating/StarRatingContainer";
 import StarVotesContainer from "../starRating/StarVotesContainer";
 import CommentForm from "../forms/CommentForm";
 import CommentContainerList from "../comments/CommentContainerList"
+import { Navbar } from "../Navbar";
 /**
  * 
  * SOMEHOw add reviews and like functionality
@@ -37,9 +38,9 @@ const RestaurantDetails = () => {
 
   if(!restaurant) return <LoadingSpinner/>
   return (
-    <div className="Restaurant card">
+    <>
+    <Flex top={0}>
       <div className="card-body">
-        <ChakraLink as={ReactRouterLink} to="/">press here</ChakraLink>
        {/* {user.id ? <FavoriteButton userId={user.id} restaurantId={id} isFavorited={isFavorited}/>: null }  */}
        <FavoriteButton  restaurantId={id} isFavorited={restaurant.user? restaurant.user.favorited : false} isLoggedin={restaurant.user}/>
        {/*only renders total User Population votes*/ }
@@ -52,7 +53,8 @@ const RestaurantDetails = () => {
       <CommentForm restaurantId={id}/>
       <CommentContainerList comments={restaurant.generalUsers.allParentComments } restaurantId={id}/>
   
-    </div>
+    </Flex>
+    </>
   );
 };
 

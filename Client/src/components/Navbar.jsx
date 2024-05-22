@@ -36,23 +36,25 @@ export const Navbar = () => {
           Home
         </ChakraLink>
         <ChakraLink as={ReactRouterLink} to="/">
-          <Button onClick={logout}>Log Out</Button>
+          <Button onClick={logout} variant="link">Log Out</Button>
         </ChakraLink>
       </>
     );
 
   return (
-    <div>
+   
       <Flex
+
         zIndex={1}
         justify="center"
-        pos="relative"
+        // pos="relative"
         position={"fixed"}
-        bg="red.500"
-        align="center"
+        bg="red.400"
+        // align="center"
         width={"100%"}
         top={0}
         left={0}
+        bot={0}
 
       >
         <Flex
@@ -63,12 +65,12 @@ export const Navbar = () => {
           align="center"
         >
           <ChakraLink as={ReactRouterLink} to="/">
-            <Heading>Yelp</Heading>
+            < Heading >Yelp</Heading>
           </ChakraLink>
 
           <Box ml={"auto"}>{body}</Box>
         </Flex>
       </Flex>
-    </div>
+ 
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Alert from "../Alert";
 import yelpAPI from "../../api";
 import { useNavigate } from "react-router-dom";
@@ -13,8 +13,13 @@ import {
 import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { faEye as faEyeSolid } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import UserContext from "../../auth/UserContext";
 
-const LoginForm = ({ login }) => {
+
+const LoginForm = () => {
+  const user = useContext(UserContext);
+  const login = user.login
+  
   const [formData, setFormData] = useState({
     email: "",
     password: "",
