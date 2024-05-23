@@ -41,6 +41,8 @@ const restaurantRating = require("./routes/restaurants/restaurantRating");
 const commentOrReply = require("./routes/comments/commentOrReply");
 const seeReplies = require("./routes/comments/seeReplies");
 const editComment = require("./routes/comments/editComment");
+const getNewRestaraunts = require("./routes/restaurants/getNewRestaraunts");
+
 
 
 /**secrets */
@@ -95,6 +97,12 @@ app.get(
   getRestaurantIdSchema,
   validateSchema,
   getRestaurantById
+);
+
+//get new restaurants
+app.post(
+  "/api/v1/newrestaurant",
+  getNewRestaraunts
 );
 
 //create a reastaruant

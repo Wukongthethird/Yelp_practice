@@ -9,17 +9,17 @@ comment section
 edit delete comment
 fake data
 
+newest restaurant api limit offset pagination front end new container for this stuff.
+
 
 
 carasel -> do it by finding at least 4 stars randomized 7-10 restaurant 
 
-some front end stuff
 
 
 
 commenting on restaurant watch vudeo soon
 
-make navbar its own thing dont shrink or grow base on restarants size
 
 
 do this later no really required
@@ -31,7 +31,6 @@ keywords?
 carasel -> do it by finding at least 4 stars randomized 7-10 restaurant 
 
 
-color button popout
 
 hottest what's new restaraunts
 

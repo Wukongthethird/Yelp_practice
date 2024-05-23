@@ -330,3 +330,35 @@ insert into restaurants (restaurants_name, address_location, city, zipcode, abou
 insert into restaurants (restaurants_name, address_location, city, zipcode, about) values ('REMEDYREPACK INC.', '633 Ruskin Lane', 'Venda do Alcaide', 35908, 'Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.
 
 Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.');
+
+
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Music', '75492 Prairieview Hill', 'Créteil', 48475);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Tools', '433 Russell Parkway', 'Brejoeira', 19437);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Games', '864 Schurz Court', 'Sumuran', 32165);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Baby', '50 Susan Terrace', 'Guxi', 65784);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Kids', '870 6th Plaza', 'Carbajales', 36008);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Jewelry', '96989 Doe Crossing Alley', 'Burns Lake', 15999);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Jewelry', '08976 Crest Line Drive', 'Bajingzi', 22491);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Outdoors', '02 Garrison Crossing', 'Cibatu', 11059);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Automotive', '1 Forest Run Parkway', 'Dengzhuang', 99961);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Kids', '0939 North Park', 'Arıqıran', 92547);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Kids', '3 Village Avenue', 'Plessisville', 97983);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Movies', '1 Pond Circle', 'Jammāl', 12883);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Movies', '17 High Crossing Trail', 'Pau', 15815);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Electronics', '93691 Amoth Center', 'Ignalina', 54751);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Electronics', '365 Redwing Drive', 'Shiogama', 91972);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Books', '155 Harper Pass', 'Sila', 20375);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Books', '265 Banding Point', 'Donghai', 91928);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Industrial', '2285 Ridge Oak Trail', 'Gar', 86225);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Shoes', '83 Maywood Way', 'Tanjungpati', 42889);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Industrial', '09 Dwight Lane', 'Shahumyan', 46799);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Outdoors', '70451 Sachs Hill', 'Stockholm', 36786);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Movies', '2 Reinke Parkway', 'Ucluelet', 34779);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Movies', '403 Ryan Lane', 'Kedungbanteng Krajan', 40605);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Sports', '7 Morning Plaza', 'Telengsari', 28241);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Baby', '49589 Gulseth Crossing', 'Candoni', 77242);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Books', '35930 Bellgrove Road', 'Werota', 14464);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Clothing', '139 Sutherland Trail', 'Laojie', 33132);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Industrial', '36685 Declaration Crossing', 'Longlou', 91644);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Games', '2303 Kim Court', 'Yongfu', 92044);
+insert into restaurants (restaurants_name, address_location, city, zipcode) values ('Home', '25 Hoffman Center', 'Photharam', 60079);

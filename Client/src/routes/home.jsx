@@ -33,7 +33,7 @@ const Home = () => {
       <Box maxW={"75rem"}  margin={" 0 auto"}>
         <Carousel data={images} />
       </Box>
-      {/* <RestaurantList /> */}
+      <RestaurantList />
     </>
   );
 };

@@ -3,7 +3,7 @@ import yelpAPI from "../../api";
 import LoadingSpinner from "../LoadingSpinner";
 import SearchForm from "../forms/SearchForm";
 import RestaurantCardList from "./RestaurantCardList";
-import { SimpleGrid, Container } from "@chakra-ui/react";
+import { SimpleGrid, Container, Box } from "@chakra-ui/react";
 
 /**
  * on mount should load list of restaraunts
@@ -29,14 +29,14 @@ const RestaurantList = () => {
   if (!restaurants) return <LoadingSpinner />;
 
   return (
-    < >
+    < Box marginTop={0}>
       <SearchForm searchFor={search} />
       {restaurants[0] !== null ? (
         <RestaurantCardList restaurants={restaurants} />
       ) : (
         <p className="lead">Sorry, no results were found!</p>
       )}
-    </>
+    </Box>
   );
 };
 

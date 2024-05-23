@@ -20,6 +20,7 @@ import {
   AspectRatio,
   HStack,
   keyframes,
+  IconButton,
   Fade, ScaleFade, Slide, SlideFade, Collapse
 } from "@chakra-ui/react";
 
@@ -28,6 +29,7 @@ import {
   faChevronRight,
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
+import { right } from "@popperjs/core";
 
 const Carousel = ({ data }) => {
   const [position, setPosition] = useState(0);
@@ -82,7 +84,8 @@ const Carousel = ({ data }) => {
     return () => clearInterval(slideInterval);
   }, [position]);
 
-  console.log("running", position)
+  const leftArrow =  <FontAwesomeIcon  text-shadow="0 0 3px #000" all={"unset"} display={'block'} position={"absolute"} icon={faChevronLeft} onClick={prevSlide}/>
+  const rightArrow =  <FontAwesomeIcon   text-shadow="0 0 3px #000" all={"unset"} display={'block'} position={"absolute"} icon={faChevronRight} onClick={prevSlide}/>
   return (
     <>
       <Flex
@@ -99,27 +102,26 @@ const Carousel = ({ data }) => {
           overflow={"hidden"}
           flexShrink={0}
           flexGrow={0}
-          // transition={"translate 300ms ease-in-out"}
-          // _before={{
-          //   bgGradient: "linear(to-r, base.d400, transparent)",
-          //   position: "absolute",
-          //   // w: `${gap / 2}px`,
-          //   content: "''",
-          //   zIndex: 1,
-          //   h: "100%",
-          //   left: 0,
-          //   top: 0
-          // }}
-          // _after={{
-          //   bgGradient: "linear(to-l, base.d400, transparent)",
-          //   position: "absolute",
-          //   // w: `${gap / 2}px`,
-          //   content: "''",
-          //   zIndex: 1,
-          //   h: "100%",
-          //   right: 0,
-          //   top: 0
-          // }}
+          _before={{
+            bgGradient: "linear(to-r, base.d400, transparent)",
+            position: "absolute",
+            // w: `${gap / 2}px`,
+            content: "''",
+            zIndex: 1,
+            h: "100%",
+            left: 0,
+            top: 0
+          }}
+          _after={{
+            bgGradient: "linear(to-l, base.d400, transparent)",
+            position: "absolute",
+            // w: `${gap / 2}px`,
+            content: "''",
+            zIndex: 1,
+            h: "100%",
+            right: 0,
+            top: 0
+          }}
         >
           {data.map((val, ind) => {
             return (
@@ -132,7 +134,7 @@ const Carousel = ({ data }) => {
                 height={"100%"}
                 flexShrink={0}
                 flexGrow={0}
-                transition={"translate 500ms ease-in-out"}
+                transition={"translate 1000ms ease-in-out"}
               />
             );
           })}
@@ -149,11 +151,11 @@ const Carousel = ({ data }) => {
               
             /> */}
         </Box>
+        <IconButton  text-shadow="0 0 3px #000" icon={leftArrow} outline={"white"} all={"unset"} display={'block'} position={"absolute"}variant='ghost' top={"50%"} transform={"translateY(-50%)"} left={0} onClick={prevSlide} zIndex={50}/>
+        <IconButton  text-shadow="0 0 3px #000" icon={rightArrow} outline={"white"}  all={"unset"} display={'block'} position={"absolute"}variant='ghost' top={"50%"} transform={"translateY(-50%)"} right={0} onClick={nextSlide} zIndex={50}/>
+
       </Flex>
-      <Box>
-        <FontAwesomeIcon icon={faChevronLeft} onClick={prevSlide} />
-        <FontAwesomeIcon icon={faChevronRight} onClick={nextSlide} />
-      </Box>
+      
     </>
   );
 };

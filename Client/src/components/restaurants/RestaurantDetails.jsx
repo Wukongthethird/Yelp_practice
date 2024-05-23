@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import yelpAPI from "../../api";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
-import { Button, Link as ChakraLink, Flex } from "@chakra-ui/react";
+import { Box, Button, Link as ChakraLink, Flex } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from 'react-router-dom'
 import FavoriteButton  from "../favorites/FavoriteButton";
 import PriceIconContainer from "../priceReview/PriceIconContainer";
@@ -39,7 +39,7 @@ const RestaurantDetails = () => {
   if(!restaurant) return <LoadingSpinner/>
   return (
     <>
-    <Flex top={0}>
+    <Box top={0}>
       <div className="card-body">
        {/* {user.id ? <FavoriteButton userId={user.id} restaurantId={id} isFavorited={isFavorited}/>: null }  */}
        <FavoriteButton  restaurantId={id} isFavorited={restaurant.user? restaurant.user.favorited : false} isLoggedin={restaurant.user}/>
@@ -53,7 +53,7 @@ const RestaurantDetails = () => {
       <CommentForm restaurantId={id}/>
       <CommentContainerList comments={restaurant.generalUsers.allParentComments } restaurantId={id}/>
   
-    </Flex>
+    </Box>
     </>
   );
 };
