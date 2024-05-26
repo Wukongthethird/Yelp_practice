@@ -3,7 +3,7 @@ import yelpAPI from "../../api";
 import LoadingSpinner from "../LoadingSpinner";
 import SearchForm from "../forms/SearchForm";
 import RestaurantCardList from "./RestaurantCardList";
-import { SimpleGrid, Container, Box } from "@chakra-ui/react";
+import { SimpleGrid, Container, Box, Button } from "@chakra-ui/react";
 
 /**
  * on mount should load list of restaraunts
@@ -13,29 +13,66 @@ import { SimpleGrid, Container, Box } from "@chakra-ui/react";
  * /routed at homes for now
  */
 const RestaurantList = () => {
-  const [restaurants, setRestaurants] = useState(null);
+  const [restaurants, setRestaurants] = useState([]);
+  const [hasMore, setHasMore] = useState(false);
+  const [variables, setVariables] = useState({
+    limit: 15,
+    cursor: null,
+  });
 
   useEffect(function getAllRestaurantsOnMount() {
-    console.debug("RestaurantsList useEffect getAllRestaurantsOnMount");
-    search();
+    handleOnClickPosts(variables);
   }, []);
+
+  async function handleOnClickPosts(variables) {
+    let results = await yelpAPI.getNewRestaurants(variables);
+    setRestaurants([...restaurants, ...results.restaurants]);
+    setHasMore(results.hasMore);
+
+    if (restaurants.length) {
+      setVariables({
+        ...variables,
+        cursor: restaurants[restaurants.length - 1].id,
+      });
+    }
+  }
 
   /** Triggered by search form submit; reloads restaurants. */
   async function search(restaurantsName) {
+    if (!restaurantsName) {
+      setVariables({
+        limit: 15,
+        cursor: null,
+      });
+      return handleOnClickPosts(variables);
+    }
     let restaurants = await yelpAPI.getAllRestaurants(restaurantsName);
     setRestaurants(restaurants);
+    setHasMore(false);
   }
 
-  if (!restaurants) return <LoadingSpinner />;
+  if (!restaurants.length) return <LoadingSpinner />;
 
   return (
-    < Box marginTop={0}>
+    <Box marginTop={0}>
       <SearchForm searchFor={search} />
       {restaurants[0] !== null ? (
         <RestaurantCardList restaurants={restaurants} />
       ) : (
         <p className="lead">Sorry, no results were found!</p>
       )}
+
+      {hasMore ? (
+        <Button
+          marginTop={"25px"}
+          onClick={(evt) => {
+            evt.preventDefault();
+            handleOnClickPosts(variables);
+          }}
+        >
+          Load More
+        </Button>
+      ) : null}
     </Box>
   );
 };

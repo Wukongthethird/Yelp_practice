@@ -28,8 +28,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
   faChevronLeft,
+  
 } from "@fortawesome/free-solid-svg-icons";
-import { right } from "@popperjs/core";
+import {} from 'font-awesome-animation/css/font-awesome-animation.min.css'
+
 
 const Carousel = ({ data }) => {
   const [position, setPosition] = useState(0);
@@ -84,7 +86,7 @@ const Carousel = ({ data }) => {
     return () => clearInterval(slideInterval);
   }, [position]);
 
-  const leftArrow =  <FontAwesomeIcon  text-shadow="0 0 3px #000" all={"unset"} display={'block'} position={"absolute"} icon={faChevronLeft} onClick={prevSlide}/>
+  const leftArrow =  <FontAwesomeIcon  text-shadow="-1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000" all={"unset"} display={'block'} position={"absolute"} icon={faChevronLeft} onClick={prevSlide}/>
   const rightArrow =  <FontAwesomeIcon   text-shadow="0 0 3px #000" all={"unset"} display={'block'} position={"absolute"} icon={faChevronRight} onClick={prevSlide}/>
   return (
     <>
@@ -102,6 +104,7 @@ const Carousel = ({ data }) => {
           overflow={"hidden"}
           flexShrink={0}
           flexGrow={0}
+          aspectRatio={10/4}
           _before={{
             bgGradient: "linear(to-r, base.d400, transparent)",
             position: "absolute",
@@ -151,9 +154,9 @@ const Carousel = ({ data }) => {
               
             /> */}
         </Box>
-        <IconButton  text-shadow="0 0 3px #000" icon={leftArrow} outline={"white"} all={"unset"} display={'block'} position={"absolute"}variant='ghost' top={"50%"} transform={"translateY(-50%)"} left={0} onClick={prevSlide} zIndex={50}/>
+        <IconButton  text-shadow="0 0 3px #000" icon={leftArrow} outline={"white"} all={"unset"} display={'block'} position={"absolute"} variant='ghost' top={"50%"} transform={"translateY(-50%)"} left={0}  onClick={prevSlide} zIndex={50}/>
         <IconButton  text-shadow="0 0 3px #000" icon={rightArrow} outline={"white"}  all={"unset"} display={'block'} position={"absolute"}variant='ghost' top={"50%"} transform={"translateY(-50%)"} right={0} onClick={nextSlide} zIndex={50}/>
-
+    
       </Flex>
       
     </>

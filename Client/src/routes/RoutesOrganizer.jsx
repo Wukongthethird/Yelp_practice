@@ -8,13 +8,16 @@ import SignUp from "./SignUp";
 import Login from "./Login";
 import{useContext} from 'react'
 import UserContext from "../auth/UserContext";
+import ErrorPage from "./ErrorPage";
+
+
 const RoutesOrganizer = () => {
   
 
   return (
 
     <>
-      <Routes>
+      <Routes >
         <Route exact path="/" element={<Home />} />
         <Route
           exact
@@ -25,6 +28,7 @@ const RoutesOrganizer = () => {
         <Route exact path="/login" element={<Login/>} />
         <Route exact path="/create_restaurant" element={<AddNewRestaurant />} />
         <Route exact path="/signup" element={<SignUp />} />
+        <Route path="*" element={<ErrorPage />}/>
       </Routes>
     </>
   );

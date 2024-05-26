@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import Carousel from "../components/Carousel";
 import { Image, VStack, Box } from "@chakra-ui/react";
+import NewRestaurant from "../components/restaurants/NewRestaurant"
 
 const Home = () => {
   const [restaurants, setRestaurants] = useState(null);
@@ -16,24 +17,25 @@ const Home = () => {
     "/pexels-pixabay-460537.jpg",
     "/pexels-pixabay-262978.jpg",
   ];
-  useEffect(function getAllRestaurantsOnMount() {
-    console.debug("restaurants useEffect getallrestauranrs");
-    getAllrestaurants();
-  }, []);
+  // useEffect(function getAllRestaurantsOnMount() {
+  //   console.debug("restaurants useEffect getallrestauranrs");
+  //   getAllrestaurants();
+  // }, []);
 
-  async function getAllrestaurants() {
-    let restaurants = await yelpAPI.getAllRestaurants();
-    setRestaurants(restaurants);
-  }
+  // async function getAllrestaurants() {
+  //   let restaurants = await yelpAPI.getAllRestaurants();
+  //   setRestaurants(restaurants);
+  // }
 
-  if (!restaurants) return <LoadingSpinner />;
+  // if (!restaurants) return <LoadingSpinner />;
 
   return (
     <>
-      <Box maxW={"75rem"}  margin={" 0 auto"}>
+      <Box maxW={"75rem"} margin={" 0 auto"}>
         <Carousel data={images} />
       </Box>
       <RestaurantList />
+      {/* <NewRestaurant/> */}
     </>
   );
 };

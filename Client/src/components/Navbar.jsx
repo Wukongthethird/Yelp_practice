@@ -45,7 +45,7 @@ export const Navbar = () => {
    
       <Flex
 
-        zIndex={1}
+        zIndex={999}
         justify="center"
         // pos="relative"
         position={"fixed"}
@@ -55,6 +55,7 @@ export const Navbar = () => {
         top={0}
         left={0}
         bot={0}
+        
 
       >
         <Flex

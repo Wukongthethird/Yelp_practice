@@ -8,8 +8,9 @@ restaurants detail page itself
 comment section
 edit delete comment
 fake data
-
-newest restaurant api limit offset pagination front end new container for this stuff.
+button animation and outline
+paginattion for main page endless scrolling
+newest restaurant api limit offset pagination   front end new container for this stuff.
 
 
 

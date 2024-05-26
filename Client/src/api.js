@@ -63,6 +63,12 @@ class yelpAPI {
     return res;
   }
 
+  static async getNewRestaurants(data) {
+    let res = await this.request("api/v1/newrestaurant", data, "post");
+    console.log("getnew",res)
+    return res;
+  }
+
   /** adds new restaurant based on form data */
   static async addNewRestaurant(data) {
     let res = await this.request("api/v1/create_restaurant", data, "post");

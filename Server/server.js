@@ -66,6 +66,7 @@ app.use(session(sessionConfig));
 const passport = require("passport");
 const initializePassport = require("./passportconfig");
 const { restart } = require("nodemon");
+const getAllRestarauntsByPagination = require("./routes/restaurants/getAllRestarauntsByPagination");
 
 initializePassport(passport);
 app.use(passport.initialize());
@@ -102,7 +103,7 @@ app.get(
 //get new restaurants
 app.post(
   "/api/v1/newrestaurant",
-  getNewRestaraunts
+  getAllRestarauntsByPagination
 );
 
 //create a reastaruant

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-import { Flex, Box , Input, FormControl , Button,} from "@chakra-ui/react";
+import { Flex, Box, Input, FormControl, Button } from "@chakra-ui/react";
 /** Search widget.
  *
  * Appears on RestaurantsList so it can be filtered
@@ -15,32 +15,24 @@ import { Flex, Box , Input, FormControl , Button,} from "@chakra-ui/react";
  */
 
 const SearchForm = ({ searchFor }) => {
-
   const [searchTerm, setSearchTerm] = useState("");
 
   /** Tell parent to filter */
   function handleSubmit(evt) {
-    // take care of accidentally trying to search for just spaces
     evt.preventDefault();
-    // if (evt.key == "Enter"){
-    //   searchFor(searchTerm.trim() || undefined);
-    //   setSearchTerm(searchTerm.trim()); 
-    // }
     searchFor(searchTerm.trim() || undefined);
     setSearchTerm(searchTerm.trim());
   }
 
-
   /** Update form fields */
   function handleChange(evt) {
-    evt.preventDefault()
+    evt.preventDefault();
     setSearchTerm(evt.target.value);
-  } 
+  }
 
   return (
-    <Box className="SearchForm mb-4" marginTop={4} width ={""}>
-      <form className="form-inline" onSubmit={handleSubmit}  >
-      {/* <FormControl className="form-inline" onSubmit={handleSubmit}> */}
+    <Box className="SearchForm mb-4" marginTop={4} width={""}>
+      <form className="form-inline" onSubmit={handleSubmit}>
         <Input
           className="form-control form-control-lg flex-grow-1"
           name="searchTerm"
@@ -48,9 +40,8 @@ const SearchForm = ({ searchFor }) => {
           value={searchTerm}
           onChange={handleChange}
         />
-      {/* </FormControl > */}
       </form>
-     </Box  >
+    </Box>
   );
 };
 
