@@ -1,16 +1,25 @@
 import React from "react";
 import SignupForm from "../components/forms/SignUpForm";
 import { Route } from "react-router-dom";
-import { Heading } from "@chakra-ui/react";
+import { Heading , Flex, Center} from "@chakra-ui/react";
 
 const SignUp = () =>{
   return (
-    <div>
-    <Heading >Sign Up</Heading>
-    <div className = "SignUp">
+  
+    <Flex
+    width={"100vw"}
+    height={"100vh"}
+    alignContent={"center"}
+    justifyContent={"center"}
+  >
+      
+    <Center>
+
+
       <SignupForm/>
-    </div>
-    </div>
+      </Center>
+    </Flex>
+  
   )
 }
 

@@ -51,8 +51,6 @@ const RestaurantList = () => {
     setHasMore(false);
   }
 
-  if (!restaurants.length) return <LoadingSpinner />;
-
   return (
     <Box marginTop={0} mx={"auto"} marginBottom={"5rem"}>
       <SearchForm searchFor={search} />

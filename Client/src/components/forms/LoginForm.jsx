@@ -63,8 +63,8 @@ const LoginForm = () => {
   }
 
   return (
-    <div className="LoginForm">
-      <Box  mt={8} mx="auto" maxW="300px" w="100% " variant="floating">
+
+      <Box   maxW="300px" >
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <Input
@@ -115,7 +115,7 @@ const LoginForm = () => {
           </Button>
         </form>
       </Box>
-    </div>
+
   );
 };
 

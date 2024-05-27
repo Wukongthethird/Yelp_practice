@@ -28,7 +28,7 @@ const RoutesOrganizer = () => {
         <Route exact path="/login" element={<Login/>} />
         <Route exact path="/create_restaurant" element={<AddNewRestaurant />} />
         <Route exact path="/signup" element={<SignUp />} />
-        <Route path="*" element={<ErrorPage />}/>
+        {/* <Route path="*" element={<ErrorPage />}/> */}
       </Routes>
     </>
   );
