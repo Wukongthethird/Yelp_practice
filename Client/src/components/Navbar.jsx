@@ -23,7 +23,7 @@ export const Navbar = () => {
     // user.user.status == "logout" &&
     Object.keys(user.user).length === 0 ? (
       <>
-        <ChakraLink as={ReactRouterLink} to="/login">
+        <ChakraLink mx="5px" as={ReactRouterLink} to="/login">
           Login
         </ChakraLink>
         <ChakraLink as={ReactRouterLink} to="/signup">

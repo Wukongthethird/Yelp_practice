@@ -4,7 +4,7 @@ ALEX
 layout for main page
 restaurants detail page itself
 
-
+hover over like button function
 comment section
 edit delete comment
 fake data

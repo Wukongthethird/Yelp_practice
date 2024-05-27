@@ -65,7 +65,6 @@ class yelpAPI {
 
   static async getNewRestaurants(data) {
     let res = await this.request("api/v1/newrestaurant", data, "post");
-    console.log("getnew",res)
     return res;
   }
 

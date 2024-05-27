@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import Carousel from "../components/Carousel";
 import { Image, VStack, Box } from "@chakra-ui/react";
-import NewRestaurant from "../components/restaurants/NewRestaurant"
+import NewRestaurant from "../components/restaurants/NewRestaurant";
 
 const Home = () => {
   const [restaurants, setRestaurants] = useState(null);
@@ -31,10 +31,11 @@ const Home = () => {
 
   return (
     <>
-      <Box maxW={"75rem"} margin={" 0 auto"}>
-        <Carousel data={images} />
+      <Carousel data={images} />
+      <Box maxW={"75rem"} margin={"0 auto"}>
+        <RestaurantList />
       </Box>
-      <RestaurantList />
+
       {/* <NewRestaurant/> */}
     </>
   );

@@ -53,7 +53,7 @@ const StarIcon = ({
     />
   );
 
-  console.log(starIcon)
+
   return <>{starIcon}</>;
 };
 

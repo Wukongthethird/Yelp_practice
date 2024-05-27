@@ -8,10 +8,6 @@ import {
 } from "react";
 
 import {
-  // useMediaQuery,
-  // useTheme,
-  // Progress,
-  // VStack,
   Button,
   Flex,
   Box,
@@ -21,17 +17,19 @@ import {
   HStack,
   keyframes,
   IconButton,
-  Fade, ScaleFade, Slide, SlideFade, Collapse
+  Fade,
+  ScaleFade,
+  Slide,
+  SlideFade,
+  Collapse,
 } from "@chakra-ui/react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
   faChevronLeft,
-  
 } from "@fortawesome/free-solid-svg-icons";
-import {} from 'font-awesome-animation/css/font-awesome-animation.min.css'
-
+import {} from "font-awesome-animation/css/font-awesome-animation.min.css";
 
 const Carousel = ({ data }) => {
   const [position, setPosition] = useState(0);
@@ -39,19 +37,7 @@ const Carousel = ({ data }) => {
 
   const autoNext = true;
   let slideInterval;
-  let intervalTime = 5000;
-
-  const containerStyle = {
-    // width: `100%`,
-    height: "100%",
-    position: "relative",
-    overflow: "hidden",
-  };
-  const sliderStyle = {
-    position: "relative",
-    overflow: "hidden",
-    objectFit: "cover",
-  };
+  const intervalTime = 5000;
 
   const imageStyle = {
     objectFit: "cover",
@@ -61,16 +47,11 @@ const Carousel = ({ data }) => {
     flexShrink: 0,
     flexGrow: 0,
     translate: `${-100 * position}%`,
-  
   };
-
-
 
   //button onclick
   const nextSlide = () => {
-
     setPosition(position === slideLength - 1 ? 0 : position + 1);
-
   };
   const prevSlide = () => {
     setPosition(position === 0 ? slideLength - 1 : position - 1);
@@ -86,8 +67,26 @@ const Carousel = ({ data }) => {
     return () => clearInterval(slideInterval);
   }, [position]);
 
-  const leftArrow =  <FontAwesomeIcon  text-shadow="-1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000" all={"unset"} display={'block'} position={"absolute"} icon={faChevronLeft} onClick={prevSlide}/>
-  const rightArrow =  <FontAwesomeIcon   text-shadow="0 0 3px #000" all={"unset"} display={'block'} position={"absolute"} icon={faChevronRight} onClick={prevSlide}/>
+  const leftArrow = (
+    <FontAwesomeIcon
+      text-shadow="-1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000"
+      all={"unset"}
+      display={"block"}
+      position={"absolute"}
+      icon={faChevronLeft}
+      onClick={prevSlide}
+    />
+  );
+  const rightArrow = (
+    <FontAwesomeIcon
+      text-shadow="0 0 3px #000"
+      all={"unset"}
+      display={"block"}
+      position={"absolute"}
+      icon={faChevronRight}
+      onClick={prevSlide}
+    />
+  );
   return (
     <>
       <Flex
@@ -95,7 +94,6 @@ const Carousel = ({ data }) => {
         height="100%"
         position={"relative"}
         objectFit={"cover"}
-   
       >
         <Box
           width={`100%`}
@@ -104,26 +102,26 @@ const Carousel = ({ data }) => {
           overflow={"hidden"}
           flexShrink={0}
           flexGrow={0}
-          aspectRatio={10/4}
+          aspectRatio={10 / 4}
           _before={{
             bgGradient: "linear(to-r, base.d400, transparent)",
             position: "absolute",
-            // w: `${gap / 2}px`,
+
             content: "''",
             zIndex: 1,
             h: "100%",
             left: 0,
-            top: 0
+            top: 0,
           }}
           _after={{
             bgGradient: "linear(to-l, base.d400, transparent)",
             position: "absolute",
-            // w: `${gap / 2}px`,
+
             content: "''",
             zIndex: 1,
             h: "100%",
             right: 0,
-            top: 0
+            top: 0,
           }}
         >
           {data.map((val, ind) => {
@@ -141,24 +139,36 @@ const Carousel = ({ data }) => {
               />
             );
           })}
-          {/* <Image
-             
-              src={data[position]}
-              alt="error"
-             
-              style={imageStyle}
-              width={"100%"}
-              height={"100%"}
-              flexShrink={0}
-              flexGrow={0}
-              
-            /> */}
         </Box>
-        <IconButton  text-shadow="0 0 3px #000" icon={leftArrow} outline={"white"} all={"unset"} display={'block'} position={"absolute"} variant='ghost' top={"50%"} transform={"translateY(-50%)"} left={0}  onClick={prevSlide} zIndex={50}/>
-        <IconButton  text-shadow="0 0 3px #000" icon={rightArrow} outline={"white"}  all={"unset"} display={'block'} position={"absolute"}variant='ghost' top={"50%"} transform={"translateY(-50%)"} right={0} onClick={nextSlide} zIndex={50}/>
-    
+        <IconButton
+          text-shadow="0 0 3px #000"
+          icon={leftArrow}
+          outline={"white"}
+          all={"unset"}
+          display={"block"}
+          position={"absolute"}
+          variant="ghost"
+          top={"50%"}
+          transform={"translateY(-50%)"}
+          left={0}
+          onClick={prevSlide}
+          zIndex={50}
+        />
+        <IconButton
+          text-shadow="0 0 3px #000"
+          icon={rightArrow}
+          outline={"white"}
+          all={"unset"}
+          display={"block"}
+          position={"absolute"}
+          variant="ghost"
+          top={"50%"}
+          transform={"translateY(-50%)"}
+          right={0}
+          onClick={nextSlide}
+          zIndex={50}
+        />
       </Flex>
-      
     </>
   );
 };

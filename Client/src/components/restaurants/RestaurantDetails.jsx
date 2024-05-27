@@ -12,7 +12,7 @@ import StarRatingContainer from "../starRating/StarRatingContainer";
 import StarVotesContainer from "../starRating/StarVotesContainer";
 import CommentForm from "../forms/CommentForm";
 import CommentContainerList from "../comments/CommentContainerList"
-import { Navbar } from "../Navbar";
+import RestaurantsDetailsBanner from "./RestaurantDetailsBanner";
 /**
  * 
  * SOMEHOw add reviews and like functionality
@@ -27,6 +27,12 @@ const RestaurantDetails = () => {
 
   const [restaurant, setRestaurant] = useState(null);
 
+  const images = [
+    "/pexels-pixabay-262978.jpg",
+    "/pexels-igor-starkov-233202-914388.jpg",
+    "/pexels-elevate-1267696.jpg"
+  ]
+
   useEffect(function getRestaurantByID() {
     async function getRestaurant() {
       setRestaurant(await yelpAPI.getRestaurantByID(id));
@@ -34,13 +40,14 @@ const RestaurantDetails = () => {
     getRestaurant();
   }, []);
 
-
+  console.log("Rest",restaurant)
 
   if(!restaurant) return <LoadingSpinner/>
   return (
     <>
-    <Box top={0}>
-      <div className="card-body">
+    <RestaurantsDetailsBanner restaurant={restaurant} images = {images}/>
+    <Box top={0} width={"100%"}>
+   
        {/* {user.id ? <FavoriteButton userId={user.id} restaurantId={id} isFavorited={isFavorited}/>: null }  */}
        <FavoriteButton  restaurantId={id} isFavorited={restaurant.user? restaurant.user.favorited : false} isLoggedin={restaurant.user}/>
        {/*only renders total User Population votes*/ }
@@ -49,7 +56,7 @@ const RestaurantDetails = () => {
       {/**terneary the bottom thing ig is no user allows hover but no vote */}
       <StarVotesContainer restaurantId={id} rating={ restaurant.user && restaurant.user.rating ? restaurant.user.rating : null } />
         <h6 className="card-title">{restaurant.restaurant.restaurantsName} </h6>
-      </div>
+    
       <CommentForm restaurantId={id}/>
       <CommentContainerList comments={restaurant.generalUsers.allParentComments } restaurantId={id}/>
   

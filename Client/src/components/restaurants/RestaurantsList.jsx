@@ -54,7 +54,7 @@ const RestaurantList = () => {
   if (!restaurants.length) return <LoadingSpinner />;
 
   return (
-    <Box marginTop={0}>
+    <Box marginTop={0} mx={"auto"} marginBottom={"5rem"}>
       <SearchForm searchFor={search} />
       {restaurants[0] !== null ? (
         <RestaurantCardList restaurants={restaurants} />
@@ -65,6 +65,8 @@ const RestaurantList = () => {
       {hasMore ? (
         <Button
           marginTop={"25px"}
+          position={"relative"}
+          // transform={"translateX(-50%"}
           onClick={(evt) => {
             evt.preventDefault();
             handleOnClickPosts(variables);

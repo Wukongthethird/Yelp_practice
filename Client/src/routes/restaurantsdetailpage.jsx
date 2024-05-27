@@ -1,10 +1,11 @@
 import React from "react";
+import { Box } from "@chakra-ui/react";
 import RestaurantDetails from "../components/restaurants/RestaurantDetails";
 const RestaurantsDetailPage = () =>{
   return (
-    <div>
-      <RestaurantDetails restaurant={"jeeoo"}/>
-    </div>
+
+      <RestaurantDetails/>
+  
   )
 }
 
