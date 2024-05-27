@@ -10,11 +10,40 @@ const RestaurantsDetailsBanner = ({ restaurant, images }) => {
     flexShrink: 0,
     flexGrow: 0,
   };
-  console.log("images" , restaurant)
+
+  console.log("images", images)
 
   return (
+    // <Box pos="relative"  width={"100%"} left="0">
+      
+    // <Flex pos="relative" height={"100%"} width={"100vw"} ml={0} aspectRatio={3 / 1}  objectFit={"cover"}>
+    //   {images.map((val, ind) => {
+    //     return (
+    //       <Box
+    //       key={val + ind}
+    //         width={`100$`}
+    //         height = {"100%"}  
+    //       >
+    //         <Image
+    //           key={val + ind}
+    //           src={val}
+    //           alt="error"
+    //           style={imageStyle}
+    //         />
+    //       </Box>
+    //     );
+    //   })}
+    // </Flex>
+    // </Box>
+    <>
+    <Box
+    width={`100$`}
+    height = {"100%"}  
+  
+  ></Box>
+
     <Box pos="relative"  width={"100%"} left="0">
-  <Text> {restaurant.restaurant.restaurantsName}</Text>
+   
     <Flex pos="relative" height={"100%"} width={"100vw"} ml={0} aspectRatio={3 / 1}  objectFit={"cover"}>
       {images.map((val, ind) => {
         return (
@@ -22,20 +51,16 @@ const RestaurantsDetailsBanner = ({ restaurant, images }) => {
           key={val + ind}
             width={`100$`}
             height = {"100%"}  
+            bgImage= {`"url"(require${val})`}
+    
           >
-            <Image
-              key={val + ind}
-              src={val}
-              alt="error"
-              style={imageStyle}
-
-              transition={"translate 1000ms ease-in-out"}
-            />
+        
           </Box>
         );
       })}
     </Flex>
     </Box>
+    </>
   );
 };
 

@@ -13,6 +13,10 @@ import StarVotesContainer from "../starRating/StarVotesContainer";
 import CommentForm from "../forms/CommentForm";
 import CommentContainerList from "../comments/CommentContainerList"
 import RestaurantsDetailsBanner from "./RestaurantDetailsBanner";
+import photo1 from "../../photos/photo1.jpg"
+import photo6 from "../../photos/photo6.jpg"
+import phot07 from "../../photos/photo7.jpg"
+
 /**
  * 
  * SOMEHOw add reviews and like functionality
@@ -28,9 +32,7 @@ const RestaurantDetails = () => {
   const [restaurant, setRestaurant] = useState(null);
 
   const images = [
-    "/pexels-pixabay-262978.jpg",
-    "/pexels-igor-starkov-233202-914388.jpg",
-    "/pexels-elevate-1267696.jpg"
+    photo1,phot07,photo6
   ]
 
   useEffect(function getRestaurantByID() {
