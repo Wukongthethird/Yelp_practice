@@ -26,7 +26,8 @@ const StarIcon = ({
   voteFunction = null,
   fillValue = null,
   hoverOver = null,
-  leaveHover=null
+  leaveHover=null,
+  size =null
 
 }) => {
 
@@ -36,9 +37,11 @@ const StarIcon = ({
     <FontAwesomeIcon
       aria-hidden="true"
       icon={fillValue}
-      size="2x"
+  
       onMouseEnter={()=> hoverOver(voteValue)}
       onMouseLeave={leaveHover}
+      color="red"
+      size={size ? size:"2xl"}
       onClick={(evt) => {
         evt.preventDefault();
      
@@ -49,7 +52,9 @@ const StarIcon = ({
 <FontAwesomeIcon
       aria-hidden="true"
       icon={fillValue}
-      size="2x"
+    
+      color="red"
+      size={size ? size:"2xl"}
     />
   );
 

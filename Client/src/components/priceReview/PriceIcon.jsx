@@ -17,6 +17,8 @@ const PriceIcon = () => {
       aria-hidden="true"
       icon={faHandHoldingDollar} 
       size="2x"
+      color="orange"
+
     />
   )
 

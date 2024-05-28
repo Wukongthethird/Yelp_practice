@@ -21,14 +21,14 @@ const StarRatingContainer = ({ rating  }) => {
   let count =  rating;
   for (let ind = 1; ind < 6; ind++) {
     if (count <= 0.25) {
-      starIcons.push(<StarIcon key={uuidv4()} fillValue={faStarOutlined} color={"red"} />);
+      starIcons.push(<StarIcon key={uuidv4()} fillValue={faStarOutlined} size={"xl"} />);
     }
     if (count < 0.65 && count > 0.25) {
-      starIcons.push(<StarIcon key={uuidv4()} fillValue={faStarHalfStroke} color={"red"} />);
+      starIcons.push(<StarIcon key={uuidv4()} fillValue={faStarHalfStroke}  size={"xl"} />);
       count = 0;
     }
     if (count >= 0.65) {
-      starIcons.push(<StarIcon key={uuidv4()} fillValue={faStarSolid} />);
+      starIcons.push(<StarIcon key={uuidv4()} fillValue={faStarSolid} size={"xl"} />);
       count--;
     }
   }
@@ -36,7 +36,7 @@ const StarRatingContainer = ({ rating  }) => {
   
   // jave some bg color light up if on hover permentaly lock in the hover if have voted
   const starIconContainer = (
-    <HStack spacing = '20px'>
+    <HStack spacing = '20px' pos={"absolute"} zIndex={50} top={"90%"} ml={"5%"} >
        {starIcons}
     </HStack>
   );
