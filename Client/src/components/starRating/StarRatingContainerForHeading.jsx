@@ -36,7 +36,7 @@ const StarRatingContainer = ({ rating  }) => {
   
   // jave some bg color light up if on hover permentaly lock in the hover if have voted
   const starIconContainer = (
-    <HStack spacing = '20px' pos={"absolute"} zIndex={50} top={"90%"} ml={"5%"} >
+    <HStack spacing ='20px' pos={"absolute"} top={["80%", "80%","75%", "75%", "70%", "70%" ]} zIndex={50}  >
        {starIcons}
     </HStack>
   );

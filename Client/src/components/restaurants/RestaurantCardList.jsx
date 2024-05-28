@@ -6,7 +6,7 @@ import { Box, SimpleGrid } from "@chakra-ui/react";
 
 const RestaurantCardList = ({ restaurants }) => {
   return (
-    <SimpleGrid columns={[2, null, 3]} spacing="40px">
+    <SimpleGrid columns={[1, 2, null, null, 3]} spacing="40px">
       {restaurants.map((restaurant) => {
         return (
           <Box key={uuidv4()}>

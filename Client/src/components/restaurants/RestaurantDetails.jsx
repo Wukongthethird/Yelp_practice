@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import yelpAPI from "../../api";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
-import { Box, Button, Link as ChakraLink, Flex } from "@chakra-ui/react";
+import { Box, Button, Link as ChakraLink, Flex, HStack } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from 'react-router-dom'
 import FavoriteButton  from "../favorites/FavoriteButton";
 import PriceIconContainer from "../priceReview/PriceIconContainer";
@@ -50,12 +50,10 @@ const RestaurantDetails = () => {
     <RestaurantsDetailsBanner restaurant={restaurant} images = {images}/>
     <Box top={0} width={"100%"}>
    
-       {/* {user.id ? <FavoriteButton userId={user.id} restaurantId={id} isFavorited={isFavorited}/>: null }  */}
+     <HStack right={0} >
        <FavoriteButton  restaurantId={id} isFavorited={restaurant.user? restaurant.user.favorited : false} isLoggedin={restaurant.user}/>
-       {/*only renders total User Population votes*/ }
-      {/**terneary the bottom thing ig is no user allows hover but no vote */}
       <StarVotesContainer restaurantId={id} rating={ restaurant.user && restaurant.user.rating ? restaurant.user.rating : null } />
-   
+      </HStack>
     
       <CommentForm restaurantId={id}/>
       <CommentContainerList comments={restaurant.generalUsers.allParentComments } restaurantId={id}/>

@@ -11,7 +11,7 @@ const PriceIconContainer = ({ usersPrice }) => {
     priceRows.push(<PriceIcon key={uuidv4()} />);
   }
   const priceIconContainer = (
-    <HStack spacing="20px" zIndex={50} top={"70%"} ml={"5%"} pos="absolute">
+    <HStack spacing="20px">
       {priceRows}
     </HStack>
   );

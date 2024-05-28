@@ -7,6 +7,7 @@ import {
   Link as ChakraLink,
   Container,
   Flex,
+  HStack,
   Image,
   Text,
   VStack,
@@ -22,25 +23,29 @@ const RestaurantsDetailsBanner = ({ restaurant, images }) => {
     flexGrow: 0,
   };
 
-  console.log(restaurant)
+  console.log(restaurant);
   return (
     <Box pos="relative" width={"100%"} left="0">
-      <Box maxW="xl" height={"75%"}>
-        <Text
-          pos="absolute"
-          fontSize={"4xl"}
-          top="50%"
-          ml={"5%"}
-          color="white"
-          zIndex={20}
-        >
-          {restaurant.restaurant.restaurantsName}
-        </Text>
-        <PriceIconContainer usersPrice={restaurant.generalUsers.averagePrice}/> 
-        <StarRatingContainerForHeading rating={restaurant.generalUsers.averageRating}/>
-
-
-      </Box>
+      <HStack maxW="xl" height={"75%"} spacing={"10px"}>
+        <Box pos="absolute" top="40%" ml={"5%"} zIndex={20}>
+          <Text
+            fontSize={["xl", "xl", "2xl", "2xl", "6xl", "6xl"]}
+            color="white"
+          >
+            {restaurant.restaurant.restaurantsName}
+          </Text>
+        </Box>
+        <Box zIndex={50} top={"60%"} ml={"5%"} pos="absolute" padding={0}>
+          <PriceIconContainer
+            usersPrice={restaurant.generalUsers.averagePrice}
+          />
+        </Box>
+        <Box zIndex={50} top={"70%"} ml={"5%"} pos="absolute" xpadding={0}>
+          <StarRatingContainerForHeading
+            rating={restaurant.generalUsers.averageRating}
+          />
+        </Box>
+      </HStack>
 
       <Flex
         pos="relative"
@@ -53,7 +58,13 @@ const RestaurantsDetailsBanner = ({ restaurant, images }) => {
         {images.map((val, ind) => {
           return (
             <Box key={val + ind} width={`100$`} height={"100%"}>
-              <Image key={val + ind} src={val} alt="error" style={imageStyle} opacity={"75%"} />
+              <Image
+                key={val + ind}
+                src={val}
+                alt="error"
+                style={imageStyle}
+                opacity={"85%"}
+              />
             </Box>
           );
         })}

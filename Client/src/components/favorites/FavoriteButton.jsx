@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import yelpAPI from "../../api";
 import { v4 as uuidv4 } from "uuid";
 
-import { IconButton, Box , Flex} from "@chakra-ui/react";
+import { IconButton, Box , Flex, Icon} from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartFilled } from "@fortawesome/free-solid-svg-icons";
@@ -17,8 +17,8 @@ const FavoriteButton = ({ restaurantId, isFavorited ,isLoggedin=false}) => {
   }
 
   const favoriteButtonLoggedIn =  (
-    <Flex>
-    <Box  bg='red.600'>
+  
+    <Box  >
     <FontAwesomeIcon
     key={uuidv4()}
       aria-hidden="true"
@@ -29,12 +29,12 @@ const FavoriteButton = ({ restaurantId, isFavorited ,isLoggedin=false}) => {
         favoriting(restaurantId)}}
     />
     </Box>
-    </Flex>
+
   )
 
   const favoriteButtonLoggedOut =  (
-    <Flex>
-    <Box  bg='red.600'>
+ 
+    <Box  >
     <FontAwesomeIcon
     key={uuidv4()}
       aria-hidden="true"
@@ -42,11 +42,11 @@ const FavoriteButton = ({ restaurantId, isFavorited ,isLoggedin=false}) => {
       size="4x"
     />
     </Box>
-    </Flex>
+  
   )
 
 
-  return <>{isLoggedin? favoriteButtonLoggedIn: favoriteButtonLoggedOut }</>;
+  return <>{isLoggedin?  favoriteButtonLoggedIn: favoriteButtonLoggedOut }</>;
 };
 
 export default FavoriteButton;
