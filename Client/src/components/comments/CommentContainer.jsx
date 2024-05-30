@@ -10,8 +10,14 @@ import {
   Avatar,
   Heading,
   Text,
-  IconButton,
+  useDisclosure,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
   Link as ChakraLink,
+  AvatarBadge,
 } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -19,9 +25,10 @@ import yelpAPI from "../../api";
 import CommentForm from "../forms/CommentForm";
 import CommentContainerList from "./CommentContainerList";
 import UserContext from "../../auth/UserContext";
+import { motion } from "framer-motion";
 
-// restaurantDetails -> CommentList -> CommentContainer 
-const CommentContainer = ({ comment, restaurantId , ml=0}) => {
+// restaurantDetails -> CommentList -> CommentContainer
+const CommentContainer = ({ comment, restaurantId, ml = 0 }) => {
   // maybe doesnt render comment go one more deeper for comment card
   // container handles reply see replies and layout of container
   // replies renders a comment form
@@ -31,15 +38,10 @@ const CommentContainer = ({ comment, restaurantId , ml=0}) => {
   const [seeRepliesState, setSeeRepliesState] = useState([]);
   const [toggleSeeReplies, setToggleSeeReplies] = useState(true);
   const [editComment, setEditComment] = useState(false);
- const [show, setShow] = useState(true)
-
-
 
   function replying(evt) {
     evt.preventDefault();
     setReply(!reply);
-    
-
   }
 
   async function seeReplies(parentId, restaurantId) {
@@ -57,30 +59,41 @@ const CommentContainer = ({ comment, restaurantId , ml=0}) => {
   const buttonContainers =
     user.id && comment.userId == user.id ? (
       <>
-        <Button variant={"ghost"} onClick={replying}>reply</Button>
-        <Button variant={"ghost"}  onClick={editing}>edit</Button>
+        <Button variant={"ghost"} onClick={replying}>
+          reply
+        </Button>
+        <Button variant={"ghost"} onClick={editing}>
+          edit
+        </Button>
       </>
     ) : user.id ? (
-      <Button  variant={"ghost"} onClick={replying}>reply</Button>
+      <Button variant={"ghost"} onClick={replying}>
+        reply
+      </Button>
     ) : null;
 
   return (
     <Card maxW={"50rem"}>
-
       <CardBody>
         {!editComment ? (
-          <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-            <Avatar name="Hung Bro" src="https://bit.ly/sage-adebayo" />
+          <Box flex="1" gap="4" alignItems="center" flexWrap="wrap">
+            <Flex marginBottom={"2rem"}>
+              <Avatar name="Hung Bro" src="https://bit.ly/sage-adebayo">
+                <AvatarBadge placement="top-start" />
+              </Avatar>
+              <Box ml={"5px"} mt={"10px"}>
+                <Heading size="md" textAlign={"left"} top={0}>
+                  {comment.firstName + " " + comment.lastName}
+                </Heading>
+              </Box>
+            </Flex>
 
             <Box flex="1" gap="4" alignItems="left" flexWrap="wrap">
-              <Heading size="md" textAlign={"left"} >
-                {comment.firstName + " " + comment.lastName}
-              </Heading>
-              <Text textAlign={"left"} size="sm" color = "gray.500">
+              <Text textAlign={"left"} size="sm" color="gray.500">
                 {comment.commentMessage}
               </Text>
             </Box>
-          </Flex>
+          </Box>
         ) : (
           <CommentForm
             restaurantId={restaurantId}
@@ -91,20 +104,20 @@ const CommentContainer = ({ comment, restaurantId , ml=0}) => {
         )}
         <hr></hr>
       </CardBody>
-      <Flex >
-      {buttonContainers}
-      {toggleSeeReplies ? (
-        <Button 
-        size = {"md"}
-        variant={"ghost"}
-          onClick={(evt) => {
-            evt.preventDefault();
-            seeReplies(comment.commentId, restaurantId);
-          }}
-        >
-          see replies
-        </Button>
-      ) : null}
+      <Flex>
+        {buttonContainers}
+        {toggleSeeReplies ? (
+          <Button
+            size={"md"}
+            variant={"ghost"}
+            onClick={(evt) => {
+              evt.preventDefault();
+              seeReplies(comment.commentId, restaurantId);
+            }}
+          >
+            see replies
+          </Button>
+        ) : null}
       </Flex>
       {reply ? (
         <CommentForm
@@ -117,12 +130,11 @@ const CommentContainer = ({ comment, restaurantId , ml=0}) => {
         <CommentContainerList
           comments={seeRepliesState}
           restaurantId={restaurantId}
-          ml={ml+3}
+          ml={ml + 3}
         />
       )}
 
       {/* this should be seperate from body*/}
-     
     </Card>
   );
 };
