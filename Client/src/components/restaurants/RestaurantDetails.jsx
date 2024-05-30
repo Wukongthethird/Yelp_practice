@@ -42,13 +42,12 @@ const RestaurantDetails = () => {
     getRestaurant();
   }, []);
 
-  console.log("Rest",restaurant)
 
   if(!restaurant) return <LoadingSpinner/>
   return (
-    <>
+    <Box minH={"100vh"}>
     <RestaurantsDetailsBanner restaurant={restaurant} images = {images}/>
-    <Box top={0} width={"100%"}>
+    <Box top={0} width={"100%"} >
    
      <HStack right={0} >
        <FavoriteButton  restaurantId={id} isFavorited={restaurant.user? restaurant.user.favorited : false} isLoggedin={restaurant.user}/>
@@ -59,7 +58,7 @@ const RestaurantDetails = () => {
       <CommentContainerList comments={restaurant.generalUsers.allParentComments } restaurantId={id}/>
   
     </Box>
-    </>
+    </Box>
   );
 };
 

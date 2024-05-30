@@ -16,13 +16,12 @@ import {
 import { Link as ReactRouterLink } from "react-router-dom";
 import PropTypes from "prop-types";
 import yelpAPI from "../../api";
-import CommentCard from "./CommentCard";
 import CommentForm from "../forms/CommentForm";
 import CommentContainerList from "./CommentContainerList";
 import UserContext from "../../auth/UserContext";
 
-// restaurantDetails -> CommentList -> CommentContainer -> CommentCard
-const CommentContainer = ({ comment, restaurantId }) => {
+// restaurantDetails -> CommentList -> CommentContainer 
+const CommentContainer = ({ comment, restaurantId , ml=0}) => {
   // maybe doesnt render comment go one more deeper for comment card
   // container handles reply see replies and layout of container
   // replies renders a comment form
@@ -32,10 +31,15 @@ const CommentContainer = ({ comment, restaurantId }) => {
   const [seeRepliesState, setSeeRepliesState] = useState([]);
   const [toggleSeeReplies, setToggleSeeReplies] = useState(true);
   const [editComment, setEditComment] = useState(false);
+ const [show, setShow] = useState(true)
+
+
 
   function replying(evt) {
     evt.preventDefault();
     setReply(!reply);
+    
+
   }
 
   async function seeReplies(parentId, restaurantId) {
@@ -53,32 +57,55 @@ const CommentContainer = ({ comment, restaurantId }) => {
   const buttonContainers =
     user.id && comment.userId == user.id ? (
       <>
-        <Button onClick={replying}>reply</Button>
-        <Button onClick={editing}>edit</Button>
+        <Button variant={"ghost"} onClick={replying}>reply</Button>
+        <Button variant={"ghost"}  onClick={editing}>edit</Button>
       </>
     ) : user.id ? (
-      <Button onClick={replying}>reply</Button>
+      <Button  variant={"ghost"} onClick={replying}>reply</Button>
     ) : null;
 
-  //     comment.userId == user.id?
-  //     <>
-  //     <Button onClick={replying}>reply</Button>
-  //     <Button onClick={editing}>edit</Button>
-  //  </>: null);
   return (
-    <>
-      {!editComment ? (
-        <CommentCard comment={comment} />
-      ) : (
-        <CommentForm
-          restaurantId={restaurantId}
-          commentMessage={comment.commentMessage}
-          edit={editComment}
-          commentId={comment.commentId}
-        />
-      )}
-      {/* <CommentCard comment={comment} /> */}
+    <Card maxW={"50rem"}>
+
+      <CardBody>
+        {!editComment ? (
+          <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
+            <Avatar name="Hung Bro" src="https://bit.ly/sage-adebayo" />
+
+            <Box flex="1" gap="4" alignItems="left" flexWrap="wrap">
+              <Heading size="md" textAlign={"left"} >
+                {comment.firstName + " " + comment.lastName}
+              </Heading>
+              <Text textAlign={"left"} size="sm" color = "gray.500">
+                {comment.commentMessage}
+              </Text>
+            </Box>
+          </Flex>
+        ) : (
+          <CommentForm
+            restaurantId={restaurantId}
+            commentMessage={comment.commentMessage}
+            edit={editComment}
+            commentId={comment.commentId}
+          />
+        )}
+        <hr></hr>
+      </CardBody>
+      <Flex >
       {buttonContainers}
+      {toggleSeeReplies ? (
+        <Button 
+        size = {"md"}
+        variant={"ghost"}
+          onClick={(evt) => {
+            evt.preventDefault();
+            seeReplies(comment.commentId, restaurantId);
+          }}
+        >
+          see replies
+        </Button>
+      ) : null}
+      </Flex>
       {reply ? (
         <CommentForm
           restaurantId={restaurantId}
@@ -90,21 +117,13 @@ const CommentContainer = ({ comment, restaurantId }) => {
         <CommentContainerList
           comments={seeRepliesState}
           restaurantId={restaurantId}
+          ml={ml+3}
         />
       )}
 
       {/* this should be seperate from body*/}
-      {toggleSeeReplies ? (
-        <Button
-          onClick={(evt) => {
-            evt.preventDefault();
-            seeReplies(comment.commentId, restaurantId);
-          }}
-        >
-          see replies
-        </Button>
-      ) : null}
-    </>
+     
+    </Card>
   );
 };
 

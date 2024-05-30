@@ -50,6 +50,7 @@ const RestaurantList = () => {
     setRestaurants(restaurants);
     setHasMore(false);
   }
+  console.log(restaurants)
 
   return (
     <Box marginTop={0} mx={"auto"} marginBottom={"5rem"}>
@@ -61,6 +62,7 @@ const RestaurantList = () => {
       )}
 
       {hasMore ? (
+        <Box marginTop={0} mx={"auto"} marginTop={"5rem"}>
         <Button
           marginTop={"25px"}
           position={"relative"}
@@ -72,6 +74,7 @@ const RestaurantList = () => {
         >
           Load More
         </Button>
+        </Box>
       ) : null}
     </Box>
   );

@@ -21,13 +21,7 @@ const getAllRestarauntsOrByName = async (req, res) => {
       restaurants: results["rows"],
     });
   
-  // else {
-  //   const results = await db.query(`select id, restaurants_name as "restaurantsName" , address_location as "addressLocation",
-  //   city, zipcode, created_at as "createdAt", updated_at as "updatedAt", about from restaurants`);
-  //   return res.status(200).json({
-  //     restaurants: results["rows"],
-  //   });
-  // }
+
 };
 
 module.exports = getAllRestarauntsOrByName;

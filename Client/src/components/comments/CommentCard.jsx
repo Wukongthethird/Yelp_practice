@@ -26,25 +26,18 @@ import yelpAPI from "../../api";
  // restaurantDetails -> CommentCardList -> CommentContainer -> CommentCard
 const CommentCard = ({ comment }) => {
 
-
- // TO DO ADD IMAGE TO BACK DROP
   return (
-    <Card maxW="md">
-      <CardHeader>
-        <Flex spacing="4">
-          <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-            {/* <Avatar name='Hung Bro' src='https://bit.ly/sage-adebayo' /> */}
-            <Box>
+    
 
+          <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
+            <Avatar name='Hung Bro' src='https://bit.ly/sage-adebayo' />
+            <Box flex="1" gap="4" alignItems="left" flexWrap="wrap">
+            <Heading size="sm" textAlign={"left"}>{comment.firstName +" " + comment.lastName}</Heading>
               <Heading size="sm">{comment.commentMessage}</Heading>
-              <Heading size="sm">{comment.firstName +" " + comment.lastName}</Heading>
             </Box>
           </Flex>
-        </Flex>
-      </CardHeader>
-      <CardBody>
-  </CardBody>
-    </Card>
+
+      
   );
 };
 

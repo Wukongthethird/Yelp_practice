@@ -4,14 +4,14 @@ import { v4 as uuidv4 } from "uuid";
 import { Box, SimpleGrid } from "@chakra-ui/react";
 import CommentContainer from "./CommentContainer";
 
-// restaurantDetails -> CommentList -> CommentContainer -> CommentCard
-const CommentContainerList = ({ comments, restaurantId }) => {
-
+// restaurantDetails -> CommentList -> CommentContainer 
+const CommentContainerList = ({ comments, restaurantId, ml=0 }) => {
+  let minMl = Math.min(40,ml)
   return (
     <>
       {comments.map((comment) => {
         return (
-          <Box key={uuidv4()}>
+          <Box key={uuidv4()} ml={minMl+"rem"}>
             <CommentContainer key={uuidv4()} comment={comment} restaurantId={restaurantId}/>
           </Box>
         );
@@ -20,18 +20,6 @@ const CommentContainerList = ({ comments, restaurantId }) => {
   );
 };
 
-//https://www.geeksforgeeks.org/react-proptype-array-with-shape/
-//https://legacy.reactjs.org/docs/typechecking-with-proptypes.html
-// CommentCardList.propTypes = {
-//   restaurants: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       restaurants_name: PropTypes.string,
-//       address_location: PropTypes.string,
-//       city: PropTypes.string,
-//       zipcode: PropTypes.string,
-//       price_range: PropTypes.number,
-//     })
-//   ),
-// };
+
 
 export default CommentContainerList;

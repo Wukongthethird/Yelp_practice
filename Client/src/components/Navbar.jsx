@@ -33,45 +33,33 @@ export const Navbar = () => {
     ) : (
       <>
         <ChakraLink as={ReactRouterLink} to="/">
-          Home
-        </ChakraLink>
-        <ChakraLink as={ReactRouterLink} to="/">
-          <Button onClick={logout} variant="link">Log Out</Button>
+          <Button onClick={logout} variant="link">
+            Log Out
+          </Button>
         </ChakraLink>
       </>
     );
 
   return (
-   
-      <Flex
+    <Flex
+      zIndex={999}
+      justify="center"
 
-        zIndex={999}
-        justify="center"
-        // pos="relative"
-        position={"fixed"}
-        bg="red.400"
-        // align="center"
-        width={"100%"}
-        top={0}
-        left={0}
-        bot={0}
-        
+      position={"fixed"}
+      bg="red.400"
 
-      >
-        <Flex
-          position={"static"}
-          flex={1}
-          m="auto"
-          maxW={"100%"}
-          align="center"
-        >
-          <ChakraLink as={ReactRouterLink} to="/">
-            < Heading >Yelp</Heading>
-          </ChakraLink>
+      width={"100%"}
+      top={0}
+      left={0}
+      bot={0}
+    >
+      <Flex position={"static"} flex={1} m="auto" maxW={"100%"} align="center">
+        <ChakraLink as={ReactRouterLink} to="/">
+          <Heading>Yelp</Heading>
+        </ChakraLink>
 
-          <Box ml={"auto"}>{body}</Box>
-        </Flex>
+        <Box ml={"auto"}>{body}</Box>
       </Flex>
- 
+    </Flex>
   );
 };

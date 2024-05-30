@@ -50,9 +50,8 @@ TRANSACTIONAL EXAMPLE
   
   COMMIT
 
--- price range and rating should be its own tabe
--- restaraunt id user id rating value
 
+-- change this table to just restaurant and price float
 CREATE TABLE
   price_range(
     user_id INTEGER REFERENCES yelp_users ON DELETE CASCADE NOT NULL,
@@ -60,6 +59,8 @@ CREATE TABLE
     PRIMARY KEY (user_id,restaurants_id),
     price INTEGER NOT NULL CHECK (price>=1 and price<=5)
 );
+
+
 
 CREATE TABLE
   ratings(

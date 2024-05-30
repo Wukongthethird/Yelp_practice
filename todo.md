@@ -4,22 +4,22 @@ ALEX
 layout for main page
 restaurants detail page itself
 
-hover over like button function
-comment section
-edit delete comment
+change price range to be internal change logic on front end
+comment section -- cahnge some layout the icon bar should have min max width  
+delete comment -- delete should replace text with null not actually remove until the parent user is gone
+comment up and downvotes renders out total votes
 fake data
-button animation and outline
-paginattion for main page endless scrolling
-newest restaurant api limit offset pagination   front end new container for this stuff.
+maybe a graph bar of average ratings
+button animation and outline 
+change card on main page
+
+photos for main page card and restaurant
+-- done by components generating all the photos and assigning random photos
 
 
 
-carasel -> do it by finding at least 4 stars randomized 7-10 restaurant 
 
 
-
-
-commenting on restaurant watch vudeo soon
 
 
 
@@ -29,7 +29,6 @@ change profile form
 favoritedreviews
 keywords?
 
-carasel -> do it by finding at least 4 stars randomized 7-10 restaurant 
 
 
 
@@ -38,11 +37,10 @@ hottest what's new restaraunts
 user page to show off to other people
 
 
-cook0
 
 
 
 
 
 
-milk banana egg yogurt
+
