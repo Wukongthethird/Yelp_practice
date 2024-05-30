@@ -77,6 +77,7 @@ const CommentContainer = ({ comment, restaurantId, ml = 0 }) => {
       <CardBody>
         {!editComment ? (
           <Box flex="1" gap="4" alignItems="center" flexWrap="wrap">
+
             <Flex marginBottom={"2rem"}>
               <Avatar name="Hung Bro" src="https://bit.ly/sage-adebayo">
                 <AvatarBadge placement="top-start" />
@@ -86,6 +87,7 @@ const CommentContainer = ({ comment, restaurantId, ml = 0 }) => {
                   {comment.firstName + " " + comment.lastName}
                 </Heading>
               </Box>
+              
             </Flex>
 
             <Box flex="1" gap="4" alignItems="left" flexWrap="wrap">

@@ -34,7 +34,8 @@ import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 
 const RestaurantCard = ({ restaurant }) => {
   // I did it at this level so i didnt have to loop on every api request. TBD if i leave this in here seems weird
-  console.log(restaurant)
+  const image =  generateImages.randomImage(generateImages.images) 
+
   // TO DO ADD IMAGE TO BACK DROP
   return (
     <Card maxW="md" height={"30rem"}>
@@ -52,7 +53,7 @@ const RestaurantCard = ({ restaurant }) => {
       </CardHeader>
       <CardBody overflow={"hidden"} padding={0}>
         <Image
-          src={generateImages.randomImage(generateImages.images)}
+          src={image}
           objectFit="cover"
           height={"100%"}
           width={"100%"}
