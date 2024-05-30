@@ -11,6 +11,7 @@ const createRestaurant = async (req, res) => {
     sqlInput
   );
 
+
   return res.status(201).json({
     restaurant: result["rows"][0],
   });

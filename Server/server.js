@@ -14,8 +14,10 @@ const db = require("./DB");
 const corsConfig = require("./configs/corsConfig");
 const sessionConfig = require("./configs/sessionConfig");
 
+//middlewear
 const isAuth = require("./middlewear/isAuth");
 const isRestaurant = require("./middlewear/isRestaurant");
+const errorHandler = require("./middlewear/errorHandler")
 
 //schemas
 const validateSchema = require("./middlewear/validateSchema");
@@ -77,6 +79,8 @@ app.use(passport.session());
 
 // userAuth
 app.use("/api/v1/logout", isAuth);
+app.use(errorHandler)
+
 // app.use("/api/v1/restaurants", isAuth);
 
 // TODO safer methods and middlewears look at react and previus projects
@@ -109,8 +113,8 @@ app.post(
 //create a reastaruant
 app.post(
   "/api/v1/create_restaurant/",
-  createRestaurantSchema,
-  validateSchema,
+  // createRestaurantSchema,
+  // validateSchema,
   createRestaurant
 );
 

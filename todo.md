@@ -4,12 +4,20 @@ ALEX
 layout for main page
 restaurants detail page itself
 
-change price range to be internal change logic on front end
+generate users
+generat 
+
+fake users;
+fake ratings;
+change price db to internal 1-5 float no votes
+change favorite animation on heart
+
+get fake comment threads
+
 comment section -- cahnge some layout the icon bar should have min max width 
 collapse show hide comment 
 delete comment -- delete should replace text with null not actually remove until the parent user is gone
 comment up and downvotes renders out total votes
-fake data
 maybe a graph bar of average ratings
 button animation and outline 
 change card on main page

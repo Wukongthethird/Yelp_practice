@@ -37,8 +37,6 @@ const RestaurantList = () => {
     [restaurants]
   );
 
-  // previos searched added due to set line
-  // need to set variables and restaurant between render
   async function handleOnClickPosts(variables) {
     let results = await yelpAPI.getNewRestaurants(variables);
     setRestaurants([...restaurants, ...results.restaurants]);
