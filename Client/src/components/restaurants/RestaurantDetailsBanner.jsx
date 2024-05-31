@@ -36,13 +36,13 @@ const RestaurantsDetailsBanner = ({ restaurant, images }) => {
           </Text>
         </Box>
         <Box zIndex={50} top={"60%"} ml={"5%"} pos="absolute" padding={0}>
-          <PriceIconContainer
-            usersPrice={restaurant.generalUsers.averagePrice}
+          <StarRatingContainerForHeading
+            rating={restaurant.generalUsers.averageRating}
           />
         </Box>
         <Box zIndex={50} top={"70%"} ml={"5%"} pos="absolute" xpadding={0}>
-          <StarRatingContainerForHeading
-            rating={restaurant.generalUsers.averageRating}
+          <PriceIconContainer
+            usersPrice={restaurant.generalUsers.averagePrice}
           />
         </Box>
       </HStack>

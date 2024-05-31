@@ -12,11 +12,7 @@ global error handling back end
 add try catch to routes backend
 front end if err got to 404 or homepage
 
-fake ratings; generate haphhazard some users will vote random range not every user will vote on every restaurant;
-    list of user id
-    list of restraunt id
-      random chance around 70% skip if not
-      some int 1-5
+
 
 change price db to internal 1-5 float no votes
      -- list of rest ids  randomchance around 70% skip if not

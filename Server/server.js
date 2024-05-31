@@ -219,16 +219,47 @@ app.post(
 
 app.post("/api/v1/editcomment", isAuth,editComment )
 
-app.get("/api/v1/getuserid",
-  async (req,res)=>{
-    const result = await db.query(`
-      select id from yelp_users
-    `)
-    console.log(result)
+// app.get("/api/v1/getuserid",
+//   async (req,res)=>{
+//     const usersId = await db.query(`
+//       select ARRAY(select id from yelp_users)
+//     `).then( rows => rows["rows"][0]["array"])
 
-    return res.json({users:result.user["rows"]})
-  }
-)
+//     const restId = await db.query(`
+//     select ARRAY(select id from restaurants)
+//   `).then( rows => rows["rows"][0]["array"])
+
+
+//   for(let i=0; i< restId.length;i++){
+//     const chance = Math.random()*100
+//     if(chance <50){
+      
+//       for (let j = 0 ; j<usersId.length;j++){
+//         const vote = (i%2===0  || i%5===0) ? Math.floor(Math.random()*5)+1 : 5
+       
+//         const roll = Math.random()*100
+//         if(roll <80 || j%3===0 || j%4==0){
+//        try{
+//           await db.query(
+//             `
+//             INSERT INTO ratings
+//             (user_id , restaurants_id, rating) 
+//             values ($1, $2, $3)           
+//             `,[usersId[j] , restId[i], vote]
+//           )
+//         }catch(err){
+//           console.log(err)
+//           continue
+//         }
+//       }
+        
+//       }
+//     }
+//   }
+
+//     return res.json({restId})
+//   }
+// )
 
 app.use(errorHandler)
 

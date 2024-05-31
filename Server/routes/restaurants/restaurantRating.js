@@ -8,6 +8,7 @@ const restaurantRating = async (req, res) => {
   if ( voteValue<0 || voteValue>5) { 
     return;
   }
+  try{
 
   // IM Going to lock out the user after they voted so this check does not need to do
   const hasRated = await db
@@ -27,6 +28,9 @@ const restaurantRating = async (req, res) => {
   );
 
   return res.json({});
+}catch(err){
+  next(err)
+}
 };
 
 module.exports = restaurantRating;

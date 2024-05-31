@@ -61,6 +61,7 @@ class yelpAPI {
 
   /** Searches exact restaurant by id */
   static async getRestaurantByID(id) {
+  
     let res = await this.request(`api/v1/restaurant/${id}`);
     console.log("Res" , res)
     return res;

@@ -31,7 +31,7 @@ const getRestaurantId = async (req, res, next) => {
 
 
   if (!restaurant) {
-    console.log("here")
+
     return res.json({
       // should put a handle error to go next to a 404 page not found
       restaurant: null,
@@ -54,7 +54,6 @@ const getRestaurantId = async (req, res, next) => {
     )
     .then((res) => res.rows[0]);
 
-  console.log("shouldnt be here")
   const allParentComments = await db.query(
     `SELECT comment_id as "commentId", comment_message as "commentMessage",
     comments.created_at as "createdAt", comments.updated_at as "updatedAt",

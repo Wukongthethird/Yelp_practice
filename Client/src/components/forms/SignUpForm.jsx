@@ -13,7 +13,7 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 
-import mockUsers from "../../hooks/generateUsers";
+
 
 import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { faEye as faEyeSolid } from "@fortawesome/free-solid-svg-icons";
@@ -64,25 +64,6 @@ const SignupForm = () => {
     }
   }
 
-  // async function seed(){
-  // for( let i=0 ; i<mockUsers.length; i++){
-  //   let data = {
-  //     firstName: mockUsers[i]["first_name"],
-  //     lastName: mockUsers[i]["last_name"],
-  //     email: mockUsers[i]["email"],
-  //     password:  mockUsers[i]["password"],
-  //     confirmPassword:  mockUsers[i]["password"],
-
-  //   }
-  //   try{
-  //     const res = await yelpAPI.signUpUser(data)
-  //     console.log("sucess" , res)
-  //   }catch(err){
-  //     console.log(err)
-  //   }
-  // }
-  // }
-  // seed()
 
   /** Update form data field */
   function handleChange(evt) {
