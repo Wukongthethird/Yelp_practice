@@ -79,7 +79,7 @@ app.use(passport.session());
 
 // userAuth
 app.use("/api/v1/logout", isAuth);
-app.use(errorHandler)
+
 
 // app.use("/api/v1/restaurants", isAuth);
 
@@ -101,6 +101,7 @@ app.get(
   "/api/v1/restaurant/:id",
   getRestaurantIdSchema,
   validateSchema,
+  isRestaurant,
   getRestaurantById
 );
 
@@ -218,7 +219,9 @@ app.post(
 
 app.post("/api/v1/editcomment", isAuth,editComment )
 
-//need to add global error messsage
+
+app.use(errorHandler)
+
 app.listen(PORT, () => {
   console.log(`server is up and listening on port ${PORT}`);
 });

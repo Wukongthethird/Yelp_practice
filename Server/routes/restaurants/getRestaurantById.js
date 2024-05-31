@@ -16,6 +16,8 @@ const getRestaurantId = async (req, res, next) => {
   // )
 
   // Multiple small queries is better for DB usage allows one to customize
+
+
   const restaurant = await db
     .query(
       `select id, city, zipcode, about, restaurants_name as "restaurantsName",
@@ -27,11 +29,15 @@ const getRestaurantId = async (req, res, next) => {
     )
     .then((res) => res.rows[0]);
 
+
   if (!restaurant) {
+    console.log("here")
     return res.json({
       // should put a handle error to go next to a 404 page not found
       restaurant: null,
+      err:"there is no restaurant"
     });
+    
   }
 
   const allUsersPrice = await db
@@ -48,6 +54,7 @@ const getRestaurantId = async (req, res, next) => {
     )
     .then((res) => res.rows[0]);
 
+  console.log("shouldnt be here")
   const allParentComments = await db.query(
     `SELECT comment_id as "commentId", comment_message as "commentMessage",
     comments.created_at as "createdAt", comments.updated_at as "updatedAt",
@@ -78,13 +85,6 @@ const getRestaurantId = async (req, res, next) => {
     )
     .then((res) => res.rows[0]);
 
-  const userPrice = await db
-    .query(
-      `SELECT price FROM price_range
-      WHERE  user_id =$1  and  restaurants_id =$2`,
-      [req.session.passport.user.id, restaurantId]
-    )
-    .then((res) => res.rows[0]);
 
   const userRating = await db
     .query(
@@ -106,10 +106,10 @@ const getRestaurantId = async (req, res, next) => {
     },
     user: {
       ...favorited,
-      ...userPrice,
       ...userRating,
     },
   });
+
 };
 
 module.exports = getRestaurantId;

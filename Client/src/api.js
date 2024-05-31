@@ -1,4 +1,6 @@
 import axios from "axios";
+import {useNavigate} from 'react-router-dom'
+
 
 /** API Class.
  *
@@ -47,6 +49,7 @@ class yelpAPI {
       console.error("API Error:", err.response);
       let message = err.response.data.error.message;
       throw Array.isArray(message) ? message : [message];
+      navigate("/") 
     }
   }
 
@@ -59,7 +62,7 @@ class yelpAPI {
   /** Searches exact restaurant by id */
   static async getRestaurantByID(id) {
     let res = await this.request(`api/v1/restaurant/${id}`);
-
+    console.log("Res" , res)
     return res;
   }
 

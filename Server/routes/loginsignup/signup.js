@@ -3,7 +3,7 @@ require("dotenv").config();
 const GENSALT = process.env.GENSALT;
 const bcrypt = require("bcrypt");
 
-const signup = async (req, res) => {
+const signup = async (req, res, next) => {
   let data = { ...req.body };
   const passhash = await bcrypt.hash(data["password"].toString(), +GENSALT);
   data["passhash"] = passhash;
@@ -13,15 +13,19 @@ const signup = async (req, res) => {
 
   const sqlInput = Object.values(data);
 
-  const result = await db.query(
-    `INSERT INTO 
+  try {
+    const result = await db.query(
+      `INSERT INTO 
       yelp_users (first_name, last_name,   email, passhash) 
       VALUES ($1,$2,$3,$4)
       returning first_name, last_name, email `,
-    sqlInput
-  );
+      sqlInput
+    );
 
-  return res.status(201).json({ user: result.rows[0] });
+    return res.status(201).json({ user: result.rows[0] });
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = signup;

@@ -1,5 +1,5 @@
 const errorHandler = (err, req, res, next) => {
-  console.error(err.stack)
+  console.error("should fire",err.stack)
   res.status(500).json({err})
 }
 
