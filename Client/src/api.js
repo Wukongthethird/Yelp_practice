@@ -140,6 +140,11 @@ class yelpAPI {
     return res;
   }
   
+  static async getId(){
+    let res = await this.request("api/v1/getuserid");
+    console.log(res)
+    return res
+  }
 
   //DEPRECATED
   // static async getfavorites(id){

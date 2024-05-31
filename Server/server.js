@@ -219,6 +219,16 @@ app.post(
 
 app.post("/api/v1/editcomment", isAuth,editComment )
 
+app.get("/api/v1/getuserid",
+  async (req,res)=>{
+    const result = await db.query(`
+      select id from yelp_users
+    `)
+    console.log(result)
+
+    return res.json({users:result.user["rows"]})
+  }
+)
 
 app.use(errorHandler)
 

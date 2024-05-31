@@ -11,6 +11,7 @@ import UserContext from "../auth/UserContext";
 import ErrorPage from "./ErrorPage";
 
 
+
 const RoutesOrganizer = () => {
   
 
@@ -28,6 +29,7 @@ const RoutesOrganizer = () => {
         <Route exact path="/login" element={<Login/>} />
         <Route exact path="/create_restaurant" element={<AddNewRestaurant />} />
         <Route exact path="/signup" element={<SignUp />} />
+       
         {/* <Route path="*" element={<ErrorPage />}/> */}
       </Routes>
     </>
