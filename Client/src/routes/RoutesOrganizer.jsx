@@ -7,7 +7,7 @@ import AddNewRestaurant from "./AddNewRestaurant";
 import SignUp from "./SignUp";
 import Login from "./Login";
 import{useContext} from 'react'
-import UserContext from "../auth/UserContext";
+
 import ErrorPage from "./ErrorPage";
 
 
