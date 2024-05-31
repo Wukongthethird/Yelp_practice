@@ -14,9 +14,6 @@ front end if err got to 404 or homepage
 
 
 
-change price db to internal 1-5 float no votes
-     -- list of rest ids  randomchance around 70% skip if not
-     insert some float between 0-5
 
 change favorite animation on heart
 

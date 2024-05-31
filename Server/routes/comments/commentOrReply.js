@@ -1,6 +1,6 @@
 const db = require("../../DB");
 
-const commentOrReply = async (req, res) => {
+const commentOrReply = async (req, res,next) => {
   const userId = req.session.passport.user.id;
   const commentMessage = req.body["commentMessage"];
   const restaurantId = req.body["restaurantId"];
@@ -8,6 +8,7 @@ const commentOrReply = async (req, res) => {
 
 
   if (parentId) {
+    try{
     const parentComment = await db
       .query(
         `
@@ -26,9 +27,11 @@ const commentOrReply = async (req, res) => {
 
     if (+parentComment.restaurantId !== +restaurantId) {
       return res.json({ msg: " you've some how strayed" });
+    }}catch(err){
+      next(err)
     }
   }
-
+  try{
   const result = await db
     .query(
       `
@@ -39,7 +42,11 @@ const commentOrReply = async (req, res) => {
     )
     .then((res) => res.rows[0]);
 
+
   return res.json({ msg: "commented" });
+  }catch(err){
+    next(err)
+  }
 };
 
 module.exports = commentOrReply;

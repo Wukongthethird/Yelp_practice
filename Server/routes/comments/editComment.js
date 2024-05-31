@@ -1,11 +1,12 @@
 const db = require("../../DB");
 
-const editComment = async (req,res)=>{
+const editComment = async (req,res,next)=>{
   const userId = req.session.passport.user.id;
   const commentId =  req.body["commentId"]
   const message = req.body["commentMessage"]
   
 
+  try{
   const comment = await db.query(`
   SELECT comment_id as "commentId", comment_message as "commentMessage",
     created_at as "createdAt", updated_at as "updatedAt",
@@ -32,6 +33,9 @@ const editComment = async (req,res)=>{
   [message,commentId])
 
 return res.json({})
+  }catch(err){
+    next(err)
+  }
 
 }
 

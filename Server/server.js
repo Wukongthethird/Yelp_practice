@@ -219,47 +219,59 @@ app.post(
 
 app.post("/api/v1/editcomment", isAuth,editComment )
 
-// app.get("/api/v1/getuserid",
-//   async (req,res)=>{
-//     const usersId = await db.query(`
-//       select ARRAY(select id from yelp_users)
-//     `).then( rows => rows["rows"][0]["array"])
+app.get("/api/v1/getuserid",
+  async (req,res)=>{
 
-//     const restId = await db.query(`
-//     select ARRAY(select id from restaurants)
-//   `).then( rows => rows["rows"][0]["array"])
+    // const usersId = await db.query(`
+    //   select ARRAY(select id from yelp_users)
+    // `).then( rows => rows["rows"][0]["array"])
 
+    const restId = await db.query(`
+    select ARRAY(select id from restaurants)
+  `).then( rows => rows["rows"][0]["array"])
 
-//   for(let i=0; i< restId.length;i++){
-//     const chance = Math.random()*100
-//     if(chance <50){
-      
-//       for (let j = 0 ; j<usersId.length;j++){
-//         const vote = (i%2===0  || i%5===0) ? Math.floor(Math.random()*5)+1 : 5
-       
-//         const roll = Math.random()*100
-//         if(roll <80 || j%3===0 || j%4==0){
-//        try{
-//           await db.query(
-//             `
-//             INSERT INTO ratings
-//             (user_id , restaurants_id, rating) 
-//             values ($1, $2, $3)           
-//             `,[usersId[j] , restId[i], vote]
-//           )
-//         }catch(err){
-//           console.log(err)
-//           continue
-//         }
-//       }
+  let count=0
+  for(let i=0; i< restId.length;i++){
+    const chance = Math.random()*100
+    if (chance >90 || i%( (7*i)%10)>6){
+      count++
+      continue
+    }
+    const alpha =  Math.random()*100
+    let price
+    if (alpha < 10){
+      price =1
+    }
+    else if(alpha >=10 && alpha <25){
+      price = 2
+    }
+    else if(alpha >=25 && alpha <55){
+      price = 3
+    }
+    else if(alpha >=55 && alpha <80){
+      price = 4
+    } else if(alpha >=80){
+      price = 5
+    }
         
-//       }
-//     }
-//   }
+    try{
+        await db.query(`
+        insert into price_range (restaurants_id, price)
+        values ($1, $2)
+        `,[restId[i], price])
+    }catch(err){
+      console.log(err)
+      continue
+    }
+      
+    
+  }
 
-//     return res.json({restId})
-//   }
-// )
+    return res.json({restId})
+  }
+)
+
+
 
 app.use(errorHandler)
 

@@ -54,9 +54,8 @@ TRANSACTIONAL EXAMPLE
 -- change this table to just restaurant and price float
 CREATE TABLE
   price_range(
-    user_id INTEGER REFERENCES yelp_users ON DELETE CASCADE NOT NULL,
     restaurants_id INTEGER REFERENCES restaurants ON DELETE CASCADE NOT NULL,
-    PRIMARY KEY (user_id,restaurants_id),
+    PRIMARY KEY (restaurants_id),
     price INTEGER NOT NULL CHECK (price>=1 and price<=5)
 );
 

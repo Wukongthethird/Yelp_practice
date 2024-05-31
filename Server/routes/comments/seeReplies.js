@@ -1,9 +1,10 @@
 const db = require("../../DB");
 
-const seeReplies = async (req, res) => {
+const seeReplies = async (req, res,next) => {
   const restaurantId = req.body["restaurantId"];
   const parentId = req.body["parentId"];
 
+  try{
   const result = await db
     .query(
       `
@@ -19,6 +20,9 @@ const seeReplies = async (req, res) => {
     .then((res) => res.rows);
 
   return res.json({ result });
+  }catch(err){
+    next(err)
+  }
 };
 
 module.exports = seeReplies;
