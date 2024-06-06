@@ -6,14 +6,11 @@ import Update from "./Update";
 import AddNewRestaurant from "./AddNewRestaurant";
 import SignUp from "./SignUp";
 import Login from "./Login";
-
+import ErrorPage from "./ErrorPage";
 
 
 const RoutesOrganizer = () => {
-  
-
   return (
-
     <>
       <Routes >
         <Route exact path="/" element={<Home />} />
@@ -27,7 +24,7 @@ const RoutesOrganizer = () => {
         <Route exact path="/create_restaurant" element={<AddNewRestaurant />} />
         <Route exact path="/signup" element={<SignUp />} />
        
-        {/* <Route path="*" element={<ErrorPage />}/> */}
+        <Route path="*" element={<ErrorPage />}/>
       </Routes>
     </>
   );

@@ -3,7 +3,6 @@
 const db = require("../../DB");
 
 const getRestaurantId = async (req, res, next) => {
-
   const isLogin = req.session.passport;
 
   const restaurantId = req.params.id;
@@ -17,7 +16,6 @@ const getRestaurantId = async (req, res, next) => {
 
   // Multiple small queries is better for DB usage allows one to customize
 
-
   const restaurant = await db
     .query(
       `select id, city, zipcode, about, restaurants_name as "restaurantsName",
@@ -29,15 +27,12 @@ const getRestaurantId = async (req, res, next) => {
     )
     .then((res) => res.rows[0]);
 
-
   if (!restaurant) {
-
     return res.json({
       // should put a handle error to go next to a 404 page not found
       restaurant: null,
-      err:"there is no restaurant"
+      err: "there is no restaurant",
     });
-    
   }
 
   const allUsersPrice = await db
@@ -49,28 +44,59 @@ const getRestaurantId = async (req, res, next) => {
 
   const allUsersRating = await db
     .query(
-      `SELECT AVG(CAST(rating as FLOAT)) as "averageRating"  from ratings WHERE restaurants_id =$1`,
+      `SELECT AVG(CAST(rating as FLOAT)) as "averageRating" ,
+      COUNT(*) as "totalRating"   
+      from ratings WHERE restaurants_id =$1 
+      `,
       [req.params.id]
     )
     .then((res) => res.rows[0]);
 
-  const allParentComments = await db.query(
-    `SELECT comment_id as "commentId", comment_message as "commentMessage",
+  const allRatingCountRaw = await db
+    .query(
+      `SELECT
+        rating,
+        COUNT(*) 
+        FROM
+        ratings
+        WHERE restaurants_id =$1 
+        GROUP BY
+        rating`,
+      [req.params.id]
+    )
+    .then((res) => res.rows);
+
+
+    const allRatingCount = {}
+
+
+    for( let i=0; i< allRatingCountRaw.length;i++){
+      allRatingCount[allRatingCountRaw[i].rating] = allRatingCountRaw[i].count
+    }
+
+
+
+  const allParentComments = await db
+    .query(
+      `SELECT comment_id as "commentId", comment_message as "commentMessage",
     comments.created_at as "createdAt", comments.updated_at as "updatedAt",
     user_id as "userId", restaurant_id as "restaurantId",
     parent_id as "parentId" , first_name as "firstName", last_name as "lastName"
     FROM comments JOIN yelp_users ON user_id = id where restaurant_id = $1 and parent_id is NULL
     ORDER BY comments.created_at
-    `,[restaurantId]
-    ).then((res) => res.rows);
-  
+    `,
+      [restaurantId]
+    )
+    .then((res) => res.rows);
+
   if (!isLogin) {
     return res.json({
       restaurant: { ...restaurant },
       generalUsers: {
         ...allUsersPrice,
         ...allUsersRating,
-        allParentComments
+        allRatingCount,
+        allParentComments,
       },
     });
   }
@@ -84,7 +110,6 @@ const getRestaurantId = async (req, res, next) => {
     )
     .then((res) => res.rows[0]);
 
-
   const userRating = await db
     .query(
       `SELECT rating FROM ratings
@@ -93,22 +118,19 @@ const getRestaurantId = async (req, res, next) => {
     )
     .then((res) => res.rows[0]);
 
-
-
-
   return res.json({
     restaurant: { ...restaurant },
     generalUsers: {
       ...allUsersPrice,
       ...allUsersRating,
-      allParentComments
+      allRatingCount,
+      allParentComments,
     },
     user: {
       ...favorited,
       ...userRating,
     },
   });
-
 };
 
 module.exports = getRestaurantId;

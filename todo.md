@@ -4,31 +4,37 @@ ALEX
 layout for main page
 restaurants detail page itself
 
-global error handling back end
+
+global error handling back end add try catch to routes backend
+fix login signup error message
 
 
 
-
-add try catch to routes backend
 front end if err got to 404 or homepage
 
 
 
 
 change favorite animation on heart
-
 get fake comment threads
 
 comment section -- cahnge some layout the icon bar should have min max width 
 collapse show hide comment 
 delete comment -- delete should replace text with null not actually remove until the parent user is gone
-comment up and downvotes renders out total votes
-maybe a graph bar of average ratings
-button animation and outline 
-change card on main page
 
-photos for main page card and restaurant
--- done by components generating all the photos and assigning random photos
+comment up and downvotes renders out total votes
+
+button animation and outline 
+suggestions and tagging of cuisines
+
+add scroll to see how far
+page scrfoll
+about section
+
+
+profile page
+
+general profile for everyone to see
 
 
 

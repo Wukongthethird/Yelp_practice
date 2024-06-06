@@ -35,6 +35,7 @@ import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 const RestaurantCard = ({ restaurant }) => {
   // I did it at this level so i didnt have to loop on every api request. TBD if i leave this in here seems weird
   const image =  generateImages.randomImage(generateImages.images) 
+  const avgRating =  restaurant.averageRating %1 ==0? Math.trunc(restaurant.averageRating) :Math.round( (restaurant.averageRating) * 100) / 100
 
   // TO DO ADD IMAGE TO BACK DROP
   return (
@@ -66,7 +67,7 @@ const RestaurantCard = ({ restaurant }) => {
          
         </ChakraLink>
         <Box top={0} right={0} >
-                  { restaurant.userVotes==0 ? <Text>Unrated</Text> : <Flex top={0} right={0}><StarIcon fillValue={faStarSolid}/> <Text> {restaurant.userVotes + " votes"}</Text></Flex>}
+                  { restaurant.userVotes==0 ? <Text>Unrated</Text> : <Flex top={0} right={0}> <Box>  {avgRating}</Box><StarIcon fillValue={faStarSolid}/> <Text> {restaurant.userVotes + " votes"}</Text></Flex>}
             </Box>
       </CardFooter>
     </Card>

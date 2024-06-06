@@ -63,7 +63,7 @@ class yelpAPI {
   static async getRestaurantByID(id) {
   
     let res = await this.request(`api/v1/restaurant/${id}`);
-    console.log("Res" , res)
+   
     return res;
   }
 
@@ -106,7 +106,7 @@ class yelpAPI {
 
   static async favoriting(data) {
     let res = await this.request("api/v1/favorite", data, "post");
-    console.log("res", res)
+
     return res;
   }
 
@@ -126,7 +126,7 @@ class yelpAPI {
 
   static async commentingOrReplying(data){
     let res = await this.request("api/v1/commentorreply", data, "post");
-    console.log("res", res)
+ 
     return res;
   }
 
@@ -143,7 +143,7 @@ class yelpAPI {
   
   static async getId(){
     let res = await this.request("api/v1/getuserid");
-    console.log(res)
+
     return res
   }
 

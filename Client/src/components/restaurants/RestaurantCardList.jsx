@@ -27,7 +27,7 @@ RestaurantCardList.propTypes = {
       address_location: PropTypes.string,
       city: PropTypes.string,
       zipcode: PropTypes.string,
-      price_range: PropTypes.number,
+     
     })
   ),
 };

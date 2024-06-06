@@ -9,6 +9,7 @@ import {
   Link as ChakraLink,
   Flex,
   HStack,
+  Progress,
 } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import FavoriteButton from "../favorites/FavoriteButton";
@@ -23,6 +24,7 @@ import photo1 from "../../photos/photo1.jpg";
 import photo6 from "../../photos/photo6.jpg";
 import phot07 from "../../photos/photo7.jpg";
 import { useNavigate } from "react-router-dom";
+import RatingGraph from "../starRating/RatingGraph";
 
 /**
  *
@@ -55,6 +57,7 @@ const RestaurantDetails = () => {
     return navigate("/");
   }
 
+  console.log(restaurant)
   return (
     <Box minH={"100vh"}>
       <RestaurantsDetailsBanner restaurant={restaurant} images={images} />
@@ -63,7 +66,7 @@ const RestaurantDetails = () => {
           <FavoriteButton
             restaurantId={id}
             isFavorited={restaurant.user ? restaurant.user.favorited : false}
-            isLoggedin={restaurant.user}
+            isLoggedin={restaurant.user}  
           />
           <StarVotesContainer
             restaurantId={id}
@@ -75,12 +78,14 @@ const RestaurantDetails = () => {
           />
         </HStack>
 
+        <RatingGraph ratingData={  restaurant.generalUsers.allRatingCount } totalRating={ restaurant.generalUsers.totalRating} />
         <CommentForm restaurantId={id} />
         <CommentContainerList
           comments={restaurant.generalUsers.allParentComments}
           restaurantId={id}
         />
       </Box>
+      
     </Box>
   );
 };

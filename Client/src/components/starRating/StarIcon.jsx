@@ -32,7 +32,6 @@ const StarIcon = ({
 }) => {
 
 
-
   const starIcon = voteValue ? (
     <FontAwesomeIcon
       aria-hidden="true"

@@ -44,10 +44,8 @@ export const Navbar = () => {
     <Flex
       zIndex={999}
       justify="center"
-
       position={"fixed"}
       bg="red.400"
-
       width={"100%"}
       top={0}
       left={0}

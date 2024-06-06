@@ -23,7 +23,6 @@ const RestaurantsDetailsBanner = ({ restaurant, images }) => {
     flexGrow: 0,
   };
 
-  console.log(restaurant);
   return (
     <Box pos="relative" width={"100%"} left="0">
       <HStack maxW="xl" height={"75%"} spacing={"10px"}>

@@ -136,8 +136,8 @@ app.get("/api/v1/fetchuser/", fetchUser);
 
 app.post(
   "/api/v1/signup",
-  // signUpUserSchema,
-  // validateSchema,
+  signUpUserSchema,
+  validateSchema,
   signup
 );
 
