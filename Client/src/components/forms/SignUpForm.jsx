@@ -49,6 +49,7 @@ const SignupForm = () => {
    *
    */
 
+  console.log("formerror", formErrors)
   async function handleSubmit(evt) {
     evt.preventDefault();
     const res = await yelpAPI.signUpUser(formData);
@@ -168,7 +169,6 @@ const SignupForm = () => {
                     handleShow(show2, setShow2);
                   }}
                 >
-                  {" "}
                   {show2 ? "Hide" : "Show"}
                 </IconButton>
               </InputRightElement>

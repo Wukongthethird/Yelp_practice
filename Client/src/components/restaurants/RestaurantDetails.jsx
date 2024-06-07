@@ -57,7 +57,7 @@ const RestaurantDetails = () => {
     return navigate("/");
   }
 
-  console.log(restaurant)
+  
   return (
     <Box minH={"100vh"}>
       <RestaurantsDetailsBanner restaurant={restaurant} images={images} />
